@@ -7,23 +7,3 @@
 
 [build.environment]
   NODE_VERSION = "22"
-
-[[redirects]]
-  from = "/api/auth/login"
-  to = "/.netlify/functions/nexus-auth-login"
-  status = 200
-
-[[redirects]]
-  from = "/api/auth/callback"
-  to = "/.netlify/functions/nexus-auth-callback"
-  status = 200
-
-[[redirects]]
-  from = "/api/auth/firebase-token"
-  to = "/.netlify/functions/nexus-auth-firebase-token"
-  status = 200
-
-[[redirects]]
-  from = "/api/auth/logout"
-  to = "/.netlify/functions/nexus-auth-logout"
-  status = 200
