@@ -8,8 +8,7 @@ const FIREBASE_CONFIG = {
 };
 
 // Deve acompanhar a chave de `netlify/functions/nexus-auth-state.mjs`.
-// A reativação exige autorização explícita.
-const NEXUS_LOGIN_API_ENABLED = false;
+const NEXUS_LOGIN_API_ENABLED = true;
 
 function applyLoginAvailability() {
     const loginButton = document.querySelector('[data-login-endpoint]');
