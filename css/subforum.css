@@ -1,0 +1,193 @@
+/* ======================================================= */
+/* ==       ESTILOS DA PÁGINA DO SUBFÓRUM (NEXUS)       == */
+/* ======================================================= */
+
+.subforum-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem 1.5rem;
+}
+
+/* --- Caixa de Introdução Minimalista e Elegante --- */
+.subforum-intro {
+    background: rgba(26, 11, 46, 0.8) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(142, 68, 173, 0.3) !important;
+    padding: 2.5rem !important;
+    border-radius: 16px !important;
+    margin-bottom: 3rem !important;
+    text-align: center !important; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.subforum-intro p {
+    color: #ecf0f1 !important;
+    line-height: 1.8 !important;
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+}
+
+.subforum-intro p:last-child {
+    margin-bottom: 0;
+}
+
+/* ======================================= */
+/* ==       ESTILOS DO ACCORDION        == */
+/* ======================================= */
+
+.accordion-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.accordion-item {
+    background-color: #1a0b2e; /* Fundo roxo ultra escuro */
+    border: 1px solid rgba(142, 68, 173, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.accordion-item:hover {
+    border-color: rgba(142, 68, 173, 0.7);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    user-select: none;
+    background: transparent;
+    transition: background 0.3s ease;
+}
+
+.accordion-header:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.accordion-header h2 {
+    font-family: var(--fonte-principal, 'Poppins', sans-serif);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #fff;
+    margin: 0; 
+    display: flex;
+    align-items: center;
+}
+
+.accordion-header i.fa-chevron-down {
+    font-size: 1.2rem;
+    color: #e056fd; /* Rosa neon para o ícone de seta */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s ease;
+    padding: 0 2rem;
+    background: rgba(0, 0, 0, 0.15); /* Leve escurecimento na área interna */
+}
+
+.accordion-content p {
+    color: #cfaadb; /* Texto descritivo em tom suave */
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+/* --- Estado Ativo do Accordion (Aberto) --- */
+.accordion-item.active {
+    border-color: #e056fd; /* Borda acende quando aberto */
+    box-shadow: 0 0 20px rgba(224, 86, 253, 0.15);
+}
+
+.accordion-item.active .accordion-header i.fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.accordion-item.active .accordion-content {
+    max-height: 2000px; 
+    padding-bottom: 2rem;
+}
+
+/* ======================================= */
+/* ==       LISTA DE TÓPICOS            == */
+/* ======================================= */
+
+.subforum-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+/* Estilo de Card para cada item da lista */
+.subforum-list li {
+    padding-left: 2rem;
+    position: relative;
+    line-height: 1.7;
+    color: #ecf0f1;
+    font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1.2rem 1.2rem 1.2rem 3rem;
+    border-radius: 8px;
+    border-left: 3px solid rgba(142, 68, 173, 0.5); /* Barra lateral discreta */
+    transition: all 0.3s ease;
+}
+
+.subforum-list li:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-left-color: #e056fd; /* Barra acende no hover */
+    transform: translateX(5px); /* Efeito suave indo para a direita */
+}
+
+/* Substituindo a seta de texto por um ícone moderno do FontAwesome */
+.subforum-list li::before {
+    content: '\f0da'; /* Código do ícone fa-caret-right */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 1.2rem;
+    top: 1.3rem;
+    color: #e056fd;
+    font-size: 1.2rem;
+}
+
+.subforum-list li strong {
+    color: #FFA6E7;
+    font-weight: 700;
+}
+
+/* ======================================= */
+/* ==         RESPONSIVIDADE            == */
+/* ======================================= */
+
+@media (max-width: 768px) {
+    .subforum-intro {
+        padding: 1.5rem !important;
+    }
+    .accordion-header {
+        padding: 1.2rem;
+    }
+    .accordion-header h2 {
+        font-size: 1rem;
+    }
+    .accordion-content {
+        padding: 0 1.2rem;
+    }
+    .subforum-list li {
+        padding: 1rem 1rem 1rem 2.5rem;
+    }
+    .subforum-list li::before {
+        left: 0.8rem;
+        top: 1.1rem;
+    }
+}

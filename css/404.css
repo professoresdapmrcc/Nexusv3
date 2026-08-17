@@ -1,0 +1,165 @@
+/* ==========================================================================
+   404.css — NEXUS · Página de Erro
+   Estrutura: 4 [vídeo] 4 (Sem fundo de caixa, escala reduzida para ~80%)
+   ========================================================================== */
+
+.error-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 5rem 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+}
+
+.error-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ---------- Container Central ---------- */
+.error-card {
+    width: 100%;
+    max-width: 900px;
+    padding: 2rem 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* ---------- 4 [vídeo] 4 ---------- */
+.error-code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 1.5rem; /* Margem ajustada para o novo tamanho */
+}
+
+.error-code .number {
+    font-family: var(--fonte-titulo, 'Poppins', sans-serif);
+    font-size: 14.5rem; /* Reduzido de 18rem para simular 80% do tamanho */
+    font-weight: 800;
+    line-height: 1;
+    color: #fff;
+    /* Gradiente suave no número */
+    background: linear-gradient(170deg, #ffffff 20%, #cfaadb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    /* Aproxima os números do vídeo proporcionalmente ao novo tamanho */
+    margin: 0 -40px; 
+    z-index: 2;
+    position: relative;
+}
+
+.video-zero {
+    width: 224px; /* Reduzido de 280px (~80%) */
+    height: 256px; /* Reduzido de 320px (~80%) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter: drop-shadow(0 0 35px rgba(224, 86, 253, 0.45));
+    animation: float 4s ease-in-out infinite;
+    z-index: 1;
+    position: relative;
+}
+
+.video-zero video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: scale(1.7); /* Mantém o zoom do grifo dentro da caixa menor */
+    mix-blend-mode: screen;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-12px); }
+}
+
+/* ---------- Texto descritivo ---------- */
+.error-content p {
+    font-family: var(--fonte-principal, 'Poppins', sans-serif);
+    color: rgba(255, 255, 255, 0.85); 
+    font-size: 0.95rem; /* Reduzido de 1.1rem */
+    max-width: 500px; /* Reduzido de 580px para ficar mais estreito */
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+}
+
+/* ---------- Botões ---------- */
+.error-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* Reduzido de 1.2rem */
+    flex-wrap: wrap;
+}
+
+.nav-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.5rem; /* Reduzido proporcionalmente */
+    border-radius: 8px; /* Cantos um pouco menores */
+    text-decoration: none;
+    font-family: var(--fonte-principal, 'Poppins', sans-serif);
+    font-weight: 700;
+    font-size: 0.85rem; /* Reduzido de 0.95rem */
+    letter-spacing: 0.04em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    border: 1px solid transparent;
+}
+
+/* Botão primário */
+.nav-item:first-child {
+    background: #e056fd;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(224, 86, 253, 0.4);
+}
+
+.nav-item:first-child:hover {
+    background: #cc3de8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(224, 86, 253, 0.55);
+    color: #fff;
+}
+
+/* Botão secundário */
+.return-btn {
+    background: rgba(26, 11, 46, 0.5) !important; 
+    color: rgba(207, 170, 219, 0.9) !important;
+    border: 1px solid rgba(224, 86, 253, 0.35) !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(5px);
+}
+
+.return-btn:hover {
+    background: rgba(224, 86, 253, 0.15) !important;
+    border-color: rgba(224, 86, 253, 0.6) !important;
+    color: #fff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: none !important;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 900px) {
+    .error-code .number  { font-size: 11rem; margin: 0 -30px; }
+    .video-zero          { width: 180px; height: 210px; }
+    .video-zero video    { transform: scale(1.6); }
+}
+
+@media (max-width: 600px) {
+    .error-card          { padding: 1rem; }
+    .error-code .number  { font-size: 7rem; margin: 0 -20px; }
+    .video-zero          { width: 120px; height: 140px; }
+    .video-zero video    { transform: scale(1.5); }
+    .error-nav           { flex-direction: column; gap: 0.85rem; width: 100%; }
+    .nav-item            { justify-content: center; width: 100%; }
+}

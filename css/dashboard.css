@@ -1,0 +1,70 @@
+
+
+/* ======================================= */
+/* ==      ESTRUTURA DA PÁGINA          == */
+/* ======================================= */
+
+.dashboard-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - var(--altura-header)); /* Ocupa a altura da tela menos o header */
+    padding: var(--espaco-lg) var(--espaco-sm);
+}
+
+/* ======================================= */
+/* ==      O "QUADRADO" DE CONTEÚDO     == */
+/* ======================================= */
+
+.dashboard-box {
+    background-color: rgba(0, 0, 0, 0.2); /* Fundo escuro semi-transparente */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil */
+    border-radius: var(--border-radius);
+    padding: var(--espaco-xl); /* Espaçamento interno generoso */
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); /* Sombra para dar profundidade */
+}
+
+/* ======================================= */
+/* ==          CONTEÚDO INTERNO         == */
+/* ======================================= */
+
+.dashboard-box h1 {
+    font-family: 'Montserrat', sans-serif; /* A fonte pixelada pode ser difícil de ler aqui */
+    font-weight: var(--font-weight-black);
+    font-size: 2.5rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: var(--espaco-lg);
+}
+
+.dashboard-box p {
+    color: var(--cor-texto-principal); /* Texto principal um pouco mais claro */
+    line-height: 1.7;
+    margin-bottom: var(--espaco-md);
+    max-width: 600px; /* Limita a largura do texto para melhor leitura */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dashboard-box p strong {
+    color: var(--cor-primaria-clara);
+    font-weight: var(--font-weight-bold);
+}
+
+/* ======================================= */
+/* ==          BOTÃO DE AÇÃO (CTA)      == */
+/* ======================================= */
+
+/* Esta classe extra ajuda o botão a ocupar a largura total dentro do box */
+.btn-block {
+    display: block;
+    width: 100%;
+    margin-top: var(--espaco-lg);
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}

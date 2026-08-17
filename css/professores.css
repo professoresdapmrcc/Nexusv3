@@ -1,0 +1,405 @@
+/* ================================================= */
+/* ==   ESTILOS MODERNIZADOS (DARK PURPLE)        == */
+/* ================================================= */
+
+.professores-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem; 
+}
+
+/* Tipografia do Cabeçalho */
+.page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-family: var(--fonte-titulo, 'Inter', sans-serif);
+    color: var(--cor-texto-principal);
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.page-title i {
+    color: var(--cor-primaria-media, #4a90e2);
+}
+
+.page-subtitle {
+    color: var(--cor-texto-secundario);
+    font-size: 1.1rem;
+}
+
+/* Base de Cards Modernos */
+.modern-card {
+    background: #1a0b2e; 
+    border: 1px solid rgba(142, 68, 173, 0.3); 
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    overflow: hidden;
+}
+
+.modern-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(142, 68, 173, 0.7); 
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Top Section --- */
+.top-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 2rem;
+}
+
+.info-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.info-card {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.info-card h2 {
+    color: #f1c40f; 
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: var(--fonte-principal);
+}
+
+.info-card p {
+    color: #ecf0f1; 
+    font-size: 0.9rem;
+    line-height: 1.5;
+    opacity: 0.85; 
+}
+
+.card-icon img {
+    width: 64px; 
+    transition: transform 0.3s;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 4px 6px rgba(142, 68, 173, 0.5)); 
+}
+
+.info-card:hover .card-icon img {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* --- Destaques --- */
+.destaques-card {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.destaques-header h3 {
+    color: #e056fd; 
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.destaques-header h3 i {
+    color: #f1c40f; 
+}
+
+/* AJUSTE AQUI: Margem inferior zerada e line-height menor para aproximar dos Habbos */
+.destaques-card .date-range {
+    font-size: 0.8rem;
+    color: #ecf0f1;
+    margin-bottom: 0; 
+    margin-top: 0.5rem;
+    opacity: 0.7;
+    line-height: 1;
+}
+
+/* AJUSTE AQUI: Margem superior zerada */
+.destaques-avatars {
+    margin-top: 0; 
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.avatar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.avatar-item p {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ecf0f1; 
+}
+
+/* --- Estilo Moderno de Carregamento --- */
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #e056fd; /* Roxo neon para mostrar que é intencional */
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 1.5rem; /* Empurra o loader para baixo, desgrudando da data */
+    padding: 1rem;
+    animation: pulseLoad 1.5s infinite ease-in-out; /* Efeito de pulsar */
+}
+
+.loading-spinner i {
+    font-size: 1.2rem;
+}
+
+/* Animação suave para o loader */
+@keyframes pulseLoad {
+    0%, 100% { 
+        opacity: 0.5; 
+        transform: scale(0.98); 
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale(1.02); 
+    }
+}
+
+/* --- Scripts Section --- */
+.scripts-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.scripts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.script-item {
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #1a0b2e; 
+}
+
+.script-button {
+    background-color: #8e44ad; 
+    color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.script-button:hover {
+    background-color: #9b59b6; 
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4);
+}
+
+.script-desc {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #ecf0f1;
+    opacity: 0.8;
+}
+
+/* --- Central Mobile --- */
+.mobile-item {
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    background: #1a0b2e;
+}
+
+.mobile-button {
+    background-color: #2c3e50; 
+    color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.mobile-button:hover {
+    background-color: #1a252f;
+    transform: translateY(-3px);
+}
+
+/* --- Tools Section --- */
+.tools-section {
+    width: 100%;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+}
+
+.modern-tool-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 1.5rem 1rem;
+    background: #1a0b2e; 
+    border: 1px solid rgba(142, 68, 173, 0.2);
+    border-radius: 12px;
+    text-decoration: none;
+    color: #ecf0f1; 
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.modern-tool-link img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    transition: transform 0.3s ease;
+}
+
+.modern-tool-link:hover {
+    transform: translateY(-5px);
+    border-color: #e056fd; 
+    color: #e056fd;
+    box-shadow: 0 5px 20px rgba(142, 68, 173, 0.3);
+}
+
+.modern-tool-link:hover img {
+    transform: scale(1.1);
+}
+
+.modern-tool-link.disabled-tool {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.modern-tool-link.disabled-tool:hover {
+    transform: none;
+    border-color: rgba(142, 68, 173, 0.2);
+    color: #ecf0f1;
+    box-shadow: none;
+}
+
+.modern-tool-link.disabled-tool:hover img {
+    transform: none;
+}
+
+/* ================================================= */
+/* ==           AJUSTES DE RESPONSIVIDADE         == */
+/* ================================================= */
+
+@media (max-width: 900px) {
+    .top-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .info-links {
+        grid-template-columns: 1fr;
+    }
+    .page-title {
+        font-size: 2rem;
+    }
+    .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ================================================= */
+/* ==      LÓGICA DE CARREGAMENTO DO FIREBASE     == */
+/* ================================================= */
+
+body {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+body.autorizado {
+    display: block !important;
+    opacity: 1;
+}
+
+/* Cria a imagem de fundo fixa na tela */
+body::before {
+    content: "";
+    position: fixed; /* Fica travada na tela mesmo se der scroll */
+    top: 55%; /* Centraliza verticalmente */
+    transform: translateY(-50%);
+    
+    /* O SEGREDO DO CORTE: Joga metade da imagem pra fora da tela */
+    right: -200px; /* Ajuste esse valor dependendo do tamanho da sua logo */
+    
+    width: 500px;  /* Tamanho grande pra dar destaque */
+    height: 500px;
+    
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+    /* OPACIDADE (0.01 é quase invisível, 1.0 é 100% visível) */
+    opacity: 0.1; 
+    
+    z-index: -1; /* Joga a imagem pro fundo, atrás de tudo */
+    pointer-events: none; /* Impede que a imagem roube os cliques do mouse */
+}
+
+/* Aqui você define qual imagem aparece dependendo da página/aba.
+  Basta colocar a classe no <body> do HTML correspondente. 
+*/
+body.aba-professores::before {
+    background-image: url('/imgs/emblema-prof.png');
+}
+
+body.aba-graduadores::before {
+    background-image: url('/imgs/emblema-grad.png');
+}
+
+body.aba-conselho::before {
+    background-image: url('URL_DA_LOGO_CONSELHO.png');
+}

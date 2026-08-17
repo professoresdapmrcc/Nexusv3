@@ -1,0 +1,193 @@
+/* ======================================= */
+/* ==      ESTRUTURA DA PÁGINA          == */
+/* ======================================= */
+
+.performance-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 20px 80px 20px;
+}
+
+/* ======================================= */
+/* ==      CABEÇALHO DA PÁGINA          == */
+/* ======================================= */
+
+.page-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.glow-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 2.8rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(130, 31, 136, 0.8), 0 0 40px rgba(130, 31, 136, 0.4);
+    margin-bottom: 15px;
+}
+
+.subtitle-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* ======================================= */
+/* ==      SEÇÕES E TÍTULOS             == */
+/* ======================================= */
+
+.content-section {
+    margin-bottom: 70px;
+}
+
+.section-title-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(130, 31, 136, 0.2);
+    border: 1px solid rgba(130, 31, 136, 0.5);
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(130, 31, 136, 0.2);
+}
+
+.section-badge i {
+    color: #ba4fc0;
+}
+
+/* ======================================= */
+/* ==      GRID E ESTILO DOS CARDS      == */
+/* ======================================= */
+
+.card-grid {
+    display: grid;
+    gap: 25px;
+}
+
+.card-grid.two-columns {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.card-grid.three-columns {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Glassmorphism nos Cards */
+.glass-card {
+    background: rgba(20, 5, 30, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px 20px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.glass-card:hover {
+    transform: translateY(-8px);
+    background: rgba(40, 10, 50, 0.6);
+    border-color: rgba(130, 31, 136, 0.7);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(130, 31, 136, 0.4);
+}
+
+.glass-card img {
+    max-width: 90px;
+    height: auto;
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+    transition: transform 0.3s ease;
+}
+
+.glass-card:hover img {
+    transform: scale(1.1);
+}
+
+.card-label {
+    background: linear-gradient(135deg, rgba(130, 31, 136, 0.8), rgba(80, 15, 85, 0.9));
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    border-radius: 8px;
+    width: 90%;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ======================================= */
+/* ==      BOTÃO DE ARQUIVOS            == */
+/* ======================================= */
+
+.text-center {
+    text-align: center;
+}
+
+.glass-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 15px 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.glass-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* ======================================= */
+/* ==         RESPONSIVIDADE            == */
+/* ======================================= */
+
+@media (max-width: 850px) {
+    .glow-title { font-size: 2.2rem; }
+    .card-grid.three-columns { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .performance-page { padding: 40px 15px; }
+    .glow-title { font-size: 1.8rem; }
+    .card-grid.two-columns,
+    .card-grid.three-columns { grid-template-columns: 1fr; }
+    .glass-card img { max-width: 75px; }
+}

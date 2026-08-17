@@ -1,0 +1,202 @@
+/* =====================================================================
+/* 🎨 CENTRAL DE FEEDBACKS - IDENTIDADE VISUAL DARK MODE NEXUS
+/* ===================================================================== */
+
+.feedback-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 40px 20px;
+}
+
+.feedback-intro {
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 4px solid #e056fd;
+    padding: 15px 20px;
+    border-radius: 4px 12px 12px 4px;
+    margin-bottom: 2.5rem;
+    color: #cfaadb;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.feedback-intro p { 
+    margin: 0; 
+}
+
+.feedback-contador {
+    background: rgba(224, 86, 253, 0.15);
+    color: #e056fd;
+    padding: 6px 14px;
+    border-radius: 30px;
+    border: 1px solid rgba(224, 86, 253, 0.3);
+    font-size: 0.85rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* Grid Organizador de Cards */
+.grid-feedbacks {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+/* Estrutura dos Cards */
+.card-feedback {
+    background: rgba(18, 5, 33, 0.5);
+    border: 1px solid rgba(130, 31, 136, 0.2);
+    border-radius: 14px;
+    padding: 22px;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-feedback:hover {
+    transform: translateY(-5px);
+    border-color: rgba(224, 86, 253, 0.5);
+    box-shadow: 0 12px 24px rgba(130, 31, 136, 0.2);
+}
+
+.card-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+/* Badges Informativas */
+.badge-tipo {
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-tipo.bug {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-tipo.sugestao {
+    background: rgba(168, 85, 247, 0.15);
+    color: #a855f7;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.badge-tipo.outro {
+    background: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+    border: 1px solid rgba(107, 114, 128, 0.3);
+}
+
+.data-envio {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Caixa com a URL do erro */
+.tag-pagina-bug {
+    font-size: 0.82rem;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.08);
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mensagem-corpo {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0 0 25px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    flex-grow: 1;
+}
+
+/* Rodapé e Ações */
+.card-rodape {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-indicador {
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-indicador.pendente { color: #f59e0b; }
+.status-indicador.resolvido { color: #10b981; }
+
+.acoes-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-marcar-resolvido {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-marcar-resolvido:hover {
+    background: #10b981;
+    color: #fff;
+}
+
+.btn-deletar-card {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 6px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-deletar-card:hover {
+    color: #ff3366;
+    background: rgba(255, 51, 102, 0.1);
+}
+
+.estado-painel-vazio {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 60px 20px;
+    grid-column: 1 / -1;
+    font-size: 1.1rem;
+}
+
+.estado-painel-vazio i {
+    display: block;
+    font-size: 2.5rem;
+    color: rgba(130, 31, 136, 0.4);
+    margin-bottom: 15px;
+}

@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@900&family=Sora:wght@600;700;800&display=swap');
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: #250427;
+}
+
+body.nexus-login-page {
+  margin: 0;
+  padding: 0 !important;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow: hidden;
+  color: #fff;
+  font-family: var(--fonte-principal, 'Inter', Arial, sans-serif);
+  background:
+    linear-gradient(rgba(192, 96, 196, 0.7), rgba(192, 96, 196, 0.7)),
+    url('../imgs/corredor-prof.png') center / cover no-repeat !important;
+}
+
+.login-page-shell {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+.page-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.top-left-logo {
+  position: absolute;
+  top: 35px;
+  left: 45px;
+  z-index: 3;
+  display: block;
+  width: 65px;
+  height: 65px;
+}
+
+.top-left-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.left-panel,
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.left-panel {
+  align-items: flex-start;
+  padding-left: 10%;
+}
+
+.right-panel {
+  align-items: flex-end;
+  padding: 20px 10% 20px 20px;
+}
+
+.title-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  width: min(100%, 650px);
+}
+
+.crest-image {
+  flex: 0 0 auto;
+  width: 126px;
+  height: 126px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.35));
+}
+
+.text-group {
+  min-width: 0;
+}
+
+.main-title {
+  margin: 0;
+  color: #fff;
+  font-family: var(--fonte-display, 'Sora', 'Inter', Arial, sans-serif);
+  font-size: clamp(32px, 3vw, 48px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+}
+
+.main-title .professores {
+  color: #ec65f3;
+}
+
+.subtitle {
+  margin: 15px 0 0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 11px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.auth-container {
+  width: min(100%, 420px);
+  padding: 40px 50px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 25px;
+  box-sizing: border-box;
+  background: rgba(37, 4, 39, 0.92);
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.rccsystem-auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rccsystem-login-title {
+  width: 100%;
+  margin: 0;
+  color: #fff;
+  font-family: var(--fonte-display, 'Sora', 'Inter', Arial, sans-serif);
+  font-size: clamp(36px, 3vw, 42px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.nexus-word {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.logo-n {
+  color: var(--cor-primaria-clara, #a29bfe);
+  text-shadow: 0 0 12px rgba(162, 155, 254, 0.6);
+}
+
+.rccsystem-login-tagline {
+  width: 100%;
+  margin: 8px 0 0;
+  color: #d3c0e0;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: 0.8px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.rccsystem-login-description {
+  width: 100%;
+  margin: 18px 0 0;
+  color: #d3c0e0;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.rccsystem-login-status {
+  width: 100%;
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 178, 0, 0.3);
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: #ffd37a;
+  background: rgba(255, 178, 0, 0.08);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.rccsystem-login-status[hidden] {
+  display: none;
+}
+
+.rccsystem-login-action {
+  width: 100%;
+  margin-top: 28px;
+}
+
+.rccsystem-login-note {
+  margin: 13px 6px 0;
+  color: rgba(211, 192, 224, 0.68);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+#particles-js {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@media (max-width: 1100px) {
+  .left-panel {
+    padding-left: 6%;
+  }
+
+  .title-container {
+    gap: 18px;
+  }
+
+  .crest-image {
+    width: 104px;
+    height: 104px;
+  }
+
+  .main-title {
+    font-size: 38px;
+  }
+
+  .subtitle {
+    letter-spacing: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  body.nexus-login-page {
+    overflow-y: auto;
+  }
+
+  .page-container {
+    flex-direction: column;
+    min-height: 100svh;
+  }
+
+  .left-panel,
+  .top-left-logo {
+    display: none;
+  }
+
+  .right-panel {
+    align-items: center;
+    width: 100%;
+    min-height: 100svh;
+    padding: 34px 20px;
+  }
+
+  .auth-container {
+    width: min(100%, 430px);
+    padding: 36px 42px;
+  }
+}
+
+@media (max-width: 520px) {
+  .right-panel {
+    padding: 20px 16px;
+  }
+
+  .auth-container {
+    padding: 30px 24px;
+    border-radius: 20px;
+  }
+
+  .rccsystem-login-title {
+    font-size: 34px;
+  }
+}
+
+@media (max-height: 700px) and (min-width: 901px) {
+  .auth-container {
+    padding-top: 28px;
+    padding-bottom: 27px;
+  }
+
+  .rccsystem-login-action {
+    margin-top: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-page-shell *,
+  .login-page-shell *::before,
+  .login-page-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+.rccsystem-login-button.is-temporarily-disabled {
+    cursor: not-allowed;
+    filter: grayscale(.7);
+    opacity: .5;
+    pointer-events: auto;
+}
+
+.rccsystem-login-button.is-temporarily-disabled:hover {
+    transform: none;
+}

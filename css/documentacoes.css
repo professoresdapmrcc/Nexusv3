@@ -1,0 +1,115 @@
+/* ======================================= */
+/* ==     ESTILOS GLOBAIS E BACKGROUND    == */
+/* ======================================= */
+
+body {
+    font-family: var(--fonte-principal);
+    line-height: 1.6;
+    color: var(--cor-texto-principal);
+    background: linear-gradient(180deg, var(--cor-primaria-escura), var(--cor-primaria-media));
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding-top: var(--altura-header);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ======================================= */
+/* ==   ESTILOS DA PÁGINA DE DOCUMENTAÇÕES == */
+/* ======================================= */
+
+.docs-page {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+
+.docs-container {
+    text-align: center;
+}
+
+.docs-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 2.8rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 1rem;
+    text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.docs-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 4rem;
+}
+
+.docs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.doc-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+/* Efeito Glassmorphism nos Botões */
+.doc-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    background: rgba(130, 31, 136, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(130, 31, 136, 0.4);
+    color: #fff;
+    padding: 1.2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.doc-button i {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.doc-button:hover {
+    transform: translateY(-5px);
+    background: rgba(130, 31, 136, 0.35);
+    border-color: rgba(130, 31, 136, 0.8);
+    box-shadow: 0 12px 40px rgba(130, 31, 136, 0.4);
+}
+
+.doc-description {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 85%;
+}
+
+/* Estado Desabilitado */
+.doc-item.disabled .doc-button {
+    background: rgba(100, 100, 100, 0.1);
+    color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.1);
+    cursor: not-allowed;
+    pointer-events: none;
+    backdrop-filter: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .docs-title { font-size: 1.8rem; letter-spacing: 2px; }
+    .docs-subtitle { font-size: 0.95rem; }
+    .doc-button { padding: 1rem; font-size: 0.9rem; }
+}

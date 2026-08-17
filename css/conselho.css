@@ -1,0 +1,155 @@
+/*
+  ==========================================================================
+  ARQUIVO DE ESTILOS DA PÁGINA 'CONSELHO' - NEXUS
+  Utiliza as variáveis definidas no global.css para manter a identidade visual.
+  ==========================================================================
+*/
+
+/* --- Estilização do Body (Específica da Página) --- */
+body {
+    background-color: var(--cor-fundo);
+    /* O gradiente já é definido no global.css, então não precisamos repetir aqui */
+}
+
+/* --- Componente: Cartão de Vidro (Glass Card) --- */
+.glass-card {
+    /* Cor de fundo com transparência para o efeito de vidro */
+    background: rgba(37, 4, 39, 0.45); /* Um tom escuro derivado da sua paleta */
+    
+    /* Efeito de desfoque no fundo */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    /* Borda sutil usando as cores primárias */
+    border: 1px solid rgba(186, 79, 192, 0.15); /* --cor-primaria-clara com transparência */
+    
+    /* Outros estilos */
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* --- Componente: Modal (Janela Pop-up) --- */
+.modal {
+    display: none;
+    /* Fundo escuro com desfoque */
+    background: rgba(10, 10, 20, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    
+    /* Animação de entrada */
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.modal.show {
+    opacity: 1;
+}
+
+.modal-content {
+    /* Fundo do modal um pouco mais sólido */
+    background: rgba(37, 4, 39, 0.85); /* Tom escuro, mas mais opaco */
+    border: 1px solid rgba(186, 79, 192, 0.3); /* Borda mais forte que o .glass-card */
+    border-radius: 1rem; /* Um pouco mais arredondado que o padrão */
+    
+    /* Animação de entrada do conteúdo */
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
+}
+
+.modal.show .modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* --- Componente: Display de BBCode --- */
+.bbcode-display {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgba(0, 0, 0, 0.35);
+    border-radius: var(--border-radius);
+    padding: var(--espaco-sm);
+    border: 1px solid rgba(186, 79, 192, 0.2);
+    color: #cbd5e1;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* --- Estilização da Barra de Rolagem (Scrollbar) nos Modals --- */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    /* Usa a cor primária média da sua paleta com transparência */
+    background: rgba(130, 31, 136, 0.5); /* --cor-primaria-media com transparência */
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    /* Usa a cor primária clara para o efeito hover */
+    background: var(--cor-primaria-clara);
+}
+/* Estilo das Linhas da Tabela */
+.tabela-container {
+    overflow-x: auto; /* Para não quebrar no celular */
+}
+
+.linha {
+    display: grid;
+    grid-template-columns: 140px 140px 1fr 110px 140px;
+    gap: 10px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--brand-border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    min-width: 800px; /* Garante que a estrutura não esmague */
+}
+
+.linha.header {
+    background: var(--brand-accent);
+    color: white;
+    font-weight: bold;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.col {
+    padding: 12px;
+    text-align: center;
+    color: #e2e8f0;
+}
+
+.col.side-label {
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: 700;
+    color: #ddd6fe; /* violet-200 */
+}
+
+.col.large { text-align: left; font-size: 0.85rem; }
+
+/* Status */
+.status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+.status.concluída { background-color: #10b981; color: white; }
+.status.pendente { background-color: #64748b; color: white; }
+
+/* Botão Editar */
+.btn-edit {
+    margin-left: 8px;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+.btn-edit:hover { opacity: 1; transform: scale(1.2); }

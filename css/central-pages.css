@@ -1,0 +1,22 @@
+.central-context-nav {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    width: min(calc(100% - 2rem), 1280px);
+    min-height: 50px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    align-items: center;
+    gap: clamp(.25rem, 1.4vw, 1.25rem);
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.central-context-nav::-webkit-scrollbar { display: none; }
+.central-context-nav > span { flex: 0 0 auto; margin-right: auto; color: rgba(255,255,255,.34); font-size: .5rem; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
+.central-context-nav a { position: relative; flex: 0 0 auto; padding: 1rem .2rem; color: rgba(255,255,255,.5); font-size: .58rem; font-weight: 760; text-decoration: none; white-space: nowrap; }
+.central-context-nav a::after { content: ''; position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: #d795df; transform: scaleX(0); transition: transform .3s ease; }
+.central-context-nav a:hover, .central-context-nav a.is-active { color: #fff; text-decoration: none; }
+.central-context-nav a:hover::after, .central-context-nav a.is-active::after { transform: scaleX(1); }
+@media (max-width: 620px) { .central-context-nav { width: 100%; padding-inline: 1rem; } .central-context-nav > span { display: none; } }
+@media (prefers-reduced-motion: reduce) { .central-context-nav a::after { transition: none; } }

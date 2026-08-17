@@ -1,0 +1,263 @@
+/* ==========================================================================
+   CENTRAL DE AJUDA - ATHENA IA (ROXO → PRETO • GLASS • UX)
+   ========================================================================== */
+
+/* -------------------- WRAPPER PRINCIPAL (AGORA É O APP) -------------------- */
+.central-wrapper {
+    width: 100%;
+    max-width: 1000px; /* Um pouco mais largo para melhor leitura */
+    margin: 0 auto;
+    /* Fundo movido para cá para não conflitar com o global.css */
+    background:
+        radial-gradient(circle at 20% 20%, rgba(42, 10, 58, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(20, 0, 31, 0.5) 0%, transparent 45%),
+        linear-gradient(160deg, transparent 0%, rgba(22, 0, 33, 0.2) 40%, transparent 100%);
+    min-height: calc(100vh - var(--altura-header, 70px));
+    display: flex;
+    flex-direction: column;
+    padding: 60px 20px 40px 20px;
+    border-radius: 20px;
+}
+
+/* -------------------- HEADER -------------------- */
+.central-header {
+    text-align: center;
+    margin-bottom: 40px;
+    flex-shrink: 0;
+}
+
+.tag-duvidas {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(130, 31, 136, 0.15);
+    color: #caa6ff;
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(130, 31, 136, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(130, 31, 136, 0.2);
+}
+
+.central-header h1 {
+    font-size: 3.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    letter-spacing: -1px;
+    text-shadow: 0 0 30px rgba(150, 60, 255, 0.35);
+    margin: 0 0 5px 0;
+    color: #fff;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.15rem;
+}
+
+/* -------------------- CHAT CONTAINER -------------------- */
+.chat-container {
+    flex: 1;
+    height: 600px; /* Altura fixa ou min-height para garantir estabilidade */
+    max-height: 70vh;
+
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+
+    background: rgba(15, 5, 25, 0.6);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.5),
+        0 0 60px rgba(120, 0, 200, 0.1);
+}
+
+/* -------------------- MESSAGES AREA -------------------- */
+.messages-area {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: relative;
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar (Webkit) */
+.messages-area::-webkit-scrollbar {
+    width: 6px;
+}
+.messages-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+.messages-area::-webkit-scrollbar-thumb {
+    background: rgba(123, 44, 255, 0.3);
+    border-radius: 10px;
+}
+.messages-area::-webkit-scrollbar-thumb:hover {
+    background: rgba(123, 44, 255, 0.6);
+}
+
+/* -------------------- MESSAGE ROW E AVATAR -------------------- */
+.message-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    animation: fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.avatar-holder {
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-holder img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%; /* Se a imagem da Athena já tiver fundo transparente, você pode tirar o radius */
+    object-fit: cover;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(130, 31, 136, 0.5);
+    padding: 2px;
+}
+
+/* -------------------- BUBBLES -------------------- */
+.bubble-group {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+}
+
+.bubble {
+    padding: 16px 20px;
+    border-radius: 18px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    font-family: var(--fonte-principal);
+}
+
+.meta-info {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 6px;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.5px;
+}
+
+/* Sistema (Athena) */
+.system { justify-content: flex-start; }
+
+.system .bubble {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #eee;
+    border-bottom-left-radius: 4px;
+}
+
+.system .meta-info {
+    text-align: left;
+    margin-left: 5px;
+}
+
+/* Usuário */
+.user { flex-direction: row-reverse; }
+
+.user .bubble {
+    background: linear-gradient(135deg, rgba(130, 31, 136, 0.9), rgba(80, 15, 85, 1));
+    box-shadow: 0 5px 20px rgba(130, 31, 136, 0.3);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    border: 1px solid rgba(130, 31, 136, 0.5);
+}
+
+.user .meta-info {
+    text-align: right;
+    margin-right: 5px;
+}
+
+/* -------------------- INPUT AREA -------------------- */
+.input-area {
+    flex-shrink: 0;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+
+    background: rgba(10, 0, 20, 0.8);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.input-area input {
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    padding: 16px 25px;
+    color: white;
+    font-size: 1rem;
+    font-family: var(--fonte-principal);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-area input:focus {
+    border-color: #ba4fc0;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 15px rgba(186, 79, 192, 0.3);
+}
+
+.input-area button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(130, 31, 136, 1), rgba(80, 15, 85, 1));
+    color: white;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(130, 31, 136, 0.4);
+}
+
+.input-area button:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(130, 31, 136, 0.6);
+}
+
+/* -------------------- MOBILE -------------------- */
+@media (max-width: 768px) {
+    .central-wrapper { padding: 30px 15px; }
+    .central-header h1 { font-size: 2.5rem; }
+    .chat-container { height: 75vh; max-height: none; }
+    .messages-area { padding: 20px 15px; }
+    .bubble { padding: 12px 16px; font-size: 0.9rem; }
+    .bubble-group { max-width: 85%; }
+    .input-area { padding: 15px; }
+    .input-area input { padding: 12px 20px; }
+}

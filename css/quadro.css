@@ -1,0 +1,300 @@
+/* --- Layout Geral e Header --- */
+.page-wrapper {
+    margin-top: 40px;
+    padding-bottom: 60px;
+}
+
+.revisao-header {
+    margin-bottom: 3rem;
+}
+
+.glow-title {
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(130, 31, 136, 0.8), 0 0 40px rgba(130, 31, 136, 0.4);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+}
+
+/* --- Painel de Controles (Glassmorphism) --- */
+.glass-panel {
+    background: rgba(20, 5, 25, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(130, 31, 136, 0.3);
+    padding: 20px 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.filtros-principais {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+}
+
+/* --- Inputs e Selects --- */
+.busca-wrapper {
+    position: relative;
+    flex: 2;
+    min-width: 250px;
+}
+
+.busca-wrapper i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    transition: 0.3s;
+}
+
+.nexus-input, .select-nexus {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px;
+    color: #fff !important;
+    padding: 12px 15px;
+    font-family: var(--fonte-principal);
+    transition: all 0.3s ease;
+}
+
+.busca-wrapper input {
+    padding-left: 50px !important;
+}
+
+.select-nexus {
+    flex: 1;
+    min-width: 180px;
+    cursor: pointer;
+}
+
+.select-nexus option {
+    background: #110216; /* Fundo escuro para as opções */
+    color: #fff;
+}
+
+/* Foco Neon nos Inputs */
+.nexus-input:focus, .select-nexus:focus {
+    outline: none;
+    border-color: rgba(130, 31, 136, 0.8) !important;
+    box-shadow: 0 0 15px rgba(130, 31, 136, 0.4);
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+.busca-wrapper input:focus + i, .busca-wrapper:focus-within i {
+    color: #ba4fc0;
+}
+
+/* --- Botões de Visualização --- */
+.view-switch {
+    display: flex;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 6px;
+    border-radius: 10px;
+    align-self: flex-start;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-view {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-view:hover {
+    color: #fff;
+    background: rgba(130, 31, 136, 0.2);
+}
+
+.btn-view.active {
+    background: rgba(130, 31, 136, 0.6);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(130, 31, 136, 0.3);
+}
+
+/* --- MODO LISTA --- */
+.view-lista {
+    background: rgba(15, 5, 20, 0.6);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 16px;
+    border: 1px solid rgba(130, 31, 136, 0.2);
+    overflow-x: auto;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+.header-lista {
+    background: rgba(130, 31, 136, 0.15);
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 18px 20px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(130, 31, 136, 0.3);
+}
+
+.lista-row {
+    display: grid;
+    grid-template-columns: 60px 160px 140px 160px 1fr 110px 120px;
+    min-width: 1000px;
+    padding: 15px 20px;
+    align-items: center;
+    transition: background 0.2s ease;
+}
+
+.item-lista {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.item-lista:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.item-lista:last-child {
+    border-bottom: none;
+}
+
+/* --- Avatares e Textos --- */
+.avatar-habbo {
+    width: 48px;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px solid rgba(130, 31, 136, 0.5);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+.nick-destaque { 
+    color: #fff; 
+    font-weight: 700; 
+    font-size: 1rem; 
+    letter-spacing: 0.5px;
+}
+
+/* --- Badges de Status (Premium Feel) --- */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    border-radius: 20px;
+    letter-spacing: 1px;
+}
+
+.badge-adv { 
+    background: rgba(255, 128, 255, 0.15); 
+    color: #ff80ff; 
+    border: 1px solid rgba(255, 128, 255, 0.4);
+    box-shadow: 0 0 10px rgba(255, 128, 255, 0.2);
+}
+
+.badge-erro { 
+    background: rgba(255, 94, 94, 0.15); 
+    color: #ff5e5e; 
+    border: 1px solid rgba(255, 94, 94, 0.4);
+    box-shadow: 0 0 10px rgba(255, 94, 94, 0.2);
+}
+
+.badge-notif { 
+    background: rgba(255, 213, 79, 0.15); 
+    color: #ffd54f; 
+    border: 1px solid rgba(255, 213, 79, 0.4);
+    box-shadow: 0 0 10px rgba(255, 213, 79, 0.2);
+}
+
+.tempo-restante {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* --- MODO CARD (Reformulado) --- */
+.view-card { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+    gap: 25px; 
+    padding: 10px;
+}
+
+.card-quadro { 
+    background: rgba(25, 8, 35, 0.7); 
+    backdrop-filter: blur(10px); 
+    border: 1px solid rgba(130, 31, 136, 0.2); 
+    border-radius: 16px; 
+    padding: 25px; 
+    color: #fff; 
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card-quadro:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(130, 31, 136, 0.2);
+    border-color: rgba(130, 31, 136, 0.6);
+}
+
+.card-header-flex { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
+
+.nickname { 
+    font-size: 1.2rem; 
+    font-weight: 900; 
+    margin: 0; 
+}
+
+.motivo-box { 
+    background: rgba(0, 0, 0, 0.3); 
+    padding: 15px; 
+    border-radius: 10px; 
+    border-left: 4px solid #ba4fc0; 
+    font-size: 0.9rem; 
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Loader Animation */
+.loader-wrapper {
+    padding: 100px 20px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.pulse-icon {
+    color: #ba4fc0;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 10px rgba(186, 79, 192, 0.6));
+}

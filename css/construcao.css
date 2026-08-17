@@ -1,0 +1,63 @@
+/* ========================================================== */
+/* ==   ESTILOS APRIMORADOS PARA A PÁGINA "EM CONSTRUÇÃO"  == */
+/* ========================================================== */
+
+.construction-container {
+    /* Usa Flexbox para centralizar o card na tela */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* A CORREÇÃO PRINCIPAL: 
+      Faz o container ocupar toda a altura vertical da tela, 
+      descontando a altura do seu header fixo. Isso força a centralização.
+    */
+    min-height: calc(100vh - var(--altura-header));
+    
+    padding: var(--espaco-lg);
+}
+
+.construction-content {
+    /* Estilo do "card" de vidro fosco */
+    background: rgba(0, 0, 0, 0.2); /* Fundo escuro e semitransparente */
+    backdrop-filter: blur(8px); /* O efeito de desfoque do fundo */
+    -webkit-backdrop-filter: blur(8px); /* Para compatibilidade com Safari */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil para definir o card */
+    border-radius: 12px; /* Bordas mais arredondadas */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Sombra para dar profundidade */
+    
+    /* Layout interno */
+    text-align: center;
+    padding: var(--espaco-xl); /* Mais espaço interno para "respirar" */
+    max-width: 500px; /* Impede que o card fique muito largo em telas grandes */
+    width: 100%;
+
+    /* Animação sutil de entrada */
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.construction-content .fa-code {
+    /* Ícone maior e com mais destaque */
+    font-size: 5rem; 
+    margin-bottom: var(--espaco-md);
+    color: var(--cor-primaria-clara);
+}
+
+.construction-content h2 {
+    /* Título com melhor aparência */
+    font-size: 2.2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--cor-texto-principal);
+    margin-bottom: 0; /* Remove a margem inferior do h2 */
+}

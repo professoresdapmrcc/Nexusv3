@@ -1,0 +1,56 @@
+body.applications-body { display: block !important; min-height: 100vh; padding: 70px 0 0 !important; background: #eee9f2 !important; color: #2a1031 !important; animation: none !important; }
+.applications-shell.container { display: block; width: 100%; max-width: none; padding: 0; gap: 0; }
+.applications-shell > .central-context-nav { width: 100%; max-width: none; padding-inline: max(1rem,calc((100% - 1280px)/2 + 1rem)); background: #18061e; }
+.applications-hero { position: relative; display: grid; min-height: 520px; padding: clamp(4.5rem,8vw,7rem) max(1rem,calc((100% - 1280px)/2)); grid-template-columns: 1fr minmax(240px,.42fr); align-items: end; gap: clamp(2rem,8vw,8rem); background: radial-gradient(circle at 80% 38%,rgba(157,61,167,.25),transparent 25rem),#18061e; color: #fff; overflow: hidden; }
+.applications-hero::after { content: 'APLICAR'; position: absolute; right: -.04em; bottom: -.18em; color: rgba(255,255,255,.025); font-size: clamp(9rem,24vw,22rem); font-weight: 900; letter-spacing: -.08em; line-height: .78; pointer-events: none; }
+.applications-hero > * { position: relative; z-index: 2; }
+.applications-eyebrow { margin: 0 0 1rem; color: #963d9f; font-size: .57rem; font-weight: 900; letter-spacing: .17em; text-transform: uppercase; }
+.applications-hero .applications-eyebrow { display: flex; align-items: center; color: #dfa4e5; }
+.applications-hero .applications-eyebrow span { width: 32px; height: 1px; margin-right: .75rem; background: currentColor; }
+.applications-body .main-title { margin: 0; background: none; color: #fff; font-size: clamp(3.4rem,7vw,6.7rem); font-weight: 900; letter-spacing: -.075em; line-height: .89; text-align: left; -webkit-text-fill-color: currentColor; }
+.applications-body .main-title strong { color: #da9ce1; font: inherit; }
+.applications-body .intro-text { max-width: 600px; margin: 1.6rem 0 0; color: rgba(255,255,255,.52); font-size: .74rem; line-height: 1.75; text-align: left; }
+.applications-steps { display: grid; border-top: 1px solid rgba(255,255,255,.14); }
+.applications-steps span { display: grid; min-height: 54px; grid-template-columns: 34px 1fr; align-items: center; border-bottom: 1px solid rgba(255,255,255,.14); color: rgba(255,255,255,.58); font-size: .58rem; font-weight: 760; }
+.applications-steps b { color: #dba1e2; font-size: .5rem; }
+.applications-choice-heading { width: min(calc(100% - 3rem),1280px); margin: 0 auto; padding: clamp(5rem,8vw,7rem) 0 2.5rem; }
+.applications-choice-heading h2 { max-width: 800px; margin: 0; color: #2a1031; font-size: clamp(2.7rem,5vw,4.8rem); font-weight: 900; letter-spacing: -.07em; line-height: .94; }
+.applications-body .options-grid { display: grid; width: min(calc(100% - 3rem),1280px); margin: 0 auto; padding-bottom: clamp(5rem,9vw,8rem); grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1px; background: rgba(48,18,56,.14); }
+.applications-body .option-card { position: relative; display: grid; min-height: 470px; padding: 1.5rem; grid-template-rows: auto 190px 1fr auto; border: 0; border-radius: 0; background: #f8f5fa; color: #2a1031; text-align: left; backdrop-filter: none; box-shadow: none; overflow: hidden; }
+.applications-body .option-card::before { inset: auto -25% 34% auto; width: 210px; height: 210px; border: 1px solid rgba(42,16,49,.1); border-radius: 50%; background: transparent; opacity: 1; transition: transform .5s ease; }
+.applications-body .option-card:hover { border-color: transparent; background: #fff; box-shadow: none; transform: translateY(-7px); }
+.applications-body .option-card:hover::before { transform: translate(-16px,-10px) scale(1.06); }
+.option-index { position: relative; z-index: 2; color: #8e3697; font-size: .5rem; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+.applications-body .option-logo { position: relative; z-index: 2; align-self: center; width: 145px; height: 165px; margin: 1rem auto 0; object-fit: contain; filter: none; }
+.applications-body .option-card:hover .option-logo { transform: translateY(-6px) scale(1.04); }
+.applications-body .option-card > div { position: relative; z-index: 2; align-self: end; }
+.applications-body .option-title { margin: 0 0 .7rem; color: #2a1031; font-size: clamp(1.12rem,1.7vw,1.45rem); font-weight: 850; letter-spacing: -.035em; line-height: 1.1; }
+.applications-body .option-card > div p { margin: 0; color: rgba(42,16,49,.5); font-size: .62rem; line-height: 1.6; }
+.option-action { position: relative; z-index: 2; display: flex; margin-top: 1.25rem; padding-top: .85rem; align-items: center; justify-content: space-between; border-top: 1px solid rgba(42,16,49,.12); color: #7d3185; font-size: .52rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.applications-body .description-wrapper, .applications-body .form-wrapper { width: min(calc(100% - 2rem),900px); margin: clamp(4rem,7vw,6rem) auto; }
+.applications-body .glass-panel { padding: clamp(1.5rem,4vw,3rem); border: 1px solid rgba(42,16,49,.13); border-radius: 0; background: #f9f6fa; color: #2a1031; box-shadow: none; backdrop-filter: none; }
+.applications-body #description-logo { width: 130px; height: 150px; filter: none; animation: none; }
+.applications-body .content-container h2, .applications-body .form-step h2, .applications-body .form-step h3 { color: #2a1031; font-weight: 850; letter-spacing: -.035em; }
+.applications-body .content-container h2 { font-size: clamp(1.8rem,4vw,3rem); }
+.applications-body .content-container h3 { color: #84348d; border-color: rgba(42,16,49,.12); }
+.applications-body .content-container p, .applications-body .content-container .quote { color: rgba(42,16,49,.6); }
+.applications-body .input-group label { color: #2a1031; }
+.applications-body .input-description { color: rgba(42,16,49,.48) !important; }
+.applications-body input[type="text"], .applications-body select, .applications-body textarea { border-color: rgba(42,16,49,.16); border-radius: 8px; background: #fff; color: #2a1031; backdrop-filter: none; }
+.applications-body input[type="text"]:focus, .applications-body select:focus, .applications-body textarea:focus { border-color: #8b3494; background: #fff; box-shadow: 0 0 0 3px rgba(139,52,148,.1); }
+.applications-body select option { background: #fff; color: #2a1031; }
+.applications-body .radio-option, .applications-body .checkbox-option { border-color: rgba(42,16,49,.14); border-radius: 8px; background: #fff; color: #2a1031; }
+.applications-body .radio-option:hover, .applications-body .checkbox-option:hover { border-color: #9a4aa3; background: #fbf6fc; }
+.applications-body .radio-custom, .applications-body .checkbox-custom { border-color: rgba(42,16,49,.35); }
+.applications-body .scale-option label { border-color: rgba(42,16,49,.14); border-radius: 6px; background: #fff; color: #2a1031; }
+.applications-body .scale-labels { color: rgba(42,16,49,.5); }
+.applications-body .main-btn { min-height: 46px; border-radius: 999px; background: #2c0e34; box-shadow: none; font-size: .62rem; }
+.applications-body .main-btn:hover { background: #873690; box-shadow: none; }
+.applications-body .back-btn { border: 1px solid rgba(42,16,49,.16); background: transparent; color: #2a1031; }
+.applications-body .back-btn:hover { background: rgba(42,16,49,.06); box-shadow: none; }
+.applications-body .subscribe-section { border-color: rgba(42,16,49,.12); }
+.applications-body .subscribe-section p { color: #2a1031; }
+.applications-body .credits { padding: 0 1rem 3rem; color: rgba(42,16,49,.4); }
+@media (max-width: 880px) { .applications-hero { grid-template-columns: 1fr; } .applications-body .options-grid { grid-template-columns: 1fr; } .applications-body .option-card { min-height: 390px; grid-template-rows: auto 150px 1fr auto; } .applications-body .option-logo { height: 140px; } }
+@media (max-width: 560px) { .applications-hero { padding-inline: 1rem; } .applications-choice-heading, .applications-body .options-grid { width: min(calc(100% - 2rem),1280px); } .applications-body .glass-panel { padding: 1.35rem 1rem; } }
+@media (prefers-reduced-motion: reduce) { .applications-body .option-card, .applications-body .option-card::before, .applications-body .option-logo { transition: none !important; } }

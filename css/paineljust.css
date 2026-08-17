@@ -1,0 +1,230 @@
+/* ==========================================================================
+   PAINEL DE EXIBIÇÃO - DESIGN PREMIUM & GLASSMORPHISM
+   ========================================================================== */
+
+/* As variáveis globais (como --cor-primaria-clara) e o gradiente do 
+   fundo da página vêm do global.css */
+
+.painel-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.painel-header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeIn 0.8s ease backwards;
+}
+
+.painel-header h2 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-shadow: 0 4px 15px rgba(186, 79, 192, 0.4);
+    margin-bottom: 10px;
+}
+
+.painel-header p {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Container Grid para os Cards */
+.grid-justificativas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 30px;
+}
+
+/* Card Individual (Efeito Vidro Fosco) */
+.card-glass {
+    /* Fundo semi-transparente para combinar com o gradiente fixo do global.css */
+    background: linear-gradient(145deg, rgba(26, 4, 28, 0.65), rgba(15, 2, 18, 0.85));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    animation: formEntrada 0.5s ease backwards;
+}
+
+/* Barra de Destaque no Topo do Card */
+.card-glass::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: linear-gradient(90deg, transparent, var(--cor-primaria-clara), transparent);
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.card-glass:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(186, 79, 192, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-color: rgba(186, 79, 192, 0.3);
+}
+
+.card-glass:hover::before {
+    opacity: 1;
+}
+
+@keyframes formEntrada {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header do Card (Avatar e Informações) */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+
+.avatar-box-pequeno {
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(186, 79, 192, 0.2) 0%, rgba(0,0,0,0.5) 100%);
+    border-radius: 50%;
+    border: 2px solid var(--cor-primaria-clara);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-shadow: 0 0 10px rgba(186, 79, 192, 0.3);
+    flex-shrink: 0;
+}
+
+.avatar-box-pequeno img {
+    margin-top: -5px;
+    transform: scale(1.1);
+}
+
+.info-user-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-user-card .nick {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.badge-cargo {
+    background: rgba(186, 79, 192, 0.15);
+    color: #f0a0f5;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+    width: fit-content;
+    border: 1px solid rgba(186, 79, 192, 0.3);
+}
+
+/* Corpo do Card (Dados) */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.campo-dado {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.campo-dado label {
+    color: var(--cor-primaria-clara);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.campo-dado p {
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    margin: 0;
+}
+
+.motivo-texto {
+    font-style: italic;
+    color: #c4c4c4 !important;
+}
+
+/* Footer do Card (Timestamp) */
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 15px;
+}
+
+.timestamp-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #888;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Animação de Carregamento (Spinner) */
+.loading-glass {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 15px;
+}
+
+.loading-glass p {
+    color: #a0a0a0;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(186, 79, 192, 0.2);
+    border-top: 4px solid var(--cor-primaria-clara);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

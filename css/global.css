@@ -1,0 +1,431 @@
+/* ==========================================================================
+   1. ARQUIVO GLOBAL DE ESTILOS - NEXUS
+   ========================================================================== */
+
+/* --- Importação da Fonte (Montserrat) --- */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap');
+
+
+/* ==========================================================================
+   2. VARIÁVEIS DO TEMA (DESIGN SYSTEM)
+   ========================================================================== */
+
+:root {
+    /* -- Paleta de Cores -- */
+    --cor-primaria-escura: #250427;
+    --cor-primaria-media: #821F88;
+    --cor-primaria-clara: #BA4FC0;
+    
+    --cor-fundo: var(--cor-primaria-escura);
+    --cor-texto-principal: #fff;
+    --cor-texto-secundario: #fff;
+    
+    --cor-sucesso: #2ecc71;
+    --cor-erro: #e74c3c;
+    --cor-aviso: #f1c40f;
+
+    /* -- Tipografia -- */
+    --fonte-principal: 'Montserrat', sans-serif;
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+    --font-weight-black: 600;
+    --font-weight-index: 900;
+    
+    /* -- Layout e Espaçamento -- */
+    --largura-container: 1200px;
+    --padding-container: 1.5rem;
+    --border-radius: 8px;
+    
+    --espaco-xs: 0.5rem;  /* 8px */
+    --espaco-sm: 1rem;   /* 16px */
+    --espaco-md: 1.5rem; /* 24px */
+    --espaco-lg: 2.5rem; /* 40px */
+    --espaco-xl: 4rem;   /* 64px */
+
+    /* -- Header -- */
+    --altura-header: 70px;
+}
+
+
+/* ==========================================================================
+   3. RESET BÁSICO E ESTILOS GLOBAIS
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--fonte-principal);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.6;
+    color: var(--cor-texto-principal);
+    
+    /* --- FUNDO COM GRADIENTE ESTÁTICO (CORRIGIDO) --- */
+    background: linear-gradient(180deg, var(--cor-primaria-escura), var(--cor-primaria-media), var(--cor-primaria-clara));
+    background-attachment: fixed; /* Mantém o gradiente fixo no lugar durante o scroll */
+    background-repeat: no-repeat; /* Garante que o gradiente não se repita */
+    min-height: 100vh; /* Garante que o body ocupe pelo menos toda a altura da tela */
+
+    /* Melhora a renderização da fonte */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    
+    /* Garante que o conteúdo não fique escondido atrás do header fixo */
+    padding-top: var(--altura-header);
+}
+
+
+/* ==========================================================================
+   4. TIPOGRAFIA
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    margin-bottom: var(--espaco-sm);
+    color: #ffffff; /* Títulos sempre brancos para destaque */
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+    margin-bottom: var(--espaco-sm);
+}
+
+a {
+    color: var(--cor-primaria-clara);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+ul, ol {
+    padding-left: var(--espaco-md);
+    margin-bottom: var(--espaco-sm);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/* ==========================================================================
+   5. LAYOUT (CONTAINER PRINCIPAL)
+   ========================================================================== */
+
+.container {
+    width: 100%;
+    max-width: var(--largura-container);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--padding-container);
+    padding-right: var(--padding-container);
+}
+
+
+/* ==========================================================================
+   6. COMPONENTES REUTILIZÁVEIS (BOTÕES E FORMULÁRIOS)
+   ========================================================================== */
+
+/* --- Botões --- */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--fonte-principal);
+    font-size: 1rem;
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: var(--border-radius);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--cor-primaria-media);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--cor-primaria-clara);
+    color: #ffffff;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--cor-primaria-clara);
+    border-color: var(--cor-primaria-clara);
+}
+
+.btn-outline:hover {
+    background-color: var(--cor-primaria-clara);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* --- Formulários --- */
+.form-group {
+    margin-bottom: var(--espaco-sm);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--espaco-xs);
+    font-weight: var(--font-weight-bold);
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: var(--fonte-principal);
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    color: var(--cor-texto-principal);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control::placeholder {
+    color: var(--cor-texto-secundario);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--cor-primaria-clara);
+    box-shadow: 0 0 0 3px rgba(186, 79, 192, 0.3);
+}
+
+
+/* ==========================================================================
+   7. CLASSES UTILITÁRIAS
+   ========================================================================== */
+
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.font-bold {
+    font-weight: var(--font-weight-bold);
+}
+
+.notification-item {
+    position: relative;
+}
+
+/* 2. O botão de excluir */
+.notification-delete-btn {
+    position: absolute; /* Posicionamento absoluto em relação ao .notification-item */
+    bottom: 8px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #9ca3af; /* Um cinza sutil */
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5; /* Deixa ele meio transparente por padrão */
+    transition: all 0.2s ease-in-out;
+}
+
+/* 3. Efeito ao passar o mouse */
+.notification-item:hover .notification-delete-btn {
+    opacity: 1; /* Mostra o botão completamente */
+    background-color: #f3f4f6; /* Um fundo leve para destacar */
+}
+
+.notification-delete-btn:hover {
+    color: #ef4444; /* Cor vermelha para indicar perigo/exclusão */
+}
+
+body.auth-loading .auth-dependente {
+    display: none !important;
+}
+
+/* ==========================================================================
+   NEXUS ALERTS & TOASTS (Notificações Globais)
+   ========================================================================== */
+
+/* --- Container dos Toasts (Notificações flutuantes) --- */
+#nexus-toast-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    pointer-events: none; /* Para não bloquear cliques onde não deve */
+}
+
+/* O Toast em si */
+.nexus-toast {
+    background: rgba(20, 5, 30, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-family: var(--fonte-principal), sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+    transform: translateX(120%);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.nexus-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Tipos de Toast */
+.nexus-toast.success { border-left: 4px solid #22c55e; }
+.nexus-toast.success i { color: #22c55e; }
+
+.nexus-toast.error { border-left: 4px solid #ef4444; }
+.nexus-toast.error i { color: #ef4444; }
+
+.nexus-toast.info { border-left: 4px solid #3b82f6; }
+.nexus-toast.info i { color: #3b82f6; }
+
+/* --- Modal de Confirmação (Substituto do confirm) --- */
+#nexus-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#nexus-confirm-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.nexus-confirm-box {
+    background: rgba(25, 8, 30, 0.9);
+    border: 1px solid rgba(130, 31, 136, 0.5);
+    border-radius: 20px;
+    padding: 30px 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(130, 31, 136, 0.2);
+}
+
+#nexus-confirm-overlay.show .nexus-confirm-box {
+    transform: scale(1);
+}
+
+.nexus-confirm-icon {
+    font-size: 3rem;
+    color: #ba4fc0;
+    margin-bottom: 15px;
+}
+
+.nexus-confirm-text {
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: var(--fonte-principal);
+    font-weight: 600;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.nexus-confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.nexus-confirm-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-family: var(--fonte-principal);
+}
+
+.nexus-confirm-btn.cancel {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nexus-confirm-btn.cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.nexus-confirm-btn.confirm {
+    background: linear-gradient(135deg, #ba4fc0, #821f88);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(130, 31, 136, 0.4);
+}
+
+.nexus-confirm-btn.confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(130, 31, 136, 0.6);
+}
+
+/* Responsivo para Toasts */
+@media (max-width: 600px) {
+    #nexus-toast-container {
+        bottom: 20px; right: 10px; left: 10px; align-items: center;
+    }
+    .nexus-toast { width: 100%; justify-content: center; }
+}

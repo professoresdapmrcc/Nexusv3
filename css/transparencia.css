@@ -1,0 +1,41 @@
+/* companhia/conselho/css/transparencia.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
+
+body::-webkit-scrollbar { width: 8px; }
+body::-webkit-scrollbar-track { background: #05070c; }
+body::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+body::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+.t-scrollbar::-webkit-scrollbar { width: 5px; }
+.t-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+.t-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+
+.t-panel {
+    background-color: #0a0d14;
+    border: 1px solid #1e293b;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.t-panel-hover:hover {
+    transform: translateY(-4px);
+    border-color: rgba(168, 85, 247, 0.4);
+    box-shadow: 0 20px 40px -10px rgba(168, 85, 247, 0.15);
+}
+
+.t-fade-in { animation: t-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes t-fade {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.t-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 8px; font-weight: 900; font-size: 0.65rem; 
+    text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid transparent;
+}
+.t-badge-aprovada { background: rgba(16, 185, 129, 0.1); color: #34d399; border-color: rgba(16, 185, 129, 0.2); }
+.t-badge-alteracoes { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border-color: rgba(245, 158, 11, 0.2); }
+.t-badge-reprovada { background: rgba(239, 68, 68, 0.1); color: #f87171; border-color: rgba(239, 68, 68, 0.2); }
+.t-badge-neutro { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border-color: rgba(59, 130, 246, 0.2); }
