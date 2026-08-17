@@ -4,23 +4,6 @@ let userProfileListener = null; // Guarda a escuta do banco para podermos deslig
 let userProfileListenerUid = null;
 let inactiveAccountBlockInProgress = false;
 
-// Ponte mínima para a ilha isolada do topbar. O restante do site continua
-// consultando o documento normal; somente elementos do cabeçalho atravessam
-// explicitamente o Shadow DOM por estas funções.
-function getNexusHeaderElement(id) {
-    return document.getElementById(id) || window.nexusHeaderRoot?.getElementById?.(id) || null;
-}
-
-function queryNexusHeader(selector) {
-    return document.querySelector(selector) || window.nexusHeaderRoot?.querySelector?.(selector) || null;
-}
-
-function queryAllNexusHeader(selector) {
-    const documentMatches = Array.from(document.querySelectorAll(selector));
-    const shadowMatches = window.nexusHeaderRoot ? Array.from(window.nexusHeaderRoot.querySelectorAll(selector)) : [];
-    return [...documentMatches, ...shadowMatches];
-}
-
 // =====================================================================
 // == 🚀 ANTI-FLICKER (CARREGAMENTO IMEDIATO DO CACHE)
 // == Executa ANTES do DOM carregar completamente para evitar o "piscar"
@@ -285,20 +268,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // == 🚀 INJEÇÃO IMEDIATA DO CACHE (Assim que o header carregar)
     // ================================================================
     if (window.preLoadedUserData) {
-        const applyCachedHeader = () => {
-            if (getNexusHeaderElement('header-user-info-logged-in')) {
-                populateUIWithUserData(window.preLoadedUserData, null);
-                return true;
-            }
-            return false;
-        };
         const headerObserver = new MutationObserver((mutations, obs) => {
-            if (applyCachedHeader()) obs.disconnect();
+            if (document.getElementById('header-user-info-logged-in')) {
+                populateUIWithUserData(window.preLoadedUserData, null);
+                obs.disconnect(); 
+            }
         });
         headerObserver.observe(document.body, { childList: true, subtree: true });
-        document.addEventListener('nexus-header-ready', () => {
-            if (applyCachedHeader()) headerObserver.disconnect();
-        }, { once: true });
     }
 
     // ===================================
@@ -317,13 +293,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
         firebase.analytics(); 
+        window.db = firebase.firestore();
     }
     
     auth = firebase.auth();
     db = firebase.firestore();
-    // Mantém uma referência pública mesmo quando o Firebase já foi inicializado
-    // por outra página/script antes deste arquivo ser executado.
-    window.db = db;
 
     function isActiveMemberProfile(userData) {
         return String(userData?.status || '').trim().toLowerCase() === 'ativo';
@@ -404,12 +378,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.dispatchEvent(new CustomEvent('accountAccessBlocked', { detail: { status } }));
 
         try {
-            void fetch('/api/auth/logout', {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: { Accept: 'application/json' },
-            });
-            await auth.signOut();
+            await Promise.allSettled([
+                auth.signOut(),
+                fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { Accept: 'application/json' }
+                })
+            ]);
         } catch (error) {
             console.error('Erro ao encerrar a sessão da conta inativa:', error);
         } finally {
@@ -451,9 +427,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Função que aplica a visibilidade dos botões
         function aplicarVisualHeader() {
-            const authLoader = queryNexusHeader('.auth-loader');
-            const loggedOutView = getNexusHeaderElement('profile-icon-logged-out');
-            const loggedInView = getNexusHeaderElement('header-user-info-logged-in');
+            const authLoader = document.querySelector('.auth-loader');
+            const loggedOutView = document.getElementById('profile-icon-logged-out');
+            const loggedInView = document.getElementById('header-user-info-logged-in');
 
             if (authLoader) authLoader.style.display = 'none';
 
@@ -471,21 +447,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Se o loader.js já desenhou o menu na tela, aplica direto:
-        if (getNexusHeaderElement('profile-icon-logged-out')) {
+        if (document.getElementById('profile-icon-logged-out')) {
             aplicarVisualHeader();
         } else {
             // Se o menu ainda não existe, cria o "olheiro" e espera
             const authHeaderObserver = new MutationObserver((mutations, obs) => {
-                if (getNexusHeaderElement('profile-icon-logged-out')) {
+                if (document.getElementById('profile-icon-logged-out')) {
                     aplicarVisualHeader();
                     obs.disconnect(); // Desliga o olheiro depois que fez o trabalho
                 }
             });
             authHeaderObserver.observe(document.body, { childList: true, subtree: true });
-            document.addEventListener('nexus-header-ready', () => {
-                aplicarVisualHeader();
-                authHeaderObserver.disconnect();
-            }, { once: true });
         }
     });
 
@@ -493,23 +465,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ===================================================================================
     // == INICIALIZADOR DE SCRIPTS GLOBAIS (OBSERVADOR)
     // ===================================================================================
-    let globalHeaderScriptsInitialized = false;
-    const initializeHeaderWhenReady = () => {
-        if (!globalHeaderScriptsInitialized && getNexusHeaderElement('menu-toggle')) {
-            initializeGlobalScripts();
-            globalHeaderScriptsInitialized = true;
-            return true;
-        }
-        return false;
-    };
     const observer = new MutationObserver((mutationsList, observer) => {
-        if (initializeHeaderWhenReady()) observer.disconnect();
+        if (document.getElementById('menu-toggle')) {
+            initializeGlobalScripts();
+            observer.disconnect();
+        }
     });
     observer.observe(document.body, { childList: true, subtree: true });
-    document.addEventListener('nexus-header-ready', () => {
-        if (initializeHeaderWhenReady()) observer.disconnect();
-    }, { once: true });
-    initializeHeaderWhenReady();
 
 
     // ===================================================================================
@@ -519,79 +481,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log("🎨 Inicializando scripts visuais globais...");
         
         try {
-            const menuToggle = getNexusHeaderElement('menu-toggle');
-            const topNavMenu = getNexusHeaderElement('top-nav-menu');
+            const menuToggle = document.getElementById('menu-toggle');
+            const topNavMenu = document.getElementById('top-nav-menu');
             const overlay = document.getElementById('overlay');
             const body = document.body;
             const searchPopup = document.getElementById('search-popup');
             const loginPopup = document.getElementById('login-popup');
             const notificationPanel = document.getElementById('notification-panel');
-            const desktopHeader = document.querySelector('.desktop-header');
-
-            // Identifica a rota atual para que a navegação também funcione
-            // como orientação visual, sem depender de marcação manual por página.
-            if (topNavMenu) {
-                const currentPath = window.location.pathname === '/' ? '/index.html' : window.location.pathname;
-                topNavMenu.querySelectorAll(':scope > ul > li > a[href]').forEach(link => {
-                    const rawHref = link.getAttribute('href');
-                    if (!rawHref || rawHref === '#' || rawHref.startsWith('javascript:')) return;
-                    const linkPath = new URL(link.href, window.location.origin).pathname;
-                    if (linkPath === currentPath || (currentPath === '/index.html' && linkPath === '/')) {
-                        link.classList.add('is-current');
-                        link.setAttribute('aria-current', 'page');
-                    }
-                });
-            }
-
-            // Mantém a altura original no início da página e cria um estado
-            // proporcionalmente compacto após a rolagem. Os limites diferentes
-            // evitam que o header fique alternando ao redor de um único pixel.
-            if (desktopHeader) {
-                let compactHeader = false;
-                let headerFramePending = false;
-
-                const updateHeaderDensity = () => {
-                    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-
-                    // A densidade muda continuamente nos primeiros pixels da
-                    // página, evitando o salto visual de um estado para outro.
-                    const linearProgress = Math.min(Math.max(scrollPosition / 140, 0), 1);
-                    const densityProgress = linearProgress * linearProgress * (3 - 2 * linearProgress);
-                    const mobileHeader = window.innerWidth < 1120;
-                    const expandedHeight = mobileHeader ? 64 : 78;
-                    const compactHeight = mobileHeader ? 56 : 62;
-                    const contentScale = 1 - densityProgress * (mobileHeader ? 0.045 : 0.085);
-
-                    desktopHeader.style.setProperty('--header-height', `${expandedHeight - ((expandedHeight - compactHeight) * densityProgress)}px`);
-                    desktopHeader.style.setProperty('--header-content-scale', contentScale.toFixed(4));
-                    desktopHeader.style.setProperty('--header-caption-opacity', (1 - densityProgress).toFixed(4));
-
-                    if (!compactHeader && scrollPosition > 104) compactHeader = true;
-                    if (compactHeader && scrollPosition < 30) compactHeader = false;
-
-                    desktopHeader.classList.toggle('is-compact', compactHeader);
-                    document.body.classList.toggle('header-compact', compactHeader);
-                    headerFramePending = false;
-                };
-
-                const requestHeaderUpdate = () => {
-                    if (headerFramePending) return;
-                    headerFramePending = true;
-                    window.requestAnimationFrame(updateHeaderDensity);
-                };
-
-                updateHeaderDensity();
-                window.addEventListener('scroll', requestHeaderUpdate, { passive: true });
-                window.addEventListener('resize', requestHeaderUpdate, { passive: true });
-            }
 
             function closeAllPopups() {
                 if (topNavMenu) topNavMenu.classList.remove('active');
-                if (menuToggle) {
-                    menuToggle.classList.remove('is-open');
-                    menuToggle.setAttribute('aria-expanded', 'false');
-                    menuToggle.setAttribute('aria-label', 'Abrir menu');
-                }
                 if (overlay) overlay.classList.remove('active');
                 if (searchPopup) searchPopup.classList.remove('active');
                 if (loginPopup) loginPopup.classList.remove('active');
@@ -607,9 +506,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     } else {
                         closeAllPopups();
                         topNavMenu.classList.add('active');
-                        menuToggle.classList.add('is-open');
-                        menuToggle.setAttribute('aria-expanded', 'true');
-                        menuToggle.setAttribute('aria-label', 'Fechar menu');
                         overlay.classList.add('active');
                         body.classList.add('noscroll');
                     }
@@ -617,17 +513,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 overlay.addEventListener('click', closeAllPopups);
             }
 
-            const dropdownLinks = queryAllNexusHeader('.top-nav-menu .dropdown > a');
+            const dropdownLinks = document.querySelectorAll('.top-nav-menu .dropdown > a');
             dropdownLinks.forEach(link => {
                 link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    if (window.innerWidth < 1120) {
+                    if (window.innerWidth < 1024) {
+                        event.preventDefault();
                         link.parentElement.classList.toggle('open');
                     }
                 });
             });
 
-            const searchToggleButton = getNexusHeaderElement('search-toggle-btn');
+            const searchToggleButton = document.getElementById('search-toggle-btn');
             const closeSearchButton = document.getElementById('close-search-btn');
             const popupSearchForm = document.getElementById('popup-search-form');
 
@@ -677,7 +573,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             }
 
-            const notificationToggleButton = getNexusHeaderElement('notification-toggle-btn');
+            const notificationToggleButton = document.getElementById('notification-toggle-btn');
             if (notificationToggleButton && notificationPanel) {
                 notificationToggleButton.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -694,7 +590,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             }
 
-            const loggedInView = getNexusHeaderElement('header-user-info-logged-in');
+            const loggedInView = document.getElementById('header-user-info-logged-in');
             
             if (loggedInView && loginPopup) {
                 loggedInView.addEventListener('click', (e) => {
@@ -726,7 +622,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function initializeNotificationListener() {
         const notificationItemsList = document.getElementById('notification-items-list');
-        const notificationCountElement = getNexusHeaderElement('notification-count');
+        const notificationCountElement = document.getElementById('notification-count');
 
         if (!notificationItemsList || !notificationCountElement) return;
 
@@ -895,12 +791,12 @@ li.innerHTML = `
         document.body.classList.add('auth-state-determined', 'user-logged-in');
         document.body.classList.remove('user-logged-out');
 
-        const authLoader = queryNexusHeader('.auth-loader');
-        const loggedOutView = getNexusHeaderElement('profile-icon-logged-out');
-        const loggedInView = getNexusHeaderElement('header-user-info-logged-in');
-        const elImg = getNexusHeaderElement('header-user-img');
-        const elName = getNexusHeaderElement('header-user-name');
-        const elRole = getNexusHeaderElement('user-main-role');
+        const authLoader = document.querySelector('.auth-loader');
+        const loggedOutView = document.getElementById('profile-icon-logged-out');
+        const loggedInView = document.getElementById('header-user-info-logged-in');
+        const elImg = document.getElementById('header-user-img');
+        const elName = document.getElementById('header-user-name');
+        const elRole = document.getElementById('user-main-role');
 
         if (authLoader) authLoader.style.display = 'none';
         if (loggedOutView) loggedOutView.classList.add('hidden');
@@ -1042,8 +938,8 @@ li.innerHTML = `
         }
         userProfileListenerUid = null;
 
-        const loggedInView = getNexusHeaderElement('header-user-info-logged-in');
-        const loggedOutView = getNexusHeaderElement('profile-icon-logged-out');
+        const loggedInView = document.getElementById('header-user-info-logged-in');
+        const loggedOutView = document.getElementById('profile-icon-logged-out');
 
         if(loggedInView) loggedInView.classList.add('hidden');
         if(loggedOutView) loggedOutView.classList.remove('hidden');
@@ -1051,7 +947,7 @@ li.innerHTML = `
         document.body.classList.remove('user-logged-in');
         document.body.classList.add('user-logged-out');
 
-        const topNavMenu = getNexusHeaderElement('top-nav-menu');
+        const topNavMenu = document.getElementById('top-nav-menu');
         const overlay = document.getElementById('overlay');
         if(topNavMenu) topNavMenu.classList.remove('active');
         if(overlay) overlay.classList.remove('active');
@@ -1076,19 +972,28 @@ li.innerHTML = `
                         await goOffline(userToLogout.uid); 
                     }
                     
-                    updateUIAfterLogout();
-                    void fetch('/api/auth/logout', {
-                        method: 'POST',
-                        credentials: 'same-origin',
-                        headers: { Accept: 'application/json' },
-                    });
-                    await auth.signOut();
+                    updateUIAfterLogout(); 
+                    await Promise.allSettled([
+                        auth.signOut(),
+                        fetch('/api/auth/logout', {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            headers: { Accept: 'application/json' }
+                        })
+                    ]);
                     
                     console.log("Usuário deslogado com sucesso.");
                     window.location.href = "/index.html"; 
                 } catch (error) {
                     console.error("Erro ao deslogar:", error);
-                    await auth.signOut();
+                    await Promise.allSettled([
+                        auth.signOut(),
+                        fetch('/api/auth/logout', {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            headers: { Accept: 'application/json' }
+                        })
+                    ]);
                     window.location.reload();
                 }
             }
