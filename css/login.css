@@ -1,315 +1,348 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@900&family=Sora:wght@600;700;800&display=swap');
+/* --- Importação da Fonte com todos os pesos necessários --- */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap');
 
-html {
-  min-width: 320px;
-  min-height: 100%;
-  background: #250427;
-}
-
-body.nexus-login-page {
-  margin: 0;
-  padding: 0 !important;
-  min-width: 320px;
-  min-height: 100vh;
-  overflow: hidden;
-  color: #fff;
-  font-family: var(--fonte-principal, 'Inter', Arial, sans-serif);
-  background:
-    linear-gradient(rgba(192, 96, 196, 0.7), rgba(192, 96, 196, 0.7)),
-    url('../imgs/corredor-prof.png') center / cover no-repeat !important;
-}
-
-.login-page-shell {
-  position: relative;
-  min-height: 100vh;
-  isolation: isolate;
+/* --- CONFIGURAÇÕES GERAIS E FUNDO --- */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    background: linear-gradient(rgba(192, 96, 196, 0.7), rgba(192, 96, 196, 0.7)), url('../imgs/corredor-prof.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 .page-container {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 2; /* ADICIONADO: Garante que os formulários fiquem acima das partículas */
 }
 
 .top-left-logo {
-  position: absolute;
-  top: 35px;
-  left: 45px;
-  z-index: 3;
-  display: block;
-  width: 65px;
-  height: 65px;
+    position: absolute;
+    top: 35px;
+    left: 45px;
+    width: 65px; 
+    image-rendering: auto; 
 }
 
-.top-left-logo img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.left-panel,
-.right-panel {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 50%;
-  min-height: 100vh;
-  box-sizing: border-box;
+/* --- COLUNAS PRINCIPAIS --- */
+.left-panel, .right-panel {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .left-panel {
-  align-items: flex-start;
-  padding-left: 10%;
-}
-
-.right-panel {
-  align-items: flex-end;
-  padding: 20px 10% 20px 20px;
-}
-
-.title-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 26px;
-  width: min(100%, 650px);
+    align-items: flex-start;
+    padding-left: 10%;
+    position: relative;
 }
 
 .crest-image {
-  flex: 0 0 auto;
-  width: 126px;
-  height: 126px;
-  object-fit: contain;
-  image-rendering: pixelated;
-  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.35));
-}
-
-.text-group {
-  min-width: 0;
+    position: relative;
+    top: 110px;
+    left: 0;
+    width: 120px; 
+    margin-bottom: 25px;
+    image-rendering: pixelated;
 }
 
 .main-title {
-  margin: 0;
-  color: #fff;
-  font-family: var(--fonte-display, 'Sora', 'Inter', Arial, sans-serif);
-  font-size: clamp(32px, 3vw, 48px);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  white-space: nowrap;
+    position: relative;
+    top: -35px;
+    left: 150px;
+    font-weight: 700;
+    font-size: 45px;
+    color: #FFFFFF;
+    line-height: 1.1; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .main-title .professores {
-  color: #ec65f3;
+    color: #ec65f3;
 }
 
 .subtitle {
-  margin: 15px 0 0;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 11px;
-  text-transform: uppercase;
-  white-space: nowrap;
+    position: relative;
+    top: -35px;
+    left: 150px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #ffffff;
+    margin-top: 15px;
+    letter-spacing: 12px;
+    text-transform: uppercase;
+}
+
+/* --- PAINEL DA DIREITA (FORMULÁRIOS) --- */
+.right-panel {
+    align-items: center;
+    padding: 20px;
 }
 
 .auth-container {
-  width: min(100%, 420px);
-  padding: 40px 50px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 25px;
-  box-sizing: border-box;
-  background: rgba(37, 4, 39, 0.92);
-  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
-  text-align: center;
-  backdrop-filter: blur(10px);
-}
-
-.rccsystem-auth-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.rccsystem-login-title {
-  width: 100%;
-  margin: 0;
-  color: #fff;
-  font-family: var(--fonte-display, 'Sora', 'Inter', Arial, sans-serif);
-  font-size: clamp(36px, 3vw, 42px);
-  font-weight: 700;
-  line-height: 1.12;
-  letter-spacing: 0;
-  text-align: center;
-}
-
-.nexus-word {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 900;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-.logo-n {
-  color: var(--cor-primaria-clara, #a29bfe);
-  text-shadow: 0 0 12px rgba(162, 155, 254, 0.6);
-}
-
-.rccsystem-login-tagline {
-  width: 100%;
-  margin: 8px 0 0;
-  color: #d3c0e0;
-  font-size: 11px;
-  font-weight: 800;
-  line-height: 1.4;
-  letter-spacing: 0.8px;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.rccsystem-login-description {
-  width: 100%;
-  margin: 18px 0 0;
-  color: #d3c0e0;
-  font-size: 14px;
-  line-height: 1.6;
-  text-align: center;
-}
-
-.rccsystem-login-status {
-  width: 100%;
-  margin: 16px 0 0;
-  padding: 10px 12px;
-  border: 1px solid rgba(255, 178, 0, 0.3);
-  border-radius: 10px;
-  box-sizing: border-box;
-  color: #ffd37a;
-  background: rgba(255, 178, 0, 0.08);
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.rccsystem-login-status[hidden] {
-  display: none;
-}
-
-.rccsystem-login-action {
-  width: 100%;
-  margin-top: 28px;
-}
-
-.rccsystem-login-note {
-  margin: 13px 6px 0;
-  color: rgba(211, 192, 224, 0.68);
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-#particles-js {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-@media (max-width: 1100px) {
-  .left-panel {
-    padding-left: 6%;
-  }
-
-  .title-container {
-    gap: 18px;
-  }
-
-  .crest-image {
-    width: 104px;
-    height: 104px;
-  }
-
-  .main-title {
-    font-size: 38px;
-  }
-
-  .subtitle {
-    letter-spacing: 8px;
-  }
-}
-
-@media (max-width: 900px) {
-  body.nexus-login-page {
-    overflow-y: auto;
-  }
-
-  .page-container {
-    flex-direction: column;
-    min-height: 100svh;
-  }
-
-  .left-panel,
-  .top-left-logo {
-    display: none;
-  }
-
-  .right-panel {
-    align-items: center;
+    background-color: rgba(37, 4, 39, 0.9);
+    padding: 40px 50px;
+    border-radius: 25px;
     width: 100%;
-    min-height: 100svh;
-    padding: 34px 20px;
-  }
-
-  .auth-container {
-    width: min(100%, 430px);
-    padding: 36px 42px;
-  }
+    max-width: 420px;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+    max-height: 95vh; 
+    overflow-y: auto;
 }
 
-@media (max-width: 520px) {
-  .right-panel {
-    padding: 20px 16px;
-  }
-
-  .auth-container {
-    padding: 30px 24px;
-    border-radius: 20px;
-  }
-
-  .rccsystem-login-title {
-    font-size: 34px;
-  }
+.logo h1 {
+    font-size: 42px;
+    margin: 0 0 5px 0;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+.logo-n {
+    color: #ec65f3;
+}
+.logo p {
+    margin-bottom: 35px;
+    color: #d3c0e0;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
 }
 
-@media (max-height: 700px) and (min-width: 901px) {
-  .auth-container {
-    padding-top: 28px;
-    padding-bottom: 27px;
-  }
-
-  .rccsystem-login-action {
-    margin-top: 28px;
-  }
+.auth-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 5px 0;
+}
+.auth-subtitle {
+    margin-bottom: 30px;
+    color: #d3c0e0;
+    font-size: 14px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .login-page-shell *,
-  .login-page-shell *::before,
-  .login-page-shell *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+    position: relative; /* ADICIONADO: Necessário para o ícone da palavra-passe */
 }
-.rccsystem-login-button.is-temporarily-disabled {
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: #d3c0e0;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.input-group input {
+    width: 100%;
+    padding: 14px 15px;
+    background-color: #2c0d3b;
+    border: 1px solid #3a154f; 
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 0 10px -2px rgba(216, 91, 154, 0.5);
+    font-family: 'Montserrat', sans-serif;
+    /* ADICIONADO: Espaço extra à direita para o texto não ficar por baixo do ícone */
+    padding-right: 40px; 
+}
+.input-group input:focus {
+    outline: none;
+    border-color: #d85b9a;
+    box-shadow: 0 0 12px 0px rgba(216, 91, 154, 0.8);
+}
+
+/* ========================================================= */
+/* ADICIONADO: ÍCONE DE MOSTRAR/OCULTAR SENHA E BOTÃO DISABLED */
+/* ========================================================= */
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    bottom: 14px; /* Alinha o ícone com a parte inferior do input */
+    cursor: pointer;
+    user-select: none;
+    opacity: 0.6;
+    font-size: 16px;
+    transition: opacity 0.2s ease;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+}
+
+button:disabled {
+    opacity: 0.6;
     cursor: not-allowed;
-    filter: grayscale(.7);
-    opacity: .5;
-    pointer-events: auto;
+    transform: none !important; /* Remove o efeito de subir (hover) */
+    background-color: #692455 !important; /* Fica mais escuro quando desativado */
+    border-bottom: 3px solid #4a183b !important;
+}
+/* ========================================================= */
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+.checkbox-group label {
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+.checkbox-group input[type="checkbox"] {
+    width: auto;
 }
 
-.rccsystem-login-button.is-temporarily-disabled:hover {
-    transform: none;
+.auth-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background-color: #bf419b;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    margin-top: 10px;
+    border-bottom: 3px solid #943278; 
+}
+.auth-button:hover {
+    background-color: #d052a9;
+    transform: translateY(-2px);
+}
+
+.auth-links {
+    margin-top: 30px;
+    font-size: 13px;
+    font-weight: 600;
+}
+.auth-links a {
+    color: #d3c0e0;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.auth-links a:hover {
+    color: #fff;
+}
+.auth-links span {
+    margin: 0 10px;
+    color: #7c319c;
+}
+
+.verification-text {
+    font-size: 14px;
+    color: #d3c0e0;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+    margin: 25px 0;
+    line-height: 1.5;
+}
+.verification-code-text {
+    color: #fff;
+    font-weight: 700;
+}
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 15px;
+    min-height: 1.2em;
+}
+
+.success-message {
+    color: #d3c0e0;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 18px;
+    min-height: 1.2em;
+}
+
+.rccsystem-login-intro,
+.rccsystem-login-help {
+    color: #d3c0e0;
+    line-height: 1.6;
+}
+
+.rccsystem-login-intro {
+    margin: 0 0 24px;
+    font-size: 15px;
+}
+
+.rccsystem-login-help {
+    margin: 22px 0 0;
+    font-size: 12px;
+}
+
+.rccsystem-login-button.is-loading {
+    opacity: 0.72;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ==========================================================================
+   OTIMIZAÇÃO PARA MOBILE (TELAS MENORES QUE 900px)
+   ========================================================================== */
+@media (max-width: 900px) {
+    body, html {
+        overflow: auto;
+    }
+    .page-container {
+        flex-direction: column;
+        height: auto; 
+    }
+    .left-panel, .top-left-logo {
+        display: none;
+    }
+    .right-panel {
+        width: 100%;
+        padding: 40px 20px; 
+        height: auto;
+    }
+    .auth-container {
+        padding: 30px; 
+        max-height: none; 
+        overflow-y: visible; 
+        margin-top: 20px;
+    }
+    .logo h1 {
+        font-size: 36px;
+    }
+    .auth-title {
+        font-size: 28px;
+    }
+}
+
+/* ========================================================= */
+/* ADICIONADO: EFEITO DE PARTÍCULAS (MUNDO ROXO)             */
+/* ========================================================= */
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Fica atrás da interface (.page-container tem z-index: 2) */
 }
