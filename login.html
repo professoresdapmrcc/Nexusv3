@@ -7,80 +7,59 @@
     <link rel="icon" type="image/png" href="/imgs/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@policiarcc/rccsystem-login-button@1.2.0/dist/styles.css"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/login.css">
-</head>
-<body class="nexus-login-page">
-    <div class="login-page-shell">
-        <div id="particles-js" aria-hidden="true"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@policiarcc/rccsystem-login-button@1.2.0/dist/styles.css">
 
-        <main class="page-container">
-            <a href="/" class="top-left-logo" aria-label="Voltar ao início do NEXUS">
-                <img src="/imgs/logo-n.png" alt="">
-            </a>
-
-            <section class="left-panel" aria-label="Companhia dos Professores">
-                <div class="title-container">
-                    <img src="/imgs/emblema-prof.png" alt="" class="crest-image">
-                    <div class="text-group">
-                        <h1 class="main-title">
-                            COMPANHIA DOS<br>
-                            <span class="professores">PROFESSORES</span>
-                        </h1>
-                        <p class="subtitle">SOBERANIA ROXA</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="right-panel">
-                <div class="auth-container rccsystem-auth-container" aria-labelledby="rcc-login-title">
-                    <h2 id="rcc-login-title" class="rccsystem-login-title">
-                        <span class="nexus-word"><span class="logo-n">N</span>EXUS</span>
-                    </h2>
-
-                    <p class="rccsystem-login-tagline">
-                        IMERSA-TE NO MUNDO ROXO.
-                    </p>
-
-                    <p class="rccsystem-login-description">
-                        Use sua conta RCCSystem para acessar o NEXUS da Companhia dos Professores.
-                    </p>
-
-                    <p
-                        id="login-message"
-                        class="rccsystem-login-status"
-                        role="status"
-                        aria-live="polite"
-                        hidden
-                    ></p>
-
-                    <div class="rccsystem-login-action">
-                        <a
-                            class="rccsystem-login-button rccsystem-login-button--default rccsystem-login-button--full-width is-temporarily-disabled"
-                            href="#"
-                            data-login-endpoint="/api/auth/login"
-                            aria-disabled="true"
-                            aria-describedby="rcc-login-note"
-                        >
-                            <span aria-hidden="true" class="rccsystem-login-button__mark"></span>
-                            <span class="rccsystem-login-button__label">Login temporariamente indisponível</span>
-                        </a>
-                    </div>
-
-                    <p id="rcc-login-note" class="rccsystem-login-note">
-                        Novas entradas estão pausadas temporariamente. Sessões já ativas não serão afetadas.
-                    </p>
-                </div>
-            </section>
-        </main>
-    </div>
-
+    <!-- Firebase é usado somente para receber a sessão criada pela API. -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <main class="page-container">
+        <img src="imgs/logo-n.png" alt="Logo N" class="top-left-logo">
+
+        <section class="left-panel">
+            <div class="title-container">
+                <img src="imgs/emblema-prof.png" alt="Emblema" class="crest-image">
+                <div class="text-group">
+                    <h1 class="main-title">COMPANHIA DOS<br><span class="professores">PROFESSORES</span></h1>
+                    <h2 class="subtitle">SOBERANIA ROXA</h2>
+                </div>
+            </div>
+        </section>
+
+        <section class="right-panel">
+            <div class="auth-container">
+                
+                <div id="login-view">
+                    <div class="logo">
+                        <h1><span class="logo-n">N</span>EXUS</h1>
+                        <p>IMERSA-TE NO MUNDO ROXO.</p>
+                    </div>
+                    <p class="rccsystem-login-intro">Use sua conta RCCSystem para entrar no Nexus.</p>
+                    <a
+                        id="rccsystem-login-button"
+                        class="rccsystem-login-button rccsystem-login-button--default rccsystem-login-button--full-width"
+                        href="/api/auth/login"
+                    >
+                        <span aria-hidden="true" class="rccsystem-login-button__mark"></span>
+                        <span class="rccsystem-login-button__label">Entre com o RCCSystem</span>
+                    </a>
+                    <p id="login-message" class="error-message" role="status" aria-live="polite"></p>
+                    <p class="rccsystem-login-help">O acesso e o primeiro cadastro são validados pelo RCCSystem.</p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="/js/login.js"></script>
 </body>
