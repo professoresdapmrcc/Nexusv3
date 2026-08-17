@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Atualização 1</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/templates/header.css"> 
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/companhia/conselho/css/atualizacao1.css">
+    <link rel="stylesheet" href="/companhia/conselho/css/estilo.css">  
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script> 
+</head>
+<body class="light-theme aba-conselho"></body>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container-conselho">
+        <header class="header-pagina">
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <h1>CONSELHO DA ATUALIZAÇÃO 1</h1>
+                
+                <div class="periodo-atual-badge" style="display: inline-flex; align-items: center; gap: 10px; background: rgba(186, 79, 192, 0.15); border: 1px solid rgba(186, 79, 192, 0.4); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; width: fit-content; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+                    <i class="fa-solid fa-calendar-week"></i>
+                    <span id="texto-periodo">Calculando semana atual...</span>
+                </div>
+            </div>
+            
+            <div class="botoes-acao" style="display: flex; gap: 15px; align-items: center;">
+                <a href="forms.html" class="btn-postar"><i class="fa-solid fa-plus"></i> Registrar Função</a>
+                <button onclick="abrirModalManual()" class="btn-postar btn-manual"><i class="fa-solid fa-book"></i> Manual</button>
+            </div>
+        </header>
+
+        <div class="grid-conselho">
+            <section class="secao-logs card-vidro">
+                <div class="topo-card">
+                    <i class="fa-solid fa-list-check"></i>
+                    <h2>Histórico de Registros</h2>
+                </div>
+                <div class="tabela-container">
+                    <table id="tabela-logs">
+                        <thead>
+                            <tr>
+                                <th>Nick</th>
+                                <th>Data/Hora</th>
+                                <th>Função Realizada</th>
+                                <th>Comprovante</th>
+                                <th>Comentários</th>
+                                <th class="th-acoes" style="display: none;">Ações</th> 
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-logs">
+                            <tr><td colspan="6" class="txt-center">Carregando registros...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="secao-escalas card-vidro">
+                <div class="topo-card">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <h2>Funções e Prazos</h2>
+                </div>
+                <div class="lista-prazos-cards" id="lista-prazos">
+                    <div style="padding: 20px; text-align: center; color: #888;">Carregando escalas...</div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div id="modal-manual" class="modal-nexus">
+    <div class="modal-content glass-card max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-2xl">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+            <h2 style="font-size: 1.5rem; font-weight: bold; color: var(--cor-primaria-clara); margin: 0;"><i class="fa-solid fa-upload" style="margin-right: 10px;"></i> Manual da Atualização 1</h2>
+            <button onclick="fecharModalManual()" style="background: none; border: none; color: #888; font-size: 2rem; cursor: pointer; transition: 0.3s;">&times;</button>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 20px; color: #e2e8f0; font-size: 0.9rem;">
+            
+            <a href="https://docs.google.com/document/d/1-SXYl0gBJ3aOwj7Dwc88WW9YmXWYpChoGc2FYpp8Svs/edit?tab=t.0" target="_blank" style="display: block; width: 100%; text-align: center; padding: 12px; font-size: 1.1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(168,85,247,0.3); border-radius: 8px; color: #fff; text-decoration: none; font-weight: 600; transition: 0.3s;">
+                <i class="fa-solid fa-book" style="margin-right: 8px;"></i> Acessar Documento Completo
+            </a>
+            
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                <h3 style="font-size: 1.1rem; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 12px; margin-top: 0; color: #fff;">ATUALIZAÇÃO DOS CURSOS NO RCCSYSTEM</h3>
+                <p style="font-weight: 600; margin-bottom: 5px; color: var(--cor-primaria-clara);">Resumo (Diariamente, até 23h59):</p>
+                <ul style="list-style-type: disc; padding-left: 20px; margin: 0; line-height: 1.6;">
+                    <li>Verifique requerimentos pendentes no RCCSystem e confira os dados na planilha de relatórios.</li>
+                    <li>Se a postagem estiver regular, aceite. Se estiver irregular, negue e encaminhe ao SPP.</li>
+                    <li>Ao finalizar, poste o carimbo de atualização no sistema.</li>
+                </ul>
+            </div>
+
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                <h3 style="font-size: 1.1rem; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 12px; margin-top: 0; color: #fff;">CONFERÊNCIA DA LISTAGEM DE MEMBROS</h3>
+                <p style="font-weight: 600; margin-bottom: 5px; color: var(--cor-primaria-clara);">Resumo (Aos sábados, até 23h59):</p>
+                <ul style="list-style-type: disc; padding-left: 20px; margin: 0; line-height: 1.6;">
+                    <li>Acesse a listagem e verifique o perfil de cada professor no RCCSystem.</li>
+                    <li>Confira se os cursos CAC e CAP estão postados para quem tem Graduação I.</li>
+                    <li>Caso falte algum curso, faça a postagem no sistema para regularizar o membro.</li>
+                </ul>
+            </div>
+
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                <h3 style="font-size: 1.1rem; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 12px; margin-top: 0; color: #fff;">ATUALIZAÇÃO DO LIVRO DE RECORDES E RANKING</h3>
+                <p style="font-weight: 600; margin-bottom: 5px; color: var(--cor-primaria-clara);">Resumo (Domingos, dias 01 e 16):</p>
+                <ul style="list-style-type: disc; padding-left: 20px; margin: 0; line-height: 1.6;">
+                    <li>Abra o tópico do Livro de Recordes e a planilha geradora.</li>
+                    <li>Compare os relatórios da meta encerrada e atualize os recordistas no tópico.</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/companhia/conselho/js/atualizacao1.js" defer></script>
+</body>
+</html>

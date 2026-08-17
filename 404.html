@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Erro 404</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/404.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="error-page">
+        <section class="error-container">
+
+            <div class="error-card">
+
+                <div class="error-code">
+                    <span class="number">4</span>
+                    <div class="video-zero">
+                        <video autoplay loop muted playsinline>
+                            <source src="/imgs/griffo-flying.webm" type="video/webm">
+                        </video>
+                    </div>
+                    <span class="number">4</span>
+                </div>
+
+                <div class="error-content">
+                    <p>O grifo levou esta página para longe dos nossos servidores. O link pode estar quebrado ou você digitou um endereço que não existe mais no NEXUS.</p>
+
+                    <nav class="error-nav">
+                        <a href="/" class="nav-item">
+                            <i class="fa-solid fa-house"></i> Voltar à Base
+                        </a>
+                        <a href="javascript:history.back()" class="nav-item return-btn">
+                            <i class="fa-solid fa-rotate-left"></i> Página Anterior
+                        </a>
+                    </nav>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js" defer></script>
+
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script>
+    <script src="/js/404.js" defer></script>
+
+</body>
+</html>

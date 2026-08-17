@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Promoções</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/promocoes.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="bg-[#0b0f19] text-slate-200 font-['Inter'] pt-20 min-h-screen flex flex-col selection:bg-indigo-500/30">
+
+    <div id="header-placeholder"></div>
+
+    <div id="access-denied-screen" class="hidden fixed inset-0 z-50 bg-[#0b0f19] flex flex-col items-center justify-center text-center px-4">
+        <i class="fas fa-lock text-5xl text-red-500 mb-4 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]"></i>
+        <h2 class="text-2xl font-bold text-white mb-2">Acesso Restrito</h2>
+        <p class="text-slate-400 text-sm">Faça login no sistema NEXUS para acessar este painel.</p>
+    </div>
+
+    <div id="modal-votos-conselho" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+        <div class="glass-panel w-full max-w-xl rounded-2xl overflow-hidden flex flex-col shadow-2xl border border-slate-700 max-h-[85vh]">
+            <div class="bg-[#0b0f19] p-4 border-b border-slate-800 flex justify-between items-center z-10">
+                <div>
+                    <h2 class="text-xl font-black text-white" id="modal-conselho-nick">Nick</h2>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Pareceres dos Colegas</p>
+                </div>
+                <button onclick="fecharModalVotosConselho()" class="text-slate-400 hover:text-red-400 transition bg-slate-900 hover:bg-slate-800 w-8 h-8 rounded-lg flex items-center justify-center border border-slate-800"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-5 overflow-y-auto custom-scrollbar flex-1 bg-gradient-to-b from-[#0b0f19] to-slate-900" id="modal-conselho-content">
+                </div>
+        </div>
+    </div>
+
+    <main id="main-app-screen" class="hidden flex-1 container mx-auto px-4 max-w-[1000px] pb-8 relative">
+        
+        <div class="glass-panel p-4 rounded-xl mb-4 flex flex-col md:flex-row justify-between items-center z-10 relative">
+            <div class="mb-3 md:mb-0 text-center md:text-left flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <i class="fas fa-gavel text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-white leading-tight">Avaliação de Promoções</h1>
+                    <div id="sync-status" class="text-[10px] text-amber-400 font-semibold animate-pulse mt-0.5"><i class="fas fa-sync fa-spin mr-1"></i> Sincronizando...</div>
+                </div>
+            </div>
+            <div class="flex gap-2 bg-[#0b0f19] p-1 rounded-lg border border-slate-800">
+                <button id="nav-avaliacao" class="px-4 py-2 rounded-md text-xs font-bold bg-indigo-600 text-white transition shadow-md shadow-indigo-900/40"><i class="fas fa-user-check mr-1.5"></i> Avaliar Membros</button>
+                <button id="nav-comparador" class="px-4 py-2 rounded-md text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition"><i class="fas fa-balance-scale mr-1.5"></i> Comparador</button>
+            </div>
+        </div>
+
+        <div id="view-avaliacao" class="view-module block animate-fade-in relative">
+            
+            <div class="flex flex-wrap justify-center gap-2 mb-4" id="promo-buttons">
+                <button data-cargo="professor" class="promo-btn glass-btn disabled:opacity-50 text-xs" disabled>
+                    <i class="fas fa-chalkboard-teacher text-blue-400 mr-1.5"></i> Professores <span class="count-badge hidden ml-1.5 bg-black/50 text-white px-1.5 py-0.5 rounded text-[10px]">0/0</span>
+                </button>
+                <button data-cargo="coordenador" class="promo-btn glass-btn disabled:opacity-50 text-xs" disabled>
+                    <i class="fas fa-users-cog text-purple-400 mr-1.5"></i> Coordenadores <span class="count-badge hidden ml-1.5 bg-black/50 text-white px-1.5 py-0.5 rounded text-[10px]">0/0</span>
+                </button>
+                <button data-cargo="graduador" class="promo-btn glass-btn disabled:opacity-50 text-xs" disabled>
+                    <i class="fas fa-user-graduate text-pink-400 mr-1.5"></i> Graduadores <span class="count-badge hidden ml-1.5 bg-black/50 text-white px-1.5 py-0.5 rounded text-[10px]">0/0</span>
+                </button>
+            </div>
+
+            <div id="initial-message" class="text-center py-20 glass-panel rounded-2xl border-dashed border-2 border-slate-700">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#0b0f19] mb-4 animate-bounce border border-slate-800">
+                    <i class="fas fa-arrow-up text-2xl text-indigo-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-1">Pronto para avaliar?</h3>
+                <p class="text-sm text-slate-400">Selecione um cargo acima para iniciar.</p>
+            </div>
+
+            <div id="evaluation-container" class="hidden flex flex-col gap-3 items-start relative">
+                
+                <div class="glass-panel w-full rounded-2xl flex flex-col xl:flex-row shadow-xl shadow-black/80 border border-slate-800 relative items-start">
+                    
+                    <div class="w-full xl:w-2/5 bg-gradient-to-b from-slate-900 to-[#0b0f19] border-b xl:border-b-0 xl:border-r border-slate-800 p-5 flex flex-col relative z-10 xl:sticky xl:top-20 xl:h-[calc(100vh-6rem)] rounded-t-2xl xl:rounded-l-2xl xl:rounded-tr-none">
+                        
+                        <div class="flex justify-between items-center w-full mb-3 z-20">
+                            <span class="bg-indigo-900/50 text-indigo-300 border border-indigo-500/30 font-mono font-bold px-2 py-1 rounded-md text-[10px]" id="card-counter">1 / 10</span>
+                            <button id="toggle-retrospecto-btn" class="text-[10px] font-bold text-slate-400 hover:text-white bg-slate-800/50 px-2 py-1 rounded-md border border-slate-700 transition">
+                                <i class="fas fa-list mr-1"></i> Retrospecto
+                            </button>
+                        </div>
+
+                        <div class="text-center z-20 mb-2 mt-auto">
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-0.5" id="display-cargo-atual">Cargo</p>
+                            <h2 id="display-nick-avaliado" class="text-2xl xl:text-3xl font-black text-white tracking-tight drop-shadow-md break-all">Nick</h2>
+                        </div>
+
+                        <div class="flex-1 flex justify-center items-center relative my-2 z-10 min-h-[160px]">
+                            <div class="absolute inset-0 bg-indigo-500/10 blur-[40px] rounded-full w-40 h-40 mx-auto top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+                            <img id="character-avatar" src="" alt="Avatar" class="relative z-20 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] scale-[1.3] xl:scale-[1.6] transform hover:scale-[1.7] transition-transform duration-500" style="image-rendering: pixelated;">
+                        </div>
+
+                        <div class="w-full mt-auto z-20">
+                            <div class="flex flex-col gap-2">
+                                <label class="veredito-btn promovido w-full cursor-pointer relative group">
+                                    <input type="radio" name="veredito" value="Promovido">
+                                    <div class="v-bg absolute inset-0 bg-emerald-500/10 rounded-lg border border-slate-700 group-hover:border-emerald-500/50 transition"></div>
+                                    <div class="relative py-2.5 flex items-center justify-center gap-2">
+                                        <i class="fas fa-arrow-circle-up text-xl v-icon text-slate-500 group-hover:text-emerald-400 transition"></i>
+                                        <span class="font-black text-sm tracking-wide text-slate-400 group-hover:text-emerald-400 transition">PROMOVIDO</span>
+                                    </div>
+                                </label>
+                                <label class="veredito-btn mantem w-full cursor-pointer relative group">
+                                    <input type="radio" name="veredito" value="Mantém">
+                                    <div class="v-bg absolute inset-0 bg-amber-500/10 rounded-lg border border-slate-700 group-hover:border-amber-500/50 transition"></div>
+                                    <div class="relative py-2.5 flex items-center justify-center gap-2">
+                                        <i class="fas fa-minus-circle text-xl v-icon text-slate-500 group-hover:text-amber-400 transition"></i>
+                                        <span class="font-black text-sm tracking-wide text-slate-400 group-hover:text-amber-400 transition">MANTÉM</span>
+                                    </div>
+                                </label>
+                            </div>
+                            <p id="vagas-alerta" class="text-center text-[10px] font-bold mt-2 h-3"></p>
+                        </div>
+                    </div>
+
+                    <div class="w-full xl:w-3/5 bg-[#0d1322] flex flex-col relative rounded-b-2xl xl:rounded-r-2xl xl:rounded-bl-none">
+                        
+                        <div class="p-5 md:p-6 space-y-4">
+                            
+                            <div class="info-section">
+                                <h3 class="text-sm font-black text-yellow-400 mb-2 flex items-center uppercase tracking-wider"><i class="fas fa-pen-nib mr-1.5"></i> Sua Dissertação</h3>
+                                <textarea id="dissertacao-text" rows="3" class="w-full bg-[#0b0f19] text-slate-200 p-3.5 rounded-xl border border-slate-800 focus:border-yellow-500 outline-none transition resize-none placeholder-slate-600 shadow-inner font-medium text-xs leading-relaxed" placeholder="Descreva o motivo da decisão..."></textarea>
+                            </div>
+
+                            <div class="info-section">
+                                <h3 class="text-xs font-black text-indigo-400 mb-2 flex items-center uppercase tracking-wider"><i class="fas fa-users mr-1.5"></i> Votos do Conselho</h3>
+                                <div id="colleagues-votes-placeholder" class="min-h-[50px]">
+                                    </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="info-section">
+                                    <h3 class="text-xs font-black text-cyan-400 mb-2 flex items-center uppercase tracking-wider"><i class="fas fa-address-card mr-1.5"></i> Dados Base</h3>
+                                    <div id="member-details-placeholder" class="bg-[#0b0f19] rounded-xl p-3.5 border border-slate-800"></div>
+                                </div>
+                                <div class="info-section">
+                                    <h3 class="text-xs font-black text-blue-400 mb-2 flex items-center uppercase tracking-wider"><i class="fas fa-lightbulb mr-1.5"></i> Propostas</h3>
+                                    <div id="propostas-placeholder" class="bg-[#0b0f19] rounded-xl p-3.5 border border-slate-800 h-full flex flex-col justify-center"></div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="info-section col-span-1">
+                                    <h3 class="text-xs font-black text-purple-400 mb-2 flex items-center uppercase tracking-wider"><i class="fas fa-trophy mr-1.5"></i> Rank</h3>
+                                    <div id="internal-ranking-placeholder" class="bg-gradient-to-br from-purple-900/30 to-[#0b0f19] rounded-xl p-3.5 border border-purple-500/30 h-20 flex flex-col items-center justify-center text-center shadow-md"></div>
+                                </div>
+                                <div class="info-section col-span-2">
+                                    <h3 class="text-xs font-black text-emerald-400 mb-2 flex items-center uppercase tracking-wider"><i class="fas fa-chart-line mr-1.5"></i> Meta</h3>
+                                    <div id="metas-current" class="bg-gradient-to-br from-emerald-900/10 to-[#0b0f19] rounded-xl p-3.5 border border-emerald-500/30 h-20 flex flex-col justify-center shadow-md"></div>
+                                </div>
+                            </div>
+
+                            <div class="info-section">
+                                <h3 class="text-xs font-black text-slate-400 mb-2 flex items-center uppercase tracking-wider"><i class="fas fa-history mr-1.5"></i> Desempenho Passado</h3>
+                                <div id="metas-history" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                            </div>
+
+                            <div class="info-section pb-2">
+                                <h3 class="text-xs font-black text-red-400 mb-2 flex items-center uppercase tracking-wider"><i class="fas fa-shield-alt mr-1.5"></i> Histórico de Conduta</h3>
+                                <div id="errors-warnings-placeholder" class="space-y-2"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-950/90 backdrop-blur-md p-4 border-t border-slate-800 flex justify-between items-center z-20 sticky bottom-0 rounded-b-2xl xl:rounded-br-2xl xl:rounded-bl-none">
+                            <button id="prev-button" class="px-4 py-2 bg-[#0b0f19] hover:bg-slate-800 rounded-lg text-xs font-bold border border-slate-700 transition flex items-center disabled:opacity-30 disabled:cursor-not-allowed">
+                                <i class="fas fa-chevron-left mr-1.5"></i> Anterior
+                            </button>
+                            <div class="text-slate-500 text-[10px] font-bold uppercase tracking-widest flex items-center hidden sm:flex"><i class="fas fa-info-circle mr-1.5"></i> Preenchimento Obrigatório</div>
+                            <button id="next-button" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold text-white transition flex items-center shadow-md shadow-indigo-900/50 border border-indigo-500">
+                                Próximo <i class="fas fa-chevron-right ml-1.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="retrospecto-screen" class="hidden mt-4 glass-panel rounded-2xl p-5 border border-indigo-500/30 animate-fade-in shadow-xl">
+                <div class="flex justify-between items-center mb-5 border-b border-slate-800 pb-3">
+                    <h2 class="text-xl font-black text-white"><i class="fas fa-list-check text-indigo-500 mr-2"></i> Retrospecto Geral</h2>
+                    <button onclick="document.getElementById('toggle-retrospecto-btn').click()" class="bg-[#0b0f19] hover:bg-red-500/20 hover:text-red-400 text-slate-300 px-3 py-1.5 border border-slate-800 rounded-md text-xs font-bold transition">
+                        Fechar <i class="fas fa-times ml-1"></i>
+                    </button>
+                </div>
+                <div id="retrospecto-content" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3"></div>
+            </div>
+        </div>
+
+        <div id="view-comparador" class="view-module hidden animate-fade-in">
+            <div class="glass-panel p-4 rounded-2xl mb-5 flex flex-col md:flex-row gap-4 items-end z-20 relative shadow-md">
+                <div class="w-full md:w-1/3">
+                    <label class="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-wider">Cargo</label>
+                    <select id="cargo-select" class="w-full bg-[#0b0f19] border border-slate-800 rounded-lg p-2.5 text-slate-200 text-sm font-bold outline-none focus:border-indigo-500 disabled:opacity-50 transition" disabled>
+                        <option value="" disabled selected>Aguarde...</option>
+                    </select>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <label class="block text-[10px] font-black text-indigo-400 mb-1.5 uppercase tracking-wider">Membro A</label>
+                    <select id="membro-a-select" class="w-full bg-[#0b0f19] border border-indigo-900/50 rounded-lg p-2.5 text-slate-200 text-sm font-bold outline-none focus:border-indigo-500 disabled:opacity-50 transition" disabled>
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <label class="block text-[10px] font-black text-pink-400 mb-1.5 uppercase tracking-wider">Membro B</label>
+                    <select id="membro-b-select" class="w-full bg-[#0b0f19] border border-pink-900/50 rounded-lg p-2.5 text-slate-200 text-sm font-bold outline-none focus:border-pink-500 disabled:opacity-50 transition" disabled>
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="compare-arena" class="hidden relative grid grid-cols-1 lg:grid-cols-2 gap-6 z-10 mt-10">
+                <div class="hidden lg:flex absolute left-1/2 top-[5%] transform -translate-x-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-[#0b0f19] border-2 border-slate-800 rounded-full items-center justify-center font-black text-slate-400 shadow-xl text-sm">VS</div>
+                <div id="card-a" class="glass-panel border-t-4 border-indigo-500 rounded-2xl shadow-lg relative mt-10 lg:mt-0 pt-10 transition-all duration-300 min-h-[350px]"></div>
+                <div id="card-b" class="glass-panel border-t-4 border-pink-500 rounded-2xl shadow-lg relative mt-12 lg:mt-0 pt-10 transition-all duration-300 min-h-[350px]"></div>
+            </div>
+        </div>
+
+    </main>
+
+        <footer class="mt-auto py-8 border-t border-slate-800 text-center text-slate-500 text-xs relative z-10 bg-[#0b0f19]">
+        <div class="container mx-auto px-4">
+            <p class="mb-2">&copy; <span id="footer-year"></span> NEXUS - Companhia dos Professores. Todos os direitos reservados.</p>
+            <p><span class="font-mono text-purple-500 font-bold">&lt;/&gt;</span> por <span class="text-purple-400 font-bold">Sr.Gabriel.</span>, com base no anterior pelo <span class="text-pink-400 font-bold">Pegas</span></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/plugin/relativeTime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/locale/pt-br.min.js"></script>
+    
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script>
+    <script type="module" src="/promocoes.js"></script>
+</body>
+</html>

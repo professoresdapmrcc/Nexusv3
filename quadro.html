@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Quadro de Erros & Advertências</title>
+
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/quadro.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+
+<body class="auth-loading">
+    <div id="header-placeholder"></div>
+
+    <main class="container page-wrapper">
+        <div class="revisao-header text-center">
+            <h1 class="glow-title">Quadro de Erros & Advertências</h1>
+            <p class="subtitle-text">Dispõe-se, dado o processo de formalização, o registro disciplinar da companhia.</p>
+        </div>
+
+        <div class="controles-topo glass-panel">
+            <div class="filtros-principais">
+                <div class="busca-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="busca-nick" placeholder="Buscar Nickname..." class="form-control nexus-input" aria-label="Buscar nickname">
+                </div>
+
+                <select id="filtro-cargo" class="form-control select-nexus" aria-label="Filtrar por cargo">
+                    <option value="">Todos os Cargos</option>
+                    <option value="Professor">Professor(a)</option>
+                    <option value="Coordenador">Coordenador(a)</option>
+                    <option value="Graduador">Graduador(a)</option>
+                    <option value="Estagiario">Estagiário(a)</option>
+                    <option value="Conselheiro">Conselheiro(a)</option>
+                </select>
+
+                <select id="filtro-punicao" class="form-control select-nexus" aria-label="Filtrar por punição">
+                    <option value="">Todas as Punições</option>
+                    <option value="Erro">Erros</option>
+                    <option value="Notificação">Notificações</option>
+                    <option value="Advertência">Advertências</option>
+                </select>
+            </div>
+            
+            <div class="view-switch">
+                <button class="btn-view active" id="btn-lista" aria-label="Visualização em Lista"><i class="fas fa-list"></i></button>
+                <button class="btn-view" id="btn-card" aria-label="Visualização em Cards"><i class="fas fa-th-large"></i></button>
+            </div>
+        </div>
+
+        <div id="container-quadro" class="view-lista">
+            <div class="text-center loader-wrapper" id="loader-quadro">
+                <i class="fas fa-circle-notch fa-spin fa-3x pulse-icon"></i>
+                <p>Sincronizando registros...</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js" defer></script>
+
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script> 
+    <script type="module" src="/js/quadro.js" defer></script>
+</body>
+</html>

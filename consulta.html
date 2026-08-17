@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Consulta de Desempenho</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Poppins:wght@300;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/templates/header.css"> 
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/css/consulta.css">  
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <main class="performance-page">
+        
+        <div class="page-header">
+            <h1 class="glow-title">Consulta de Desempenho</h1>
+            <p class="subtitle-text">
+                Selecione o tópico correspondente ao cargo ou grupo interno cujo desempenho deseja consultar.<br>Em caso de dúvidas, consulte um Conselheiro ou superior.
+            </p>
+        </div>
+
+        <section class="content-section">
+            <div class="section-title-wrapper">
+                <h2 class="section-badge"><i class="fas fa-chart-line"></i> RELATÓRIOS VIGENTES</h2>
+            </div>
+            
+            <div class="card-grid two-columns">
+                <a href="https://docs.google.com/spreadsheets/d/1EQ2_6q0lrA4XIQQhaeJNmp9esYItkN6GKlIou9TkEZo/edit?usp=drive_link" target="_blank" rel="noopener noreferrer" class="performance-card glass-card">
+                    <img src="imgs/prof-brevê.png" alt="Emblema Professores">
+                    <span class="card-label">PROFESSORES</span>
+                </a>
+                <a href="https://docs.google.com/spreadsheets/d/1n3mMltgY0AmDCeO1vRDaYuz-jLaZ--4hO5f9UnTdtEw/edit?usp=drive_link" target="_blank" rel="noopener noreferrer" class="performance-card glass-card">
+                    <img src="imgs/coord-breve.png" alt="Emblema Coordenadores">
+                    <span class="card-label">COORDENADORES</span>
+                </a>
+                <a href="https://docs.google.com/spreadsheets/d/1-jR5kLgKHPJuRsXl3PBnz3sbi4mkDeRiQ9rWmmp8uAk/edit?usp=drive_link" target="_blank" rel="noopener noreferrer" class="performance-card glass-card">
+                    <img src="imgs/grad-breve.png" alt="Emblema Graduadores">
+                    <span class="card-label">GRADUADORES</span>
+                </a>
+                <a href="https://docs.google.com/spreadsheets/d/1bSd-zW1cfd1lcsCZg9cltlD2Fh9I4EED-o4XOOHUsOs/edit?usp=drive_link" target="_blank" rel="noopener noreferrer" class="performance-card glass-card">
+                    <img src="imgs/cons-breve.png" alt="Emblema Conselho">
+                    <span class="card-label">CONSELHO</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="section-title-wrapper">
+                <h2 class="section-badge"><i class="fas fa-users-cog"></i> GRUPOS INTERNOS</h2>
+            </div>
+            
+            <div class="card-grid three-columns">
+                <a href="https://docs.google.com/spreadsheets/d/1LK6KSTl5UEwN881dn8EYlbR0STgUGzkIeb6K92RX30U/edit" target="_blank" rel="noopener noreferrer" class="performance-card glass-card">
+                    <img src="imgs/spp-imagem.png" alt="Emblema SPP">
+                    <span class="card-label">Serviço de Proteção</span>
+                </a>
+                <a href="https://docs.google.com/spreadsheets/d/1Kbe2MzeTgJmY3cX7kCfSNUpVBej7yq3wwjR9a7ZlPao/edit?usp=drive_link" target="_blank" rel="noopener noreferrer" class="performance-card glass-card">
+                    <img src="imgs/cdc-imagem.png" alt="Emblema CDC">
+                    <span class="card-label">Desenv. Cultural</span>
+                </a>
+                <a href="https://docs.google.com/spreadsheets/d/1vrFobBEKufl_5Gp23m6ipzwl7-aywm0qdNkV9i7O53s/edit?usp=drive_link" target="_blank" rel="noopener noreferrer" class="performance-card glass-card">
+                    <img src="imgs/da-imagem.png" alt="Emblema DA">
+                    <span class="card-label">Dept. de Aplicação</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="content-section text-center">
+            <a href="https://drive.google.com/drive/u/2/folders/1A4ua4W_Vw4XdjmH2IQl-kfhPdcFgGbTc" target="_blank" rel="noopener noreferrer" class="btn-arquivo glass-btn">
+                <i class="fas fa-folder-open"></i> ACESSAR ARQUIVOS ANTIGOS
+            </a>
+        </section>
+
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js" defer></script>
+
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/online-status.js" defer></script>
+</body>
+</html>

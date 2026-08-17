@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos — NEXUS</title>
+    <meta name="description" content="Central de cursos, graduações e materiais de formação da Companhia dos Professores.">
+    <meta name="theme-color" content="#18061e">
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/central-pages.css">
+    <link rel="stylesheet" href="/css/cursos.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading courses-body">
+    <a class="skip-link" href="#catalogo-cursos">Ir para os cursos</a>
+    <div id="header-placeholder"></div>
+
+    <main class="courses-page">
+        <section class="courses-hero" aria-labelledby="courses-title">
+            <nav class="central-context-nav" aria-label="Áreas da Central">
+                <span>Central NEXUS</span><a href="/companhia.html">Companhia</a><a href="/cursos.html" class="is-active">Cursos</a><a href="/subgrupos.html">Subgrupos</a><a href="/inscricoes.html">Inscrições</a>
+            </nav>
+            <div class="courses-hero-grid" aria-hidden="true"></div>
+            <div class="courses-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="courses-hero-inner">
+                <div class="courses-hero-copy">
+                    <p class="courses-kicker"><span></span> Central NEXUS / Cursos</p>
+                    <h1 id="courses-title">Conhecimento em<br><strong>modo de aplicação.</strong></h1>
+                    <p>Encontre scripts, graduações e materiais de apoio organizados por etapa da jornada dentro da Companhia.</p>
+                    <div class="courses-hero-actions">
+                        <a href="#catalogo-cursos" class="courses-primary-action">Ver todos os cursos <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+                        <a href="/companhia.html" class="courses-secondary-action">Central de funções <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+
+                <div class="courses-flight-board" aria-label="Três trilhas e dez conteúdos disponíveis">
+                    <div class="flight-board-top"><span>ACADEMIA NEXUS</span><small>CATÁLOGO / 2026</small></div>
+                    <strong class="flight-board-total">10</strong>
+                    <span class="flight-board-caption">conteúdos em três rotas de formação</span>
+                    <div class="flight-board-routes">
+                        <span><i></i> Professores <b>04</b></span>
+                        <span><i></i> Coordenadores <b>04</b></span>
+                        <span><i></i> Graduadores <b>02</b></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="courses-catalog" id="catalogo-cursos" aria-labelledby="catalog-title">
+            <div class="courses-catalog-inner">
+                <div class="courses-section-heading">
+                    <div>
+                        <p class="courses-eyebrow">Rotas de aprendizagem</p>
+                        <h2 id="catalog-title">Escolha sua próxima <span>missão.</span></h2>
+                    </div>
+                    <p>Cada trilha reúne materiais oficiais para consultar, preparar e aplicar.</p>
+                </div>
+
+                <div class="course-filters" role="group" aria-label="Filtrar cursos por trilha">
+                    <button type="button" class="course-filter is-active" data-course-filter="all" aria-pressed="true">Todos</button>
+                    <button type="button" class="course-filter" data-course-filter="professores" aria-pressed="false">Professores</button>
+                    <button type="button" class="course-filter" data-course-filter="coordenadores" aria-pressed="false">Coordenadores</button>
+                    <button type="button" class="course-filter" data-course-filter="graduadores" aria-pressed="false">Graduadores</button>
+                </div>
+
+                <div class="course-grid">
+                    <a href="/companhia/cursos/professores/cac.html" class="course-card course-card--prof" data-course-track="professores">
+                        <span class="course-code">CAC</span><i class="fa-solid fa-comments course-icon" aria-hidden="true"></i>
+                        <div><small>Trilha Professores</small><h3>Aperfeiçoamento Comunicativo</h3><p>Comunicação clara, segura e eficiente para sargentos e equivalências.</p></div>
+                        <span class="course-audience">Sargentos+</span><i class="fa-solid fa-arrow-up-right-from-square course-arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="/companhia/cursos/professores/cro.html" class="course-card course-card--prof" data-course-track="professores">
+                        <span class="course-code">CRO</span><i class="fa-solid fa-spell-check course-icon" aria-hidden="true"></i>
+                        <div><small>Trilha Professores</small><h3>Revisão Ortográfica</h3><p>Precisão no uso da língua e mais confiança para escrever e orientar.</p></div>
+                        <span class="course-audience">Cabos+</span><i class="fa-solid fa-arrow-up-right-from-square course-arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="/companhia/cursos/professores/cap.html" class="course-card course-card--prof" data-course-track="professores">
+                        <span class="course-code">CAP</span><i class="fa-solid fa-user-graduate course-icon" aria-hidden="true"></i>
+                        <div><small>Trilha Professores</small><h3>Aperfeiçoamento de Praças</h3><p>Preparação obrigatória para quem está pronto para o próximo nível.</p></div>
+                        <span class="course-audience">Subtenentes</span><i class="fa-solid fa-arrow-up-right-from-square course-arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="/companhia/cursos/professores/acl.html" class="course-card course-card--prof" data-course-track="professores">
+                        <span class="course-code">ACL</span><i class="fa-solid fa-language course-icon" aria-hidden="true"></i>
+                        <div><small>Trilha Professores</small><h3>Conhecimento Linguístico</h3><p>Avaliação que reconhece domínio, repertório e atenção à linguagem.</p></div>
+                        <span class="course-audience">Cabos+</span><i class="fa-solid fa-arrow-up-right-from-square course-arrow" aria-hidden="true"></i>
+                    </a>
+
+                    <a href="/companhia/cursos/coordenadores/cop.html" class="course-card course-card--coord" data-course-track="coordenadores">
+                        <span class="course-code">COP</span><i class="fa-solid fa-bullhorn course-icon" aria-hidden="true"></i>
+                        <div><small>Trilha Coordenadores</small><h3>Oratória Pública</h3><p>Presença, clareza e domínio para comunicar ideias diante do público.</p></div>
+                        <span class="course-audience">Aspirantes+</span><i class="fa-solid fa-arrow-up-right-from-square course-arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="/companhia/cursos/coordenadores/cda.html" class="course-card course-card--coord" data-course-track="coordenadores">
+                        <span class="course-code">CDA</span><i class="fa-solid fa-message course-icon" aria-hidden="true"></i>
+                        <div><small>Trilha Coordenadores</small><h3>Desenvolvimento Argumentativo</h3><p>Construa raciocínios consistentes e defenda ideias com propósito.</p></div>
+                        <span class="course-audience">Subtenentes+</span><i class="fa-solid fa-arrow-up-right-from-square course-arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="/companhia/cursos/coordenadores/orienta%C3%A7%C3%B5es.html" class="course-card course-card--coord" data-course-track="coordenadores">
+                        <span class="course-code">ORI</span><i class="fa-solid fa-compass course-icon" aria-hidden="true"></i>
+                        <div><small>Trilha Coordenadores</small><h3>Orientações</h3><p>Scripts das orientações I a V para acompanhar a evolução dos professores.</p></div>
+                        <span class="course-audience">Professores</span><i class="fa-solid fa-arrow-up-right-from-square course-arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="/companhia/cursos/coordenadores/acompanhamento.html" class="course-card course-card--coord" data-course-track="coordenadores">
+                        <span class="course-code">ACO</span><i class="fa-solid fa-chalkboard-user course-icon" aria-hidden="true"></i>
+                        <div><small>Trilha Coordenadores</small><h3>Acompanhamento de Aula</h3><p>Observe, avalie e devolva orientações que ajudam cada professor a evoluir.</p></div>
+                        <span class="course-audience">Professores</span><i class="fa-solid fa-arrow-up-right-from-square course-arrow" aria-hidden="true"></i>
+                    </a>
+
+                    <a href="/companhia/cursos/graduadores/graduacao1.html" class="course-card course-card--grad" data-course-track="graduadores">
+                        <span class="course-code">G.I</span><i class="fa-solid fa-medal course-icon" aria-hidden="true"></i>
+                        <div><small>Trilha Graduadores</small><h3>Graduação I</h3><p>Primeira etapa de aperfeiçoamento destinada aos professores.</p></div>
+                        <span class="course-audience">Professores</span><i class="fa-solid fa-arrow-up-right-from-square course-arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="/companhia/cursos/graduadores/graduacao2.html" class="course-card course-card--grad" data-course-track="graduadores">
+                        <span class="course-code">G.II</span><i class="fa-solid fa-award course-icon" aria-hidden="true"></i>
+                        <div><small>Trilha Graduadores</small><h3>Graduação II</h3><p>Formação avançada criada para a jornada dos coordenadores.</p></div>
+                        <span class="course-audience">Coordenadores</span><i class="fa-solid fa-arrow-up-right-from-square course-arrow" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="course-manuals" aria-labelledby="manuals-title">
+            <div class="course-manuals-inner">
+                <div><p class="courses-eyebrow">Antes de começar</p><h2 id="manuals-title">Consulte o manual da sua função.</h2></div>
+                <div class="manual-links">
+                    <a href="/companhia/cursos/professores/manual.html"><span>01</span> Manual do Professor <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="/companhia/cursos/coordenadores/manual.html"><span>02</span> Manual do Coordenador <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="/companhia/cursos/graduadores/manual.html"><span>03</span> Manual do Graduador <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script>
+    <script src="/js/cursos.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Finanças</title>
+
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/fin.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script> 
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+<div class="nexus-toolbar-container">
+    <div class="nexus-toolbar-wrapper" style="padding-top: 20px; padding-bottom: 10px;"> <div class="filtros-principais">
+            <h2 class="titulo-gerador">
+                <i class="fa-solid fa-coins text-purple"></i> Gerador de Finanças - Medalhas
+            </h2>
+        </div>
+    </div>
+</div>
+
+    <main class="nexus-main-content" style="display: flex; gap: 20px;">
+        
+        <aside class="sidebar-abas glass-card">
+            <h3 class="sidebar-title">Menu de Abas</h3>
+            <button class="aba-btn active" onclick="abrirAba('aba-system', this)">
+                <i class="fa-solid fa-server"></i> System (Ativos)
+            </button>
+            <button class="aba-btn" onclick="abrirAba('aba-cargo', this, 'Professores')">
+                <i class="fa-solid fa-chalkboard-user"></i> Professores
+            </button>
+            <button class="aba-btn" onclick="abrirAba('aba-cargo', this, 'Coordenadores')">
+                <i class="fa-solid fa-user-tie"></i> Coordenadores
+            </button>
+            <button class="aba-btn" onclick="abrirAba('aba-cargo', this, 'Graduadores')">
+                <i class="fa-solid fa-graduation-cap"></i> Graduadores
+            </button>
+            <button class="aba-btn" onclick="abrirAba('aba-cargo', this, 'Estagiários')">
+                <i class="fa-solid fa-user-graduate"></i> Estagiários
+            </button>
+            <button class="aba-btn" onclick="abrirAba('aba-cargo', this, 'Conselho')">
+                <i class="fa-solid fa-users-gear"></i> Conselho
+            </button>
+            <button class="aba-btn" onclick="abrirAbaLideranca(this)">
+                <i class="fa-solid fa-crown"></i> Liderança
+            </button>
+            
+            <button class="aba-btn" onclick="abrirAba('aba-grupos', this, 'Grupos Internos')">
+                <i class="fa-solid fa-people-group text-purple"></i> Grupos Internos
+            </button>
+        </aside>
+
+        <section class="conteudo-abas flex-1">
+            
+            <div id="aba-system" class="aba-view active glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 class="view-title"><i class="fa-solid fa-server text-purple"></i> System - Base de Ativos</h2>
+                    <span id="contador-ativos" class="badge-status badge-regular">0 Ativos Carregados</span>
+                </div>
+                
+                <p style="color: #bbb; margin-bottom: 15px; font-size: 0.9rem;">
+                    Cole a tabela completa copiada do RCCSystem. A NEXUS IA vai extrair automaticamente apenas os nicknames para cruzar com as consultas de desempenho.
+                </p>
+                
+                <textarea id="texto-system" class="nexus-textarea" style="height: 200px; font-family: monospace; white-space: pre;" placeholder="Cole a listagem do RCCSystem aqui..."></textarea>
+                
+                <div style="margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
+                    <a href="https://system.policercc.com.br/listagens/gratificacoes" target="_blank" class="btn-glass">
+                        <i class="fa-solid fa-list-check"></i> Ir para Gratificações
+                    </a>
+                    <button onclick="processarSystem()" class="btn-nexus btn-purple">
+                        <i class="fa-solid fa-microchip"></i> Extrair Nicknames
+                    </button>
+                </div>
+            </div>
+
+            <div id="aba-cargo" class="aba-view glass-card" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 id="titulo-cargo-dinamico" class="view-title" style="color: var(--cor-primaria-clara); margin: 0;">Gerador: Professores</h2>
+                    <a id="btn-consulta-dinamico" href="https://docs.google.com/spreadsheets/d/1EQ2_6q0lrA4XIQQhaeJNmp9esYItkN6GKlIou9TkEZo/edit?gid=831559029#gid=831559029" target="_blank" class="btn-glass btn-glass-purple">
+                        <i class="fa-solid fa-file-excel"></i> Planilha de Consulta
+                    </a>
+                </div>
+                
+                <div class="grid-gerador" style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                    <div class="box-entrada">
+                        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                            <div style="flex: 1;">
+                                <label class="info-label">DATA INICIAL</label>
+                                <input type="date" id="cargo-data-inicio" class="nexus-input-dark">
+                            </div>
+                            <div style="flex: 1;">
+                                <label class="info-label">DATA FINAL</label>
+                                <input type="date" id="cargo-data-fim" class="nexus-input-dark">
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <label class="info-label">RESPONSÁVEL PELA POSTAGEM</label>
+                            <input type="text" id="cargo-responsavel" class="nexus-input-dark" placeholder="Seu nickname...">
+                        </div>
+
+                        <label class="info-label" style="color: #fff; margin-bottom: 8px; display: block;">
+                            <i class="fa-solid fa-paste text-purple"></i> COLE A CONSULTA DE DESEMPENHO AQUI
+                        </label>
+                        <p style="color: #888; font-size: 0.75rem; margin-bottom: 10px;">Ex: HaqzEXCELENTEIzabella:-EXCELENTE</p>
+                        
+                        <textarea id="cargo-texto-desempenho" class="nexus-textarea" style="height: 250px;"></textarea>
+                        
+                        <button onclick="processarDesempenho()" class="btn-nexus btn-purple" style="width: 100%; margin-top: 15px; justify-content: center;">
+                            <i class="fa-solid fa-filter"></i> Filtrar e Separar Resultados
+                        </button>
+                    </div>
+
+                    <div class="box-saida">
+                        <div style="background: rgba(168, 85, 247, 0.05); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                            <label class="info-label" style="text-align: center; margin-bottom: 15px;"><i class="fa-solid fa-paper-plane"></i> POSTAGEM AUTOMÁTICA (FÓRUM)</label>
+                            <div style="display: flex; gap: 10px;">
+                                <button id="btn-postar-positivos" onclick="gerarLinkPostagem('positivos')" class="btn-nexus" style="flex: 1; background: #10b981; color: white; justify-content: center; font-size: 0.85rem; padding: 10px;">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Postar Positivos (+10)
+                                </button>
+                                <button id="btn-postar-negativos" onclick="gerarLinkPostagem('negativas')" class="btn-nexus" style="flex: 1; background: #ef4444; color: white; justify-content: center; font-size: 0.85rem; padding: 10px;">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Postar Negativos (-10)
+                                </button>
+                            </div>
+                            <p style="color: #888; font-size: 0.75rem; text-align: center; margin-top: 10px; margin-bottom: 0;">Filtre os resultados antes de clicar nos links.</p>
+                        </div>
+
+                        <div style="margin-bottom: 15px;">
+                            <label id="label-positivos-qtd" class="info-label" style="color: #10b981;">POSITIVOS (10 MEDALHAS)</label>
+                            <textarea id="out-positivos" class="nexus-textarea" style="height: 60px; background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.3);" readonly></textarea>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label id="label-negativos-qtd" class="info-label" style="color: #ef4444;">NEGATIVOS (-10 MEDALHAS)</label>
+                            <textarea id="out-negativos" class="nexus-textarea" style="height: 60px; background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.3);" readonly></textarea>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label class="info-label" style="color: #3b82f6;">CASOS ESPECIAIS</label>
+                            <textarea id="out-especiais" class="nexus-textarea" style="height: 60px; background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.3);" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="aba-lideranca" class="aba-view glass-card" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 class="view-title" style="color: var(--cor-primaria-clara); margin: 0;"><i class="fa-solid fa-crown text-purple"></i> Gerador: Liderança</h2>
+                    <button onclick="carregarLideresFirebase()" class="btn-nexus btn-purple" style="padding: 8px 12px; font-size: 0.8rem;">
+                        <i class="fa-solid fa-arrows-rotate"></i> Recarregar Firebase
+                    </button>
+                </div>
+
+                <div class="grid-gerador" style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                    <div class="box-entrada">
+                        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                            <div style="flex: 1;">
+                                <label class="info-label">DATA INICIAL</label>
+                                <input type="date" id="lider-data-inicio" class="nexus-input-dark">
+                            </div>
+                            <div style="flex: 1;">
+                                <label class="info-label">DATA FINAL</label>
+                                <input type="date" id="lider-data-fim" class="nexus-input-dark">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                            <div style="flex: 2;">
+                                <label class="info-label">RESPONSÁVEL</label>
+                                <input type="text" id="lider-responsavel" class="nexus-input-dark" placeholder="Seu nickname...">
+                            </div>
+                            <div style="flex: 1;">
+                                <label class="info-label" title="Valor semanal para desempenho integral ou negativo">MEDALHAS SEMANAIS</label>
+                                <input type="number" id="lider-teto" class="nexus-input-dark" value="15" min="1">
+                            </div>
+                        </div>
+
+                        <label class="info-label" style="color: #fff; margin-bottom: 8px; display: block;">
+                            <i class="fa-solid fa-users"></i> LÍDERES E ORDENS DA SEMANA
+                        </label>
+                        
+                        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; margin-bottom: 15px;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left; color: #fff; font-size: 0.9rem;">
+                                <thead style="background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <tr>
+                                        <th style="padding: 10px;">Nick</th>
+                                        <th style="padding: 10px;">Cargo</th>
+                                        <th style="padding: 10px; width: 120px;">Ordens</th>
+                                        <th style="padding: 10px; width: 120px;">Cumpridas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-lideranca-inputs">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="adicionarLinhaLideranca('', '')" class="btn-glass" style="flex: 1; justify-content: center;">
+                                <i class="fa-solid fa-plus"></i> Manual
+                            </button>
+                            <button onclick="calcularMedalhasLideranca()" class="btn-nexus btn-purple" style="flex: 2; justify-content: center;">
+                                <i class="fa-solid fa-calculator"></i> Calcular Medalhas
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="box-saida">
+                        <label class="info-label" style="color: #fff; margin-bottom: 15px; display: block; text-align: center;">
+                            <i class="fa-solid fa-square-poll-vertical text-purple"></i> RESULTADOS E POSTAGENS
+                        </label>
+                        <div id="resultados-lideranca-container" style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="text-align: center; padding: 30px; color: #888; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.1);">
+                                <i class="fa-solid fa-arrow-left"></i> Preencha as ordens da semana ao lado e clique em Calcular.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<div id="aba-grupos" class="aba-view glass-card" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 12px; flex-wrap: wrap;">
+                    <h2 class="view-title" style="margin: 0; color: var(--cor-primaria-clara);">
+                        <i class="fa-solid fa-people-group text-purple"></i> Gerador: Grupos Internos
+                    </h2>
+                    <a href="https://docs.google.com/spreadsheets/d/1-yS4PAzwrMclgC9zFh_JFg-0DikSHrVpUSc8UV_V-0o/edit?gid=1746499743#gid=1746499743" target="_blank" class="btn-glass btn-glass-purple">
+                        <i class="fa-solid fa-file-excel"></i> Planilha de Controle
+                    </a>
+                </div>
+                
+                <div class="grid-gerador" style="display: grid; grid-template-columns: 1fr; gap: 25px;">
+                    
+                    <div class="box-entrada">
+                        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                            <div style="flex: 1;">
+                                <label class="info-label">MÊS DE REFERÊNCIA</label>
+                                <select id="grupos-mes" class="nexus-input-dark">
+                                    <option value="Janeiro">Janeiro</option>
+                                    <option value="Fevereiro">Fevereiro</option>
+                                    <option value="Março">Março</option>
+                                    <option value="Abril">Abril</option>
+                                    <option value="Maio">Maio</option>
+                                    <option value="Junho">Junho</option>
+                                    <option value="Julho">Julho</option>
+                                    <option value="Agosto">Agosto</option>
+                                    <option value="Setembro">Setembro</option>
+                                    <option value="Outubro">Outubro</option>
+                                    <option value="Novembro">Novembro</option>
+                                    <option value="Dezembro">Dezembro</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1;">
+                                <label class="info-label">RESPONSÁVEL</label>
+                                <input type="text" id="grupos-responsavel" class="nexus-input-dark" placeholder="Seu nickname...">
+                            </div>
+                        </div>
+
+                        <label class="info-label" style="color: #fff; margin-bottom: 8px; display: block;">
+                            <i class="fa-solid fa-paste text-purple"></i> COLE AS COLUNAS (NICK E QUANTIDADE)
+                        </label>
+                        <p style="color: #888; font-size: 0.78rem; margin-bottom: 12px;">
+                            O sistema limita automaticamente as medalhas positivas por pessoa: at&eacute; 20 em 1 subgrupo, at&eacute; 15 em 2 subgrupos e at&eacute; 10 em 3 subgrupos.
+                        </p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <label style="color: #a855f7; font-size: 0.8rem; font-weight: bold; text-align: center; display: block; margin-bottom: 5px;">DA</label>
+                                <textarea id="grupos-da" class="nexus-textarea" style="height: 180px; font-family: monospace;" placeholder="Cole aqui..."></textarea>
+                            </div>
+                            <div>
+                                <label style="color: #3b82f6; font-size: 0.8rem; font-weight: bold; text-align: center; display: block; margin-bottom: 5px;">CDC</label>
+                                <textarea id="grupos-cdc" class="nexus-textarea" style="height: 180px; font-family: monospace;" placeholder="Cole aqui..."></textarea>
+                            </div>
+                            <div>
+                                <label style="color: #f59e0b; font-size: 0.8rem; font-weight: bold; text-align: center; display: block; margin-bottom: 5px;">SPP</label>
+                                <textarea id="grupos-spp" class="nexus-textarea" style="height: 180px; font-family: monospace;" placeholder="Cole aqui..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <button onclick="processarGruposInternos()" class="btn-nexus btn-purple" style="width: 100%; justify-content: center;">
+                            <i class="fa-solid fa-microchip"></i> Analisar e Agrupar Medalhas
+                        </button>
+                    </div>
+
+                    <div class="box-saida">
+                        <label class="info-label" style="color: #fff; margin-bottom: 15px; display: block; text-align: center;">
+                            <i class="fa-solid fa-layer-group text-purple"></i> BOTÕES DE POSTAGEM GERADOS
+                        </label>
+                        
+                        <div id="resultados-grupos-container" style="display: flex; flex-direction: column; gap: 20px;">
+                            <div style="text-align: center; padding: 30px; color: #888; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.1);">
+                                <i class="fa-solid fa-arrow-up"></i> Cole os dados nas 3 caixas acima e processe para gerar os links de postagem.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/fin.js" defer></script>
+</body>
+</html>

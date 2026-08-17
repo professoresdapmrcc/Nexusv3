@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - GRADUAÇÃO I</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="stylesheet" href="/css/styles.css"> 
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/companhia/cursos/professores/cursos.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="document-page">
+        <header class="page-header">
+            <h1>CENTRAL DE APLICAÇÕES DE MOBILE</h1>
+            <p>Dispõe-se nesta página o acesso à ferramenta de aplicação para mobiles.</p>
+        </header>
+
+        <details class="indice-wrapper">
+            <summary>
+                <h2>ORIENTAÇÕES</h2>
+            </summary>
+            <div class="indice-container">
+                <ul>
+                    <li>➤ A execução da graduação deve ocorrer, inevitavelmente, na sala de aplicação destinada aos graduadores. Caso esta esteja ocupada, é possível usar a sala dos estagiários;</li>
+                    <li>➤ Não é permitido, em hipótese alguma, pular qualquer parte do script;</li>
+                    <li>➤ Atente-se ao script e às possíveis dúvidas do professor para esclarecê-las de forma correta.</li>
+                    <li>➤ Caso o professor caia durante a aplicação, printe o perfil dele offline com o histórico aberto ao lado, contendo balões visíveis de ambos envolvidos e, por fim, poste no formulário dos graduadores;</li>
+                    <li>➤ Lembre-se de postar a graduação no formulário ao final.</li>
+                </ul>
+            </div>
+        </details>
+
+        <h3 class="script-section-title">COMO UTILIZAR A FERRAMENTA?</h3>
+                    <p>➤ É recomendável utilizar a tela na horizontal;</p>
+                    <p>➤ No campo "Selecione a aula", você deve escolher a aula desejada para ter acesso ao script;</p>
+                    <p>➤ No campo 'Opções', estão disponíveis os trechos de cada parte das aulas para acesso aos scripts;</p>
+                    <p>➤ Para copiar, basta clicar no botão "Copiar";</p>
+                    <p>➤ Na opção "Postagem", estão disponíveis todos os links, como formulários de postagem, correção e o system para postagem dos cursos obrigatórios;</p>
+                    <p>➤ Em casos de problemas com a ferramenta consultar um conselheiro+.</p>
+
+        <div class="content-body script-content" style="text-align: center; margin: 3rem 0;">
+            <img src="/imgs/clique-aqui-mobile.png" alt="Ícone de um celular" style="width: 128px; height: auto; image-rendering: pixelated; margin: 0 auto 1.5rem auto;">
+            <a href="https://www.policiarcc.com/h219-prof-grad-central-mobile" target="_blank" class="script-button" style="max-width: 300px; margin: 0 auto; display: inline-block; text-decoration: none;">CLIQUE AQUI PARA ACESSAR</a>
+        </div>
+
+        <div class="content-body script-content">
+            <details class="accordion-item">
+                <summary class="accordion-header"><h4>MP DE BOAS-VINDAS</h4><i class="fa-solid fa-chevron-down"></i></summary>
+                <div class="accordion-content">
+                    <p><strong>Título: [PROF] Carta de Boas-Vindas ★</strong></p>
+                    <div class="bbcode-block">
+<pre>
+[font=Poppins][table              style="border-color: black; border-radius: 15px; overflow: hidden; width: 100%;" bgcolor="821F88"][tr][td][table              style="border-color: black; border-radius: 15px; overflow: hidden; width: 100%;" bgcolor="FFFFFF"][tr][td][img]https://i.imgur.com/hU7bn8R.gif[/img]
+
+[table        class="rank" style="border: none!important; margin: 0em; line-height: 1em;" bgcolor="#821F88"][tr style="border: none;"][td style="border: none!important;"][img(35px,35px)]https://imgur.com/NHjvyXk.png[/img]
+[size=18][color=white][b]CARTA DE BOAS-VINDAS[/b][/color][/size][/td][/tr][/table]
+
+&lt;div style="padding:1.5%;border:1px solid #821F88;border-radius:8px;"&gt;[img]https://i.imgur.com/oNAOABs.gif[/img]&lt;/div&gt;
+[center]Olá, {USERNAME}!
+
+[center]&lt;div&gt;&lt;hr style="border-top:2px solid #821F88;width:25%;margin-top:0px;padding:1%;" /&gt;&lt;/div&gt;[/center]
+Que jogada brilhante a sua de se juntar à galera dos Professores! A família está completa agora, e é uma [b][color=#821F88]HONRA[/color][/b] ter você com a gente.[/center]
+
+&lt;div style="padding:1.5%;border:1px solid #821F88;border-radius:8px;"&gt;[table        style="border-radius: 15px; border: none; overflow: hidden; width: 100%; font-family: Poppins, sans-serif; line-height: 1.2em"][tr style="overflow: hidden; border: none !important;"][td style="border: none!important; overflow: hidden" bgcolor="f0f0f0"][center][font=Poppins][table        class="rank" style="width: 60%; border: none!important; margin: auto; line-height: 1.2em; border-radius: 10px;" bgcolor="#821F88"][tr style="border: none;"][td style="border: none!important; padding: 1%;"][color=#FFFFFF][b][size=16]PODE CONTAR CONOSCO![/size][/b][/color][/td][/tr][/table]
+[/font][/center]
+
+[justify]Nossa missão é clara: te apoiar nessa jornada e garantir que você se sinta em casa. Adaptar-se é normal, mas aqui estamos todos prontos para responder suas dúvidas e te ajudar a mergulhar de cabeça nessa aventura.
+
+A Liderança e o Conselho dos Professores não estão para brincadeira! Estamos constantemente trazendo novidades e melhorias para você se sentir confortável e engajado. Afinal, queremos ver você brilhando e fazendo a diferença na nossa querida companhia.
+
+[center]Agora, não perca tempo! Aguarde ansiosamente ser [color=#821F88][b]adicionado no subfórum da companhia e no grupo do Habbo[/b][/color] que são como medalhas de honra.[/center][/justify]
+
+[center][font=Poppins][table        class="rank" style="width: 60%; border: none!important; margin: auto; line-height: 1.2em; border-radius: 10px;" bgcolor="#821F88"][tr style="border: none;"][td style="border: none!important; padding: 1%;"][color=#FFFFFF][b][size=16]O QUE FAZER AGORA??[/size][/b][/color][/td][/tr][/table][/font][/center]
+
+[center] 🪐 Próxima missão? Realizar a [b][color=#821F88]GRADUAÇÃO I[/color][/b]![/center]
+
+[justify][center][b]Tá na hora de mostrar que você tá pronto(a)![/b][/center]
+
+É só [url=https://docs.google.com/presentation/d/12WB721tarq9DR6ECDq_jIsV1Vdv8pHi8CxVC3kLvxEw/edit][b][color=#821F88]CLICAR AQUI[/color][/b][/url], ler o conteúdo do slide com atenção e, quando se sentir preparado(a), procurar um graduador para realizar a avaliação teórica.
+
+Missão tranquila para quem tá com a mente afiada. Vai lá e arrasa! 
+Qualquer dúvida, é só chamar — estamos no controle da nave! 
+
+Caso tenha dificuldades para achar um graduador, acesse o tópico [b]"[url=https://www.policiarcc.com/t33731-prof-listagem-de-membros][color=#821F88][PROF] Lista de Membros[/color][/url]"[/b] e consulte os nicks de todos os graduadores ativos. Lembre-se: faça o mais rápido possível a sua graduação, senão, pode acabar sendo expulso! [/justify]
+
+[center]Você tem o [b][color=#821F88]prazo de 07 (sete) dias[/color][/b] para a realizar.[/center]
+
+[justify]Além disso, após concluir a sua Graduação I você pode conferir o tópico "[b][url=https://www.policiarcc.com/t34765-prof-inscricoes-departamentais][color=#821F88][PROF] Inscrições Departamentais[/color][/url][/b]" e conhecer os SUBGRUPOS da companhia ou através do nosso slide [url=https://docs.google.com/presentation/d/1wirLOfB2fjIprNEGR35_8AUcE5KF4ZBRcY4YBSo0v5I]"[b][color=#821F88][PROF] Departamentos dos Professores[/color][/b]"[/url].[/justify]
+
+[center][font=Poppins][table        class="rank" style="width: 60%; border: none!important; margin: auto; line-height: 1.2em; border-radius: 10px;" bgcolor="#821F88"][tr style="border: none;"][td style="border: none!important; padding: 1%;"][color=#FFFFFF][b][size=16]HORA DA LEITURA!![/size][/b][/color][/td][/tr][/table][/font][/center]
+
+[center]Coisas novas são um pouco assustadoras...[/center]
+
+[justify]Mas não se preocupe! Através das páginas [url=https://sites.google.com/view/nexusprof/explorando-o-subf%C3%B3rum?authuser=3][color=#821F88][b]"EXPLORANDO O SUBFÓRUM"[/b][/color][/url] e [url=https://sites.google.com/view/profr5654456/manual][color=#821F88][b]"MANUAL DO PROFESSOR"[/b][/color][/url], você ficará mais do que pronto para começar a aplicar aulas, assim que terminar a sua Graduação I! Entre no nosso [color=#821F88][b]grupo do WhatsApp[/b][/color] e no [color=#821F88][b]Discord dos Professores[/b][/color] para se enturmar e retirar dúvidas com facilidade.[/justify]
+
+[table        style="width: 100%; border: none!important; overflow: hidden"][tr style="border: none!important; overflow: hidden"][td style="width: 30%; padding-right: 3px; border: none!important; overflow: hidden"][table        class="rank attprof" style="border: none!important; line-height: 0.5em; "][tr style="border: none!important; overflow: hidden"][td style="border: none!important; overflow: hidden"][url=https://chat.whatsapp.com/IhLdAGsiFuKDN213fx6fVO][img(35px,35px)]https://i.imgur.com/VVjSWkr.png[/img]
+[size=14][color=white][b][color=#ffffff][font=Poppins]GRUPO GERAL[/font][/color][/b][/color][/size]
+[color=#ffffff][size=11][b][color=#ffffff]Clique aqui para entrar no grupo do WhatsApp.[/color][/b][/url][/size][/color]
+[/td][/tr][/table][/td][td style="width: 30%; padding-right: 10px; border: none!important;"][table        class="rank attprof" style="border: none!important; line-height: 0.6em;"][tr style="border: none!important;"][td style="border: none!important;"][url=https://discord.com/invite/DQ8QwpZCyJ][img(35px,35px)]https://i.imgur.com/qj6TMPG.png[/img]
+[size=14][color=white][b][color=#ffffff][font=Poppins]DISCORD[/font][/color][/b][/color][/size]
+[color=#ffffff][size=11][b][color=#ffffff]Clique aqui para entrar no grupo do Discord.[/color][/b][/url][/size][/color][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table][/font]
+[font=Poppins][scroll][b][color=#821F88]Estamos torcendo por você. Agora é contigo![/color][/b][/scroll][/font]
+
+[font=Poppins][center][img]https://i.imgur.com/rrsuEHi.gif[/img]
+[size=11][font=Poppins][b]Companhia dos Professores[/b]
+[b]#[/b]SoberaniaROXA[/font][/size][/center][/font]&lt;/div&gt;
+</pre>
+                    </div>
+                </div>
+            </details>
+        </div>
+        
+        <footer class="script-footer">
+            <p>Tópico criado por Abismy</p>
+            <p>Projeto desenvolvido por .Lord e reformulado por Amy.Love.Girl & Pegas</p>
+            <p>Todos os direitos reservados à Companhia dos Professores</p>
+        </footer>
+
+    </main>
+    
+
+    <div id="footer-placeholder"></div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/professores.js" defer></script>
+    <script src="/companhia/cursos/graduadores/grad.js" defer></script>
+
+    </body>
+</html>

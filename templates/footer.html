@@ -1,0 +1,1136 @@
+<style>
+/* Footer principal do site */
+.nexus-site-footer {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    background: #140719;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+}
+
+.nexus-site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #8a3593 0 35%, #6251ae 35% 68%, #d1b95d 68% 100%);
+}
+
+.nexus-site-footer::after {
+    content: 'NEXUS';
+    position: absolute;
+    right: -0.05em;
+    bottom: -0.18em;
+    z-index: -1;
+    color: rgba(255,255,255,0.025);
+    font-size: clamp(9rem, 23vw, 22rem);
+    font-weight: 900;
+    letter-spacing: -0.09em;
+    line-height: 0.75;
+    pointer-events: none;
+}
+
+.nexus-footer-inner {
+    width: min(calc(100% - 3rem), 1320px);
+    margin: 0 auto;
+    padding: clamp(4.5rem, 8vw, 7rem) 0 2rem;
+}
+
+.nexus-footer-main {
+    display: grid;
+    grid-template-columns: minmax(260px, 1.1fr) minmax(360px, 1.2fr) minmax(220px, 0.7fr);
+    align-items: start;
+    gap: clamp(2.5rem, 6vw, 6rem);
+}
+
+.nexus-footer-logo {
+    position: relative;
+    display: inline-flex;
+    margin-bottom: 1.4rem;
+    align-items: center;
+    color: #fff;
+    font-size: clamp(2.3rem, 4vw, 3.8rem);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.nexus-footer-logo i {
+    width: 8px;
+    height: 8px;
+    margin: -1.2rem 0 0 0.35rem;
+    border-radius: 50%;
+    background: #d8b9dd;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.nexus-footer-logo:hover { color: #fff; }
+.nexus-footer-logo:hover i { background: #fff; transform: scale(1.45); }
+
+.nexus-footer-kicker,
+.nexus-footer-column h3 {
+    display: block;
+    margin: 0 0 1.15rem;
+    color: #d9b8de;
+    font-size: 0.58rem;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.nexus-footer-brand p {
+    max-width: 390px;
+    margin: 0;
+    color: rgba(255,255,255,0.55);
+    font-size: 0.78rem;
+    line-height: 1.75;
+}
+
+.nexus-footer-quick-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 0.65rem;
+}
+
+.nexus-footer-quick-links a {
+    display: flex;
+    min-height: 48px;
+    padding: 0.75rem 0.9rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 13px;
+    background: rgba(255,255,255,0.025);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.28s ease, background-color 0.28s ease, color 0.28s ease, transform 0.28s cubic-bezier(0.22,1,0.36,1);
+}
+
+.nexus-footer-quick-links a i {
+    color: rgba(217,184,222,0.62);
+    font-size: 0.62rem;
+    transition: transform 0.28s ease, color 0.28s ease;
+}
+
+.nexus-footer-quick-links a:hover,
+.nexus-footer-quick-links a:focus-visible {
+    border-color: rgba(217,184,222,0.34);
+    background: rgba(217,184,222,0.08);
+    color: #fff;
+    outline: 0;
+    transform: translateY(-3px);
+}
+
+.nexus-footer-quick-links a:hover i,
+.nexus-footer-quick-links a:focus-visible i { color: #fff; transform: translateX(3px); }
+
+.nexus-footer-socials {
+    display: grid;
+    grid-template-columns: repeat(2, 54px);
+    gap: 0.7rem;
+}
+
+.nexus-footer-socials a {
+    display: grid;
+    width: 54px;
+    height: 54px;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,0.11);
+    border-radius: 50%;
+    background: rgba(255,255,255,0.025);
+    color: rgba(255,255,255,0.68);
+    font-size: 1rem;
+    text-decoration: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease, transform 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+
+.nexus-footer-socials a:hover,
+.nexus-footer-socials a:focus-visible {
+    border-color: #d9b8de;
+    background: #d9b8de;
+    color: #291230;
+    outline: 0;
+    transform: translateY(-4px);
+}
+
+.nexus-footer-divider {
+    height: 1px;
+    margin: clamp(3.5rem, 6vw, 5rem) 0 1.8rem;
+    background: linear-gradient(90deg, rgba(255,255,255,0.14), rgba(255,255,255,0.03));
+}
+
+.nexus-footer-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.nexus-footer-copyright {
+    margin: 0;
+    color: rgba(255,255,255,0.32);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.nexus-footer-credits {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.8rem;
+    color: rgba(255,255,255,0.46);
+    font-size: 0.62rem;
+}
+
+.nexus-footer-credits p { margin: 0; }
+.nexus-footer-credits strong { color: #fff; font-weight: 800; }
+.nexus-footer-credits > i { width: 18px; height: 1px; background: rgba(217,184,222,0.45); }
+
+@media (max-width: 980px) {
+    .nexus-footer-main { grid-template-columns: 1fr 1fr; }
+    .nexus-footer-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
+    .nexus-footer-inner { width: min(calc(100% - 2rem), 1320px); padding-top: 4rem; }
+    .nexus-footer-main { grid-template-columns: 1fr; gap: 2.6rem; }
+    .nexus-footer-brand { grid-column: auto; }
+    .nexus-footer-quick-links { grid-template-columns: 1fr; }
+    .nexus-footer-socials { grid-template-columns: repeat(4, 50px); }
+    .nexus-footer-socials a { width: 50px; height: 50px; }
+    .nexus-footer-bottom { align-items: flex-start; flex-direction: column-reverse; }
+    .nexus-footer-credits { justify-content: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nexus-footer-logo i,
+    .nexus-footer-quick-links a,
+    .nexus-footer-quick-links a i,
+    .nexus-footer-socials a { transition: none; }
+}
+
+/* Footer V2 — rota de continuidade */
+.nexus-site-footer::after {
+    right: -0.03em;
+    bottom: -0.08em;
+    color: rgba(255,255,255,0.018);
+    font-size: clamp(10rem, 25vw, 24rem);
+}
+
+.nexus-footer-inner { padding-top: clamp(5rem, 9vw, 8rem); }
+
+.nexus-footer-opening {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) auto;
+    align-items: end;
+    gap: 3rem;
+}
+
+.nexus-footer-opening h2 {
+    max-width: 850px;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(3.1rem, 7vw, 6.8rem);
+    font-weight: 900;
+    letter-spacing: -0.07em;
+    line-height: 0.88;
+}
+
+.nexus-footer-opening h2 span { color: #d9b8de; }
+.nexus-footer-opening-copy > p {
+    max-width: 620px;
+    margin: 1.5rem 0 0;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.78rem;
+    line-height: 1.75;
+}
+
+.nexus-footer-back-top {
+    display: grid;
+    width: 92px;
+    height: 92px;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    color: rgba(255,255,255,0.64);
+    font-size: 0.54rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+.nexus-footer-back-top i { display: block; margin-bottom: 0.3rem; font-size: 0.72rem; }
+.nexus-footer-back-top:hover,
+.nexus-footer-back-top:focus-visible {
+    border-color: #d9b8de;
+    background: #d9b8de;
+    color: #291230;
+    outline: 0;
+    transform: translateY(-5px);
+}
+
+.nexus-footer-route { margin-top: clamp(4rem, 7vw, 6.5rem); }
+.nexus-footer-route-head {
+    display: flex;
+    margin-bottom: 1rem;
+    align-items: center;
+    gap: 1rem;
+    color: #d9b8de;
+    font-size: 0.55rem;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+.nexus-footer-route-head::after { content: ''; height: 1px; flex: 1; background: rgba(255,255,255,0.12); }
+
+.nexus-footer-route .nexus-footer-quick-links {
+    display: grid;
+    grid-template-columns: repeat(6,minmax(0,1fr));
+    gap: 1px;
+    background: rgba(255,255,255,0.1);
+    overflow: hidden;
+}
+
+.nexus-footer-route .nexus-footer-quick-links a {
+    display: grid;
+    min-height: 138px;
+    padding: 1.15rem;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr;
+    align-items: end;
+    border: 0;
+    border-radius: 0;
+    background: #19091e;
+    color: #fff;
+    transform: none;
+}
+
+.nexus-footer-route .nexus-footer-quick-links a small {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    color: rgba(255,255,255,0.32);
+    font-size: 0.5rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+}
+.nexus-footer-route .nexus-footer-quick-links a span {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+.nexus-footer-route .nexus-footer-quick-links a i {
+    grid-column: 2;
+    grid-row: 2;
+    color: #d9b8de;
+}
+.nexus-footer-route .nexus-footer-quick-links a:hover,
+.nexus-footer-route .nexus-footer-quick-links a:focus-visible {
+    background: #d9b8de;
+    color: #291230;
+    transform: none;
+}
+.nexus-footer-route .nexus-footer-quick-links a:hover small,
+.nexus-footer-route .nexus-footer-quick-links a:focus-visible small { color: rgba(41,18,48,0.48); }
+.nexus-footer-route .nexus-footer-quick-links a:hover i,
+.nexus-footer-route .nexus-footer-quick-links a:focus-visible i { color: #291230; transform: translate(3px,-3px); }
+
+.nexus-footer-community {
+    display: flex;
+    margin-top: clamp(3.5rem,6vw,5rem);
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 3rem;
+}
+.nexus-footer-community .nexus-footer-logo { margin: 0; font-size: clamp(2rem,4vw,3.5rem); }
+.nexus-footer-community-copy p {
+    max-width: 390px;
+    margin: 0.8rem 0 0;
+    color: rgba(255,255,255,0.46);
+    font-size: 0.68rem;
+    line-height: 1.65;
+}
+
+.nexus-footer-community .nexus-footer-socials {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+.nexus-footer-community .nexus-footer-socials a {
+    display: flex;
+    width: auto;
+    height: 46px;
+    padding: 0 0.9rem;
+    align-items: center;
+    gap: 0.55rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+}
+.nexus-footer-community .nexus-footer-socials a span {
+    font-size: 0.55rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+}
+
+.nexus-footer-bottom {
+    padding: 1.3rem 0;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.09);
+    border-bottom: 1px solid rgba(255,255,255,0.09);
+}
+.nexus-footer-divider { margin-top: clamp(3rem,5vw,4.5rem); margin-bottom: 0; opacity: 0; }
+
+@media (max-width: 1050px) {
+    .nexus-footer-route .nexus-footer-quick-links { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    .nexus-footer-route .nexus-footer-quick-links a { min-height: 120px; }
+    .nexus-footer-community { align-items: flex-start; flex-direction: column; }
+    .nexus-footer-community .nexus-footer-socials { justify-content: flex-start; }
+}
+
+@media (max-width: 640px) {
+    .nexus-footer-opening { grid-template-columns: 1fr; }
+    .nexus-footer-opening h2 { font-size: clamp(3rem,15vw,4.8rem); }
+    .nexus-footer-back-top { width: auto; height: 44px; padding: 0 1rem; border-radius: 999px; justify-self: start; }
+    .nexus-footer-back-top span { display: flex; align-items: center; gap: 0.5rem; }
+    .nexus-footer-back-top i { margin: 0; }
+    .nexus-footer-route .nexus-footer-quick-links { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .nexus-footer-route .nexus-footer-quick-links a { min-height: 105px; }
+    .nexus-footer-community .nexus-footer-socials a { height: 42px; }
+}
+
+/* Footer V3 — faixa editorial compacta */
+.nexus-site-footer::before { height: 3px; }
+.nexus-site-footer::after {
+    right: -0.02em;
+    bottom: -0.14em;
+    color: rgba(255,255,255,0.015);
+    font-size: clamp(7rem, 17vw, 14rem);
+}
+
+.nexus-footer-inner {
+    width: min(calc(100% - 3rem), 1320px);
+    padding: 2.9rem 0 1.35rem;
+}
+
+.nexus-footer-compact-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nexus-footer-compact-brand {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 1.4rem;
+}
+
+.nexus-footer-compact-brand .nexus-footer-logo {
+    flex: 0 0 auto;
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.45rem);
+    letter-spacing: 0.02em;
+}
+
+.nexus-footer-compact-brand p {
+    max-width: 390px;
+    margin: 0;
+    padding-left: 1.4rem;
+    border-left: 1px solid rgba(255,255,255,0.13);
+    color: rgba(255,255,255,0.48);
+    font-size: 0.67rem;
+    line-height: 1.55;
+}
+
+.nexus-footer-compact-actions,
+.nexus-footer-compact-actions .nexus-footer-socials {
+    display: flex;
+    align-items: center;
+}
+
+.nexus-footer-compact-actions { gap: 0.9rem; }
+.nexus-footer-compact-actions .nexus-footer-socials { gap: 0.42rem; }
+
+.nexus-footer-compact-actions .nexus-footer-socials a {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    place-items: center;
+    border-radius: 11px;
+    font-size: 0.78rem;
+}
+
+.nexus-footer-back-top {
+    display: flex;
+    width: auto;
+    height: 38px;
+    padding: 0 0.85rem;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 11px;
+    font-size: 0.5rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.nexus-footer-back-top i {
+    display: inline-block;
+    margin: 0;
+    font-size: 0.62rem;
+}
+
+.nexus-footer-back-top:hover,
+.nexus-footer-back-top:focus-visible { transform: translateY(-2px); }
+
+.nexus-footer-route { margin-top: 2rem; }
+.nexus-footer-route-head { margin-bottom: 0.65rem; font-size: 0.5rem; }
+
+.nexus-footer-route .nexus-footer-quick-links {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.45rem;
+    background: transparent;
+    overflow: visible;
+}
+
+.nexus-footer-route .nexus-footer-quick-links a {
+    display: flex;
+    min-height: 44px;
+    padding: 0.65rem 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(255,255,255,0.085);
+    border-radius: 11px;
+    background: rgba(255,255,255,0.025);
+    color: rgba(255,255,255,0.68);
+}
+
+.nexus-footer-route .nexus-footer-quick-links a small { display: none; }
+.nexus-footer-route .nexus-footer-quick-links a span { font-size: 0.61rem; }
+.nexus-footer-route .nexus-footer-quick-links a i { font-size: 0.52rem; }
+
+.nexus-footer-route .nexus-footer-quick-links a:hover,
+.nexus-footer-route .nexus-footer-quick-links a:focus-visible {
+    border-color: rgba(217,184,222,0.34);
+    background: rgba(217,184,222,0.09);
+    color: #fff;
+}
+
+.nexus-footer-route .nexus-footer-quick-links a:hover i,
+.nexus-footer-route .nexus-footer-quick-links a:focus-visible i { color: #d9b8de; }
+
+.nexus-footer-bottom {
+    margin-top: 1.6rem;
+    padding: 1rem 0 0;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.075);
+    border-bottom: 0;
+}
+
+.nexus-footer-copyright { font-size: 0.51rem; }
+.nexus-footer-credits { gap: 0.35rem 0.65rem; font-size: 0.55rem; }
+.nexus-footer-credits > i { width: 12px; }
+
+@media (max-width: 980px) {
+    .nexus-footer-compact-head { align-items: start; }
+    .nexus-footer-compact-brand { align-items: flex-start; flex-direction: column; gap: 0.75rem; }
+    .nexus-footer-compact-brand p { padding: 0; border: 0; }
+    .nexus-footer-route .nexus-footer-quick-links { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+    .nexus-footer-inner { width: min(calc(100% - 2rem), 1320px); padding: 2.4rem 0 1.2rem; }
+    .nexus-footer-compact-head { grid-template-columns: 1fr; gap: 1.3rem; }
+    .nexus-footer-compact-brand { gap: 0.6rem; }
+    .nexus-footer-compact-brand p { max-width: 280px; font-size: 0.62rem; }
+    .nexus-footer-compact-actions { justify-content: space-between; }
+    .nexus-footer-compact-actions .nexus-footer-socials { grid-template-columns: none; }
+    .nexus-footer-route { margin-top: 1.6rem; }
+    .nexus-footer-route .nexus-footer-quick-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .nexus-footer-route .nexus-footer-quick-links a { min-height: 42px; }
+    .nexus-footer-bottom { margin-top: 1.35rem; align-items: flex-start; flex-direction: column-reverse; gap: 0.8rem; }
+    .nexus-footer-credits { justify-content: flex-start; }
+}
+
+/* Footer V4 — composição institucional inspirada na referência */
+.nexus-site-footer {
+    background: #17091c;
+}
+
+.nexus-site-footer::before {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(217,184,222,0.42) 28%, rgba(196,170,100,0.3) 70%, transparent);
+}
+
+.nexus-site-footer::after {
+    content: 'N';
+    right: -0.03em;
+    bottom: -0.22em;
+    color: rgba(255,255,255,0.012);
+    font-size: clamp(10rem, 22vw, 18rem);
+    letter-spacing: 0;
+}
+
+.nexus-footer-inner {
+    width: min(calc(100% - 3rem), 1180px);
+    padding: 2.7rem 0 1.25rem;
+}
+
+.nexus-footer-brandbar {
+    display: flex;
+    min-height: 72px;
+    padding-bottom: 1.8rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.075);
+}
+
+.nexus-footer-identity {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.nexus-footer-identity-mark {
+    display: grid;
+    width: 64px;
+    height: 52px;
+    flex: 0 0 64px;
+    place-items: center;
+    border-right: 1px solid rgba(217,184,222,0.18);
+}
+
+.nexus-footer-identity-mark img {
+    display: block;
+    width: 52px;
+    height: 42px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 12px rgba(92,38,105,0.24));
+    transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), filter 0.35s ease;
+}
+
+.nexus-footer-identity-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.22rem;
+}
+
+.nexus-footer-identity-copy strong {
+    color: #fff;
+    font-size: clamp(1.45rem, 2.8vw, 2.15rem);
+    font-weight: 900;
+    letter-spacing: 0.045em;
+    line-height: 0.95;
+}
+
+.nexus-footer-identity-copy small {
+    color: rgba(255,255,255,0.42);
+    font-size: 0.54rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.nexus-footer-identity:hover { color: #fff; }
+.nexus-footer-identity:hover .nexus-footer-identity-mark img {
+    filter: drop-shadow(0 8px 15px rgba(170,112,184,0.3));
+    transform: translateY(-3px) rotate(-2deg);
+}
+
+.nexus-footer-primary-action {
+    display: inline-flex;
+    min-height: 42px;
+    padding: 0 1rem 0 1.15rem;
+    align-items: center;
+    gap: 0.8rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    color: rgba(255,255,255,0.82);
+    font-size: 0.54rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+
+.nexus-footer-primary-action i {
+    color: #d9b8de;
+    font-size: 0.55rem;
+    transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+
+.nexus-footer-primary-action:hover,
+.nexus-footer-primary-action:focus-visible {
+    border-color: #d9b8de;
+    background: #d9b8de;
+    color: #26102d;
+    outline: 0;
+    transform: translateY(-2px);
+}
+
+.nexus-footer-primary-action:hover i,
+.nexus-footer-primary-action:focus-visible i { color: #26102d; transform: translateX(3px); }
+
+.nexus-footer-reference-grid {
+    display: grid;
+    grid-template-columns: minmax(300px, 1.55fr) minmax(180px, 0.75fr) minmax(160px, 0.58fr);
+    gap: clamp(2.5rem, 6vw, 5.5rem);
+    padding: 2.2rem 0 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.075);
+}
+
+.nexus-footer-about-label,
+.nexus-footer-column-title {
+    display: block;
+    margin: 0 0 0.9rem;
+    color: #eadced;
+    font-size: 0.53rem;
+    font-weight: 900;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.nexus-footer-about p {
+    max-width: 540px;
+    margin: 0;
+    color: rgba(255,255,255,0.38);
+    font-size: 0.67rem;
+    line-height: 1.75;
+}
+
+.nexus-footer-link-list,
+.nexus-footer-social-list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    gap: 0.62rem;
+    list-style: none;
+}
+
+.nexus-footer-link-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.2rem; }
+
+.nexus-footer-link-list a,
+.nexus-footer-social-list a {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: 0.55rem;
+    color: rgba(255,255,255,0.38);
+    font-size: 0.63rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-decoration: none;
+    transition: color 0.25s ease, transform 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+
+.nexus-footer-link-list a::before {
+    content: '';
+    width: 3px;
+    height: 3px;
+    flex: 0 0 3px;
+    border-radius: 50%;
+    background: rgba(217,184,222,0.42);
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nexus-footer-social-list a i {
+    width: 13px;
+    color: rgba(217,184,222,0.54);
+    font-size: 0.68rem;
+    text-align: center;
+    transition: color 0.25s ease;
+}
+
+.nexus-footer-link-list a:hover,
+.nexus-footer-link-list a:focus-visible,
+.nexus-footer-social-list a:hover,
+.nexus-footer-social-list a:focus-visible {
+    color: #fff;
+    outline: 0;
+    transform: translateX(3px);
+}
+
+.nexus-footer-link-list a:hover::before,
+.nexus-footer-link-list a:focus-visible::before {
+    background: #d9b8de;
+    box-shadow: 0 0 7px rgba(217,184,222,0.6);
+}
+
+.nexus-footer-social-list a:hover i,
+.nexus-footer-social-list a:focus-visible i { color: #d9b8de; }
+
+.nexus-footer-bottom.nexus-footer-reference-bottom {
+    margin: 0;
+    padding: 1.15rem 0 0;
+    border: 0;
+}
+
+.nexus-footer-reference-bottom .nexus-footer-copyright { color: rgba(255,255,255,0.28); }
+.nexus-footer-reference-bottom .nexus-footer-credits { color: rgba(255,255,255,0.34); }
+
+@media (max-width: 900px) {
+    .nexus-footer-reference-grid {
+        grid-template-columns: minmax(0, 1.2fr) minmax(180px, 0.8fr);
+        gap: 2.3rem 3rem;
+    }
+    .nexus-footer-about { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
+    .nexus-footer-inner { width: min(calc(100% - 2rem), 1180px); padding: 2.2rem 0 1.1rem; }
+    .nexus-footer-brandbar { min-height: 0; padding-bottom: 1.5rem; align-items: flex-start; flex-direction: column; gap: 1.2rem; }
+    .nexus-footer-identity-mark { width: 54px; height: 46px; flex-basis: 54px; }
+    .nexus-footer-identity-mark img { width: 46px; height: 38px; }
+    .nexus-footer-identity-copy strong { font-size: 1.55rem; }
+    .nexus-footer-primary-action { min-height: 38px; }
+    .nexus-footer-reference-grid { grid-template-columns: 1fr 1fr; gap: 2rem 1.4rem; padding: 1.8rem 0; }
+    .nexus-footer-about { grid-column: 1 / -1; }
+    .nexus-footer-link-list { grid-template-columns: 1fr; }
+    .nexus-footer-bottom.nexus-footer-reference-bottom { align-items: flex-start; flex-direction: column-reverse; gap: 0.8rem; }
+}
+
+@media (max-width: 410px) {
+    .nexus-footer-reference-grid { grid-template-columns: 1fr; }
+    .nexus-footer-about { grid-column: auto; }
+    .nexus-footer-link-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nexus-footer-identity-mark img,
+    .nexus-footer-primary-action,
+    .nexus-footer-primary-action i,
+    .nexus-footer-link-list a,
+    .nexus-footer-social-list a { transition: none; }
+}
+
+/* Imagem fixa na esquerda */
+.imagem-fixa-esquerda {
+    position: fixed; bottom: 20px; left: 20px; z-index: 1000;  
+    width: 70px; height: auto; cursor: pointer; 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+}
+.imagem-fixa-esquerda:hover {
+    transform: scale(1.15) translateY(-5px); 
+    filter: drop-shadow(0 10px 20px rgba(130, 31, 136, 0.5));
+}
+
+/* Aba de feedback discreta na lateral */
+.btn-feedback-circular {
+    position: fixed; right: 0; bottom: 22px; z-index: 1000;
+    display: flex; width: 44px; height: 44px;
+    padding: 0; align-items: center; justify-content: flex-start;
+    background: rgba(20,7,25,0.82);
+    border: 1px solid rgba(217,184,222,0.24);
+    border-right: 0;
+    border-radius: 14px 0 0 14px;
+    color: rgba(255,255,255,0.72);
+    cursor: pointer;
+    opacity: 0.52;
+    overflow: hidden;
+    outline: none;
+    box-shadow: none;
+    backdrop-filter: blur(10px);
+    transform: translateX(5px);
+    transition: width 0.38s cubic-bezier(0.22,1,0.36,1), opacity 0.28s ease, transform 0.28s ease, background-color 0.28s ease;
+}
+.btn-feedback-circular:hover,
+.btn-feedback-circular:focus-visible {
+    width: 126px;
+    opacity: 1;
+    transform: translateX(0);
+    background: #1b0a21;
+    border-color: rgba(217,184,222,0.55);
+    color: #fff;
+}
+.btn-feedback-circular i {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    place-items: center;
+    color: #d9b8de;
+    font-size: 0.88rem;
+}
+.btn-feedback-circular span {
+    padding-right: 0.9rem;
+    color: #fff;
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+    .btn-feedback-circular,
+    .btn-feedback-circular:hover,
+    .btn-feedback-circular:focus-visible {
+        bottom: 12px;
+        width: 40px;
+        height: 40px;
+        opacity: 0.42;
+        transform: translateX(4px);
+    }
+    .btn-feedback-circular i { width: 40px; height: 40px; flex-basis: 40px; }
+    .btn-feedback-circular span { display: none; }
+}
+
+/* Estilos do Modal */
+.modal-fundo {
+    display: none; position: fixed; z-index: 9999;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+.modal-conteudo {
+    background: rgba(15, 5, 25, 0.95);
+    margin: 12% auto; padding: 25px;
+    border: 1px solid rgba(130, 31, 136, 0.5);
+    border-radius: 12px; width: 90%; max-width: 450px;
+    color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+.fechar-btn { color: rgba(255, 255, 255, 0.5); float: right; font-size: 24px; font-weight: bold; cursor: pointer; }
+.fechar-btn:hover { color: #fff; }
+.modal-conteudo h3 { margin-top: 0; color: #ba4fc0; border-bottom: 1px solid rgba(130, 31, 136, 0.2); padding-bottom: 10px; }
+.modal-descricao { font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); margin-bottom: 20px; }
+.modal-conteudo label { display: block; margin-top: 15px; font-size: 0.9rem; font-weight: bold; }
+.modal-conteudo select, .modal-conteudo textarea, .modal-conteudo input {
+    width: 100%; padding: 12px; margin-top: 5px;
+    background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(130, 31, 136, 0.3);
+    color: #fff; border-radius: 6px; box-sizing: border-box; outline: none;
+    font-family: inherit;
+}
+.modal-conteudo select:focus, .modal-conteudo textarea:focus, .modal-conteudo input:focus { border-color: #ba4fc0; }
+
+/* Campo dinâmico do bug */
+.campo-dinamico-bug {
+    display: none;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-enviar-form {
+    width: 100%; margin-top: 25px; background: #ba4fc0; color: #fff;
+    border: none; padding: 14px; border-radius: 6px;
+    font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s;
+}
+.btn-enviar-form:hover { background: #9d3da3; box-shadow: 0 0 15px rgba(186, 79, 192, 0.6); }
+</style>
+
+<footer class="nexus-site-footer" aria-label="Rodapé do site">
+    <div class="nexus-footer-inner">
+        <div class="nexus-footer-brandbar">
+            <a href="/index.html" class="nexus-footer-identity" aria-label="NEXUS — Página inicial">
+                <span class="nexus-footer-identity-mark" aria-hidden="true"><img src="/imgs/logo-n.png" alt=""></span>
+                <span class="nexus-footer-identity-copy">
+                    <strong>NEXUS</strong>
+                    <small>Conhecimento em movimento</small>
+                </span>
+            </a>
+            <a href="/subforum.html" class="nexus-footer-primary-action"><span>Acessar o subfórum</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+
+        <div class="nexus-footer-reference-grid">
+            <div class="nexus-footer-about">
+                <span class="nexus-footer-about-label">Companhia dos Professores</span>
+                <p>O NEXUS é o ponto de encontro da Companhia dos Professores: um espaço para compartilhar conhecimento, acompanhar projetos e fortalecer conexões que transformam aprendizado em movimento.</p>
+            </div>
+
+            <nav aria-label="Acesso rápido">
+                <h3 class="nexus-footer-column-title">Acesso rápido</h3>
+                <ul class="nexus-footer-link-list">
+                    <li><a href="/index.html">Início</a></li>
+                    <li><a href="/companhia.html">Companhia</a></li>
+                    <li><a href="/subgrupos.html">Subgrupos</a></li>
+                    <li><a href="/weekly.html">Weekly</a></li>
+                    <li><a href="/mural.html">Mural</a></li>
+                    <li><a href="/athena.html">Athena IA</a></li>
+                </ul>
+            </nav>
+
+            <div aria-label="Redes sociais">
+                <h3 class="nexus-footer-column-title">Redes sociais</h3>
+                <ul class="nexus-footer-social-list">
+                    <li><a href="http://bit.ly/dcprof" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-discord" aria-hidden="true"></i><span>Discord</span></a></li>
+                    <li><a href="https://instagram.com/PoliceRCC" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span>Instagram</span></a></li>
+                    <li><a href="https://facebook.com/PoliciaRCC" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i><span>Facebook</span></a></li>
+                    <li><a href="https://twitter.com/PoliceRCC" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i><span>X / Twitter</span></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nexus-footer-bottom nexus-footer-reference-bottom">
+            <p class="nexus-footer-copyright">© <span id="nexus-footer-year">2026</span> NEXUS — conhecimento em movimento.</p>
+            <div class="nexus-footer-credits">
+                <p>Idealizado por <strong>,Novembro</strong></p>
+                <i aria-hidden="true"></i>
+                <p>Desenvolvido por <strong>Sr.Gabriel</strong></p>
+                <i aria-hidden="true"></i>
+                <p>Design por <strong>.Brendon</strong></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<a href="" target="_blank" class="imagem-fixa-esquerda">
+    <img src="/imgs/selocopia.png" alt="Selo NEXUS" style="width: 100%; height: auto;">
+</a>
+
+<button id="btn-feedback" class="btn-feedback-circular" title="Enviar sugestão ou reportar bug" aria-label="Abrir formulário de feedback">
+    <i class="fa-regular fa-message" aria-hidden="true"></i>
+    <span>Feedback</span>
+</button>
+
+<div id="modal-feedback" class="modal-fundo">
+    <div class="modal-conteudo">
+        <span id="fechar-modal" class="fechar-btn">&times;</span>
+        <h3>Enviar Feedback</h3>
+        <p class="modal-descricao">Ajude a melhorar a Companhia! Sugira melhorias ou reporte bugs aqui.</p>
+        
+        <form id="form-feedback">
+            <label for="tipo-feedback">Tipo de Feedback:</label>
+            <select id="tipo-feedback" required>
+                <option value="" disabled selected>Selecione uma opção</option>
+                <option value="sugestao">Ideia / Sugestão</option>
+                <option value="bug">Reportar um Bug</option>
+                <option value="outro">Outro</option>
+            </select>
+
+            <div id="container-pagina-bug" class="campo-dinamico-bug">
+                <label for="pagina-bug">Em qual página está ocorrendo?</label>
+                <input type="text" id="pagina-bug" placeholder="Ex: /dashboard.html">
+            </div>
+
+            <label for="texto-feedback">Mensagem:</label>
+            <textarea id="texto-feedback" rows="5" required placeholder="Descreva detalhadamente aqui..."></textarea>
+
+            <button type="submit" class="btn-enviar-form">Enviar Feedback</button>
+        </form>
+    </div>
+</div>
+
+<script>
+(() => {
+    const footerYear = document.getElementById('nexus-footer-year');
+    if (footerYear) footerYear.textContent = new Date().getFullYear();
+
+    const modal = document.getElementById("modal-feedback");
+    const btnAbrir = document.getElementById("btn-feedback");
+    const btnFechar = document.getElementById("fechar-modal");
+    const formFeedback = document.getElementById("form-feedback");
+    const btnEnviar = document.querySelector(".btn-enviar-form");
+    
+    const tipoSelect = document.getElementById("tipo-feedback");
+    const containerPagina = document.getElementById("container-pagina-bug");
+    const inputPagina = document.getElementById("pagina-bug");
+
+    if (!btnAbrir || !modal) return;
+
+    // Monitora a mudança do select para exibir o campo da página
+    tipoSelect.onchange = () => {
+        if (tipoSelect.value === "bug") {
+            containerPagina.style.display = "block";
+            // Preenche automaticamente com o caminho da página atual do usuário
+            inputPagina.value = window.location.pathname;
+            inputPagina.required = true;
+        } else {
+            containerPagina.style.display = "none";
+            inputPagina.required = false;
+            inputPagina.value = "";
+        }
+    };
+
+    btnAbrir.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        modal.style.display = "block";
+    };
+
+    btnFechar.onclick = () => {
+        modal.style.display = "none";
+    };
+
+    window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    formFeedback.onsubmit = async function(e) {
+        e.preventDefault();
+
+        if (!window.db) {
+            if (typeof showToast === 'function') {
+                showToast('O sistema ainda está carregando, aguarde um segundo.', 'error');
+            } else {
+                alert('O sistema de banco de dados ainda está carregando.');
+            }
+            return;
+        }
+
+        const tipoValor = tipoSelect.value;
+        const textoValor = document.getElementById("texto-feedback").value;
+        const paginaValor = inputPagina.value;
+
+        const textoOriginalBotao = btnEnviar.innerHTML;
+        btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+        btnEnviar.disabled = true;
+
+        try {
+            // Gravando na collection incluindo o campo 'pagina' condicionalmente
+            await window.db.collection('sugestoes').add({
+                tipo: tipoValor,
+                mensagem: textoValor,
+                pagina: tipoValor === "bug" ? paginaValor : "", // Só envia se for bug
+                data_envio: firebase.firestore.FieldValue.serverTimestamp(),
+                status: "pendente"
+            });
+
+            if (typeof showToast === 'function') {
+                showToast('Sugestão enviada com sucesso! Valeu!', 'success');
+            } else {
+                alert('Sugestão enviada com sucesso!');
+            }
+
+            formFeedback.reset();
+            containerPagina.style.display = "none"; // Reseta o campo dinâmico
+            modal.style.display = "none";
+
+        } catch (error) {
+            console.error("Erro ao salvar feedback no Firestore:", error);
+            if (typeof showToast === 'function') {
+                showToast('Houve um erro ao salvar sua sugestão.', 'error');
+            }
+        } finally {
+            btnEnviar.innerHTML = textoOriginalBotao;
+            btnEnviar.disabled = false;
+        }
+    };
+})();
+</script>

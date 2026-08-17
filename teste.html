@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membro</title>
+
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/teste.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <img src="/imgs/grifo-image-invertido.png" alt="Personagem lateral" class="side-character">
+
+    <div class="page-container">
+
+        <!-- COLUNA ESQUERDA -->
+        <aside class="left-column">
+
+            <div class="card" id="card-stats">
+                <h3><i class="fa-solid fa-id-card-clip"></i> Perfil</h3>
+                <div class="info-item">
+                    <span class="info-label">STATUS</span>
+                    <span id="info-estado" class="info-value">Carregando...</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">CARGO</span>
+                    <span id="info-cargo" class="info-value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">ANIVERSÁRIO</span>
+                    <span id="info-aniversario" class="info-value">--/--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">DIAS NA CIA</span>
+                    <span id="info-dias-cargo" class="info-value badge-dias">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">PROPOSTAS</span>
+                    <span id="info-propostas" class="info-value">0</span>
+                </div>
+            </div>
+
+            <div class="card" id="card-groups">
+                <h3><i class="fa-solid fa-users"></i> Grupos Internos</h3>
+                <div class="info-item group-row">
+                    <div class="group-icon"><img src="/imgs/spp-imagem.png" alt="Logo do SPP"></div>
+                    <span id="info-spp">--</span>
+                </div>
+                <div class="info-item group-row">
+                    <div class="group-icon"><img src="/imgs/da-imagem.png" alt="Logo do DA"></div>
+                    <span id="info-da">--</span>
+                </div>
+                <div class="info-item group-row">
+                    <div class="group-icon"><img src="/imgs/cdc-imagem.png" alt="Logo da CDC"></div>
+                    <span id="info-cdc">--</span>
+                </div>
+            </div>
+
+            <div class="card company-card" id="card-company">
+                <img src="/imgs/Logo (1).png" alt="Logo da Companhia dos Professores">
+            </div>
+
+            <div class="card" id="card-mini-mural">
+                <h3><i class="fa-solid fa-images"></i> Fotos Recentes</h3>
+                <div class="mini-mural-grid" id="mini-mural-grid">
+                    <p style="font-size: 12px; text-align:center; color:#ccc; grid-column: 1 / -1;">Carregando...</p>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- COLUNA CENTRAL -->
+        <main class="main-column">
+
+            <div class="hero-profile-card">
+                <!-- Avatar flutua acima do card de info -->
+                <div class="hero-avatar-wrap">
+                    <div class="avatar-glow-ring"></div>
+                    <div class="avatar-card">
+                        <img src="" alt="Avatar do Usuário">
+                    </div>
+                </div>
+
+                <!-- Card de info: nome + frase -->
+                <div class="hero-info-wrap">
+                    <div class="card" id="card-info">
+                        <h2 id="profile-name" class="profile-title">Carregando...</h2>
+                        <div class="quote-box" id="card-frase">
+                            <i class="fa-solid fa-quote-left quote-icon"></i>
+                            <p id="txt-frase">Carregando frase...</p>
+                            <div class="edit-icon" id="btn-edit-frase" style="display: none;">
+                                <i class="fa-solid fa-pencil"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card relationship-card" id="card-relationships">
+                <h3>
+                    <i class="fa-solid fa-heart-pulse"></i> Relacionamentos
+                    <i class="fa-solid fa-pencil btn-edit-rel" id="btn-edit-rel" style="display: none;"></i>
+                </h3>
+                <div class="rel-list" id="lista-relacionamentos">
+                    <p style="font-size: 12px; text-align:center; color:#ccc">Carregando...</p>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- COLUNA DIREITA -->
+        <aside class="right-column">
+            <div class="card" id="card-timeline" style="margin-bottom: 0;">
+                <h3 class="timeline-title"><i class="fa-solid fa-scroll"></i> Timeline</h3>
+                <div class="timeline">
+                    <div class="timeline-item"><p>Carregando histórico...</p></div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <div class="vertical-text">#SOBERANIAROXA</div>
+    <div id="footer-placeholder"></div>
+
+    <!-- MODAL FRASE E RELACIONAMENTOS -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div id="modal-frase" class="modal-box">
+            <h3>Editar Frase</h3>
+            <p class="modal-desc">Escreva algo marcante sobre você.</p>
+            <textarea id="input-nova-frase" rows="4" placeholder="Digite sua frase aqui..."></textarea>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+                <button class="btn-confirm" id="btn-salvar-frase">Salvar Frase</button>
+            </div>
+        </div>
+
+        <div id="modal-relacionamentos" class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3>Gerenciar Relacionamentos</h3>
+                <i class="fa-solid fa-xmark close-icon" onclick="fecharModal()"></i>
+            </div>
+            <div class="add-rel-section">
+                <h4>Adicionar Novo</h4>
+                <div class="add-form">
+                    <input type="text" id="input-rel-nick" placeholder="Nick do usuário ex: Sr.Gabriel.">
+                    <select id="input-rel-tipo">
+                        <option value="love">Amo</option>
+                        <option value="like">Gosto</option>
+                        <option value="hate">Odeio</option>
+                    </select>
+                    <button class="btn-confirm" id="btn-add-rel"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                </div>
+            </div>
+            <div class="list-rel-section">
+                <h4>Relacionamentos Atuais</h4>
+                <p class="modal-desc">Clique na lixeira para remover.</p>
+                <ul id="modal-lista-rels" class="rel-manager-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PALETA DE CORES -->
+    <div id="modal-palette" class="modal-overlay" style="z-index: 2000;">
+        <div class="modal-box palette-box">
+            <h3>Escolha uma Cor</h3>
+            <div class="color-grid">
+                <div class="swatch" style="--bg: #821F88;" onclick="selecionarCor('#821F88')"></div>
+                <div class="swatch" style="--bg: #351e49;" onclick="selecionarCor('#351e49')"></div>
+                <div class="swatch" style="--bg: #B900F6;" onclick="selecionarCor('#B900F6')"></div>
+                <div class="swatch" style="--bg: #FF0080;" onclick="selecionarCor('#FF0080')"></div>
+                <div class="swatch" style="--bg: #1a1a1a;" onclick="selecionarCor('#1a1a1a')"></div>
+                <div class="swatch" style="--bg: #2C3E50;" onclick="selecionarCor('#2C3E50')"></div>
+                <div class="swatch" style="--bg: #000000;" onclick="selecionarCor('#000000')"></div>
+                <div class="swatch" style="--bg: #2980B9;" onclick="selecionarCor('#2980B9')"></div>
+                <div class="swatch" style="--bg: #27AE60;" onclick="selecionarCor('#27AE60')"></div>
+                <div class="swatch" style="--bg: #C0392B;" onclick="selecionarCor('#C0392B')"></div>
+                <div class="swatch custom-rainbow" onclick="ativarNativo()" title="Outra cor...">
+                    <i class="fa-solid fa-plus"></i>
+                    <input type="color" id="native-picker-fallback">
+                </div>
+            </div>
+            <div class="modal-buttons" style="margin-top: 15px;">
+                <button class="btn-cancel" onclick="resetarCorAlvo()">Restaurar Original</button>
+                <button class="btn-cancel" onclick="fecharPalette()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FULL DE VISUALIZAÇÃO DE FOTO (do teste.html) -->
+    <div id="photoViewModal" class="modal-overlay hidden" style="z-index: 3000; display: none;">
+        <button class="modal-close-btn" id="close-view-modal-btn" aria-label="Fechar modal">&times;</button>
+        
+        <div class="photo-view-container">
+            <div class="photo-view-left">
+                <img id="viewModalImage" src="" alt="Visualização da Foto">
+            </div>
+            
+            <div class="photo-view-right">
+                <div class="photo-view-header">
+                    <div class="author-info">
+                        <div class="post-author-head">
+                            <img id="viewModalAuthorImage" src="" alt="Autor da foto">
+                        </div>
+                        <div class="author-details">
+                            <a id="viewModalAuthor" href="#" class="author-name">Nome</a>
+                            <span id="viewModalDesc" class="photo-desc"></span>
+                            <div id="viewModalTags"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="photo-view-comments" id="viewModalComments">
+                    <div class="loading-comments">Carregando comentários...</div>
+                </div>
+                
+                <div class="photo-view-footer">
+                    <div class="photo-view-actions">
+                        <div id="viewModalLikeBtn" class="like-button" role="button" data-liked="false">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="transparent" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                            <span class="like-count">0</span>
+                        </div>
+                    </div>
+                    
+                    <form id="comment-form" class="comment-input-area">
+                        <input type="text" id="comment-input" placeholder="Comente... (use @ para marcar)" autocomplete="off">
+                        <button type="submit" id="send-comment-btn">Publicar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTÃO FLUTUANTE CUSTOMIZAR -->
+    <div id="btn-customize" class="floating-fab" style="display: none;" onclick="abrirModalTema()">
+        <i class="fa-solid fa-palette"></i>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/teste.js" defer></script>
+</body>
+</html>

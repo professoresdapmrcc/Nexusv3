@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Liderança</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/css/auditoria.css">  
+    <link rel="stylesheet" href="/templates/header.css"> 
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <div id="nexus-recomenda" class="rec-container minimized">
+        <div class="rec-header" onclick="toggleRecomendacoes()">
+            <div class="rec-title">
+                <i class="fa-solid fa-robot text-purple"></i> 
+                <span>NEXUS AI</span>
+                <span id="badge-rec" class="badge-count hidden">0</span>
+            </div>
+            <div class="rec-controls">
+                <i class="fa-solid fa-chevron-up" id="rec-icon"></i>
+            </div>
+        </div>
+
+        <div class="rec-body">
+            <div id="lista-recomendacoes" class="rec-list">
+                <div class="rec-empty">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <p>Aguardando análise de dados...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="nexus-toolbar-container">
+            <div class="nexus-toolbar-wrapper">
+                <div class="filtros-principais">
+                    <div class="search-group">
+                        <i class="fa-solid fa-calendar-day search-icon"></i>
+                        <input type="date" id="data-inicio" class="nexus-input-search" title="Data Início">
+                    </div>
+                    <div class="search-group">
+                        <i class="fa-solid fa-calendar-check search-icon"></i>
+                        <input type="date" id="data-fim" class="nexus-input-search" title="Data Fim">
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button onclick="gerarRelatorio()" class="btn-nexus btn-purple">
+                        <i class="fa-solid fa-bolt"></i> ANALISAR
+                    </button>
+                    <button onclick="copiarParaPlanilha()" class="btn-nexus btn-blue">
+                        <i class="fa-solid fa-copy"></i> COPIAR
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="kpi-section" class="kpi-container hidden">
+            <div class="kpi-grid">
+                <div class="kpi-card glass-panel">
+                    <div class="kpi-icon text-purple"><i class="fa-solid fa-users-viewfinder"></i></div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Auditados</span>
+                        <span id="kpi-total" class="kpi-value">0</span>
+                    </div>
+                </div>
+                <div class="kpi-card glass-panel">
+                    <div class="kpi-icon" style="color: #10b981;"><i class="fa-solid fa-shield-check"></i></div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Regulares</span>
+                        <span id="kpi-regulares" class="kpi-value">0</span>
+                    </div>
+                </div>
+                <div class="kpi-card glass-panel">
+                    <div class="kpi-icon" style="color: #a855f7;"><i class="fa-solid fa-file-signature"></i></div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">C. Especiais</span>
+                        <span id="kpi-especiais" class="kpi-value">0</span>
+                    </div>
+                </div>
+                <div class="kpi-card glass-panel" style="border-left: 3px solid #ef4444;">
+                    <div class="kpi-icon" style="color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="kpi-info">
+                        <span class="kpi-label text-red-500">Irregulares</span>
+                        <span id="kpi-irregulares" class="kpi-value">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-lista glass-panel" style="margin-top: 20px;">
+            <div style="margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight:bold; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-clipboard-check text-purple"></i> Auditoria de Desempenho
+            </div>
+            <div class="lista-row header-lista">
+                <div>CARGO</div>
+                <div>NICKNAME</div>
+                <div class="col-center">STATUS</div>
+                <div>MOTIVO</div>
+            </div>
+            <div id="corpo-tabela">
+                <div class="empty-dashboard">
+                    <div class="empty-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                    <h2>Pronto para Auditar</h2>
+                    <p>Selecione as datas no painel superior e clique em <strong>Analisar</strong> para gerar o raio-x de desempenho da equipe.</p>
+                    <div class="empty-stats-preview">
+                        <div><span class="stat-dot green"></span> Regulares</div>
+                        <div><span class="stat-dot purple"></span> Casos Especiais</div>
+                        <div><span class="stat-dot red"></span> Irregulares</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="conselhos-section" style="margin-top: 40px;">
+            <div class="conselhos-grid">
+                <button class="btn-conselho glass-panel" onclick="abrirPainel('Administração', this)"><i class="fa-solid fa-user-tie"></i> Administração</button>
+                <button class="btn-conselho glass-panel" onclick="abrirPainel('Assistência', this)"><i class="fa-solid fa-heart"></i> Assistência</button>
+                <button class="btn-conselho glass-panel" onclick="abrirPainel('Atualização 1', this)"><i class="fa-solid fa-upload"></i> Atualização 1</button>
+                <button class="btn-conselho glass-panel" onclick="abrirPainel('Atualização 2', this)"><i class="fa-solid fa-cloud"></i> Atualização 2</button>
+                <button class="btn-conselho glass-panel" onclick="abrirPainel('Contabilidade', this)"><i class="fa-solid fa-book"></i> Contabilidade</button>
+                <button class="btn-conselho glass-panel" onclick="abrirPainel('Documentação', this)"><i class="fa-solid fa-file-invoice"></i> Documentação</button>
+                <button class="btn-conselho glass-panel" onclick="abrirPainel('Finanças', this)"><i class="fa-solid fa-database"></i> Finanças</button>
+                <button class="btn-conselho glass-panel" onclick="abrirPainel('Segurança', this)"><i class="fa-solid fa-shield-halved"></i> Segurança</button>
+                <a href="/companhia/reuniao.html" class="btn-conselho glass-panel" style="display: flex; align-items: center; justify-content: center; text-decoration: none; color: inherit;"><i class="fa-solid fa-calendar-check"></i> Dados p/ Reunião</a>
+                <a href="/companhia/dadospromo.html" class="btn-conselho glass-panel" style="display: flex; align-items: center; justify-content: center; text-decoration: none; color: inherit;"><i class="fa-solid fa-calendar-check"></i> Dados de Promoções</a>
+                <a href="/companhia/sugestoes.html" class="btn-conselho glass-panel" style="display: flex; align-items: center; justify-content: center; text-decoration: none; color: inherit;"><i class="fa-solid fa-lightbulb"></i> Sugestões/Bugs</a>               
+            </div>
+        </div>
+
+        <div id="dashboard-conselho" style="display: none; margin-top: 30px; margin-bottom: 40px;">
+            <div class="dash-header">
+                <div class="dash-titulo-area">
+                    <h1 id="titulo-conselho-dinamico">CONSELHO DA...</h1>
+                    <div class="badge-semana"><i class="fa-regular fa-calendar text-purple"></i> Semana: <span id="texto-semana">--</span></div>
+                </div>
+                <div class="dash-botoes">
+                    <button class="btn-registrar" onclick="alert('Funcionalidade de registrar em breve')"><i class="fa-solid fa-plus"></i> Registrar Função</button>
+                    <button class="btn-manual"><i class="fa-solid fa-book"></i> Manual</button>
+                </div>
+            </div>
+
+            <div class="dash-grid-principal">
+                
+                <div class="painel-box col-historico glass-panel">
+                    <div class="box-header"><i class="fa-solid fa-list-ul text-purple"></i> HISTÓRICO DE REGISTROS</div>
+                    <div class="tabela-container">
+                        <table class="tabela-registros">
+                            <thead>
+                                <tr>
+                                    <th>NICK</th>
+                                    <th>DATA/HORA</th>
+                                    <th>FUNÇÃO REALIZADA</th>
+                                    <th>COMPROVANTE</th>
+                                    <th>COMENTÁRIOS</th>
+                                    <th>AÇÕES</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-historico"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="painel-box col-prazos glass-panel">
+                    <div class="box-header"><i class="fa-regular fa-calendar-days text-purple"></i> FUNÇÕES E PRAZOS</div>
+                    <div class="lista-prazos" id="lista-prazos-dinamica"></div>
+                </div>
+                
+            </div>
+        </div>
+
+    </div> <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/auditoria.js"></script>
+</body>
+</html>

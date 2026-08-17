@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>NEXUS - Justificativas</title>
+
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/just.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+<div class="container-formulario">
+        <!-- Header do Formulário com Avatar -->
+        <div class="header-postagem">
+            <div class="perfil-usuario-form">
+                <div class="avatar-box-grande">
+                    <img id="avatar-img" src="https://www.habbo.com.br/habbo-imaging/avatarimage?user=Membro&action=std&direction=2&head_direction=3&img_format=png&gesture=sml&headonly=0&size=b" alt="Avatar">
+                </div>
+                <div class="info-user-form">
+                    <span id="user-nick">Carregando...</span>
+                    <span class="badge-conselho">[PROF] JUSTIFICATIVAS</span>
+                </div>
+            </div>
+        </div>
+
+        <form id="justificativa-form" class="form-moderno">
+            
+            <!-- Aviso Fixo -->
+            <div class="aviso-fixo">
+                <strong>Nota:</strong> É permitida uma (01) justificativa mensal para o não cumprimento da meta, postada até as 23h59 do domingo.
+            </div>
+
+            <div class="linha-dupla">
+                <div class="campo-moderno">
+                    <label>Nickname</label>
+                    <input type="text" id="nickname" readonly placeholder="Carregando..." style="cursor: not-allowed; opacity: 0.7;">
+                </div>
+
+                <div class="campo-moderno">
+                    <label>Cargo *</label>
+                    <select id="cargo" required>
+                        <option value="" disabled selected>Selecione seu cargo</option>
+                        <option value="Professor(a)">Professor(a)</option>
+                        <option value="Coordenador(a)">Coordenador(a)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="campo-moderno">
+                <label>Período da meta não cumprida *</label>
+                <input type="text" id="periodo" placeholder="Ex: 07 Abr 2024 a 13 Abr 2024" required>
+            </div>
+
+            <div class="campo-moderno">
+                <label>Motivos *</label>
+                <textarea id="motivos" rows="4" placeholder="Insira o(s) motivo(s) do não cumprimento..." required></textarea>
+            </div>
+
+            <div class="checkbox-moderno">
+                <input type="checkbox" id="confirmacao" required>
+                <label for="confirmacao">Postei esta justificativa dentro do prazo. Estou ciente de que isso me deixará em Casos Especiais no desempenho semanal.</label>
+            </div>
+
+            <button type="submit" id="btn-submit" class="btn-neon">Enviar Justificativa</button>
+        </form>
+    </div>
+
+    <!-- Toast de Notificação -->
+    <div id="toast-sucesso" class="toast-sucesso">
+        <div class="toast-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+        <div class="toast-content">
+            <h4>Sucesso!</h4>
+            <p>Justificativa enviada.</p>
+        </div>
+        <div class="toast-progress"></div>
+    </div>
+
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js" defer></script>
+
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/just.js" defer></script> 
+</body>
+</html>

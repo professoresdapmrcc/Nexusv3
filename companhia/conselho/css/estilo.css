@@ -1,0 +1,33 @@
+body::before {
+    content: "";
+    position: fixed; /* Fica travada na tela mesmo se der scroll */
+    top: 55%; /* Centraliza verticalmente */
+    transform: translateY(-50%);
+    
+    /* O SEGREDO DO CORTE: Joga metade da imagem pra fora da tela */
+    right: -200px; /* Ajuste esse valor dependendo do tamanho da sua logo */
+    
+    width: 500px;  /* Tamanho grande pra dar destaque */
+    height: 500px;
+    
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+    /* OPACIDADE (0.01 é quase invisível, 1.0 é 100% visível) */
+    opacity: 0.1; 
+    
+    z-index: -1; /* Joga a imagem pro fundo, atrás de tudo */
+    pointer-events: none; /* Impede que a imagem roube os cliques do mouse */
+}
+
+/* Aqui você define qual imagem aparece dependendo da página/aba.
+  Basta colocar a classe no <body> do HTML correspondente. 
+*/
+body.aba-conselho::before {
+    background-image: url('/imgs/emblema-cons.png');
+}
+
+body.aba-professores::before {
+    background-image: url('/imgs/emblema-prof.png');
+}

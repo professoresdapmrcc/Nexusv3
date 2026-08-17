@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Avaliações de Promoções</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/templates/header.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="bg-[#0b0f19] text-slate-200 font-['Inter'] pt-24 min-h-screen flex flex-col bg-[url('/imgs/bg-pattern.svg')] bg-fixed bg-cover selection:bg-pink-500/30">
+
+    <div id="header-container"></div>
+
+    <div id="access-denied-screen" class="hidden fixed inset-0 z-50 bg-[#0b0f19] flex flex-col items-center justify-center text-center px-4">
+        <i class="fas fa-lock text-6xl text-red-500 mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]"></i>
+        <h2 class="text-3xl font-bold text-white mb-2">Acesso Restrito</h2>
+        <p class="text-slate-400">Faça login para consultar a transparência de avaliações.</p>
+    </div>
+
+    <main id="app-screen" class="hidden flex-1 container mx-auto px-4 max-w-[1400px] pb-12 relative animate-fade-in">
+        
+        <div class="bg-[#05070c] p-8 md:p-10 mb-8 rounded-3xl flex flex-col md:flex-row justify-between items-center border border-slate-800 shadow-2xl relative overflow-hidden">
+            <div class="absolute -left-20 -top-20 w-64 h-64 bg-pink-600/10 blur-[80px] rounded-full pointer-events-none"></div>
+            
+            <div class="flex items-center gap-6 relative z-10">
+                <div class="w-16 h-16 rounded-2xl bg-[#0b0f19] border border-pink-500/30 flex items-center justify-center shadow-inner">
+                    <i class="fas fa-medal text-transparent bg-clip-text bg-gradient-to-br from-pink-400 to-purple-500 text-3xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-black text-white leading-tight tracking-tight drop-shadow-md">Avaliações de Promoções</h1>
+                    <p class="text-sm text-slate-400 font-medium mt-1">Consulte o histórico votações de promoções dos membros.
+                </div>
+            </div>
+            <div class="mt-6 md:mt-0 relative z-10 w-full md:w-auto">
+                <button id="btn-sync" class="w-full bg-[#0b0f19] hover:bg-slate-800 border border-slate-700 hover:border-pink-500 text-slate-300 px-6 py-3 rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-3 shadow-inner">
+                    <i class="fas fa-sync-alt text-pink-500" id="sync-icon"></i> <span id="sync-text">Sincronizar Banco</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-[#05070c] p-6 rounded-3xl mb-8 border border-slate-800 shadow-xl grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            
+            <div class="w-full relative">
+                <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block"><i class="fas fa-search text-pink-500 mr-1"></i> Buscar Avaliado</label>
+                <div class="relative">
+                    <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-500"></i>
+                    <input type="text" id="filter-nick" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl py-3.5 pl-10 pr-4 text-sm text-white outline-none focus:border-pink-500 transition shadow-inner" placeholder="Ex: Derick...">
+                </div>
+            </div>
+            
+            <div class="w-full">
+                <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block"><i class="fas fa-briefcase text-blue-500 mr-1"></i> Filtrar por Cargo</label>
+                <select id="filter-cargo" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl py-3.5 px-4 text-sm text-slate-300 font-bold outline-none focus:border-blue-500 transition shadow-inner cursor-pointer">
+                    <option value="all" selected>Todos os Cargos</option>
+                    <option value="PROFESSOR">Professor(a)</option>
+                    <option value="COORDENADOR">Coordenador(a)</option>
+                    <option value="GRADUADOR">Graduador(a)</option>
+                </select>
+            </div>
+
+            <div class="w-full">
+                <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block" id="label-filter-mes"><i class="fas fa-calendar-alt text-emerald-500 mr-1"></i> Mês da Reunião (Visão Global)</label>
+                <select id="filter-mes" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl py-3.5 px-4 text-sm text-slate-300 font-bold outline-none focus:border-emerald-500 transition shadow-inner cursor-pointer">
+                    <option value="all" selected>Todos os Meses</option>
+                    <option value="4">Maio</option>
+                    <option value="5">Junho</option>
+                    <option value="6">Julho</option>
+                    <option value="7">Agosto</option>
+                    <option value="8">Setembro</option>
+                    <option value="9">Outubro</option>
+                    <option value="10">Novembro</option>
+                    <option value="11">Dezembro</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="btn-voltar-container" class="hidden mb-6 flex items-center justify-between">
+            <button onclick="voltarParaLotes()" class="bg-[#05070c] hover:bg-slate-800 border border-slate-700 text-slate-300 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-3 shadow-lg hover:-translate-x-1">
+                <i class="fas fa-arrow-left text-pink-500 text-base"></i> Voltar à Galeria de Pastas
+            </button>
+            <span id="titulo-lote-ativo" class="text-xs font-black text-pink-400 uppercase tracking-widest bg-[#05070c] border border-pink-500/30 px-4 py-2 rounded-xl hidden md:block shadow-inner">Lote Atual</span>
+        </div>
+
+        <div id="promocoes-container" class="w-full">
+            <div class="text-center py-20 text-slate-500 bg-[#05070c] border border-slate-800 rounded-3xl shadow-xl">
+                <i class="fas fa-circle-notch fa-spin text-5xl text-pink-500 mb-6 drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]"></i>
+                <p class="font-black uppercase tracking-widest text-sm text-slate-400">Puxando relatórios...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <footer class="mt-auto py-8 border-t border-slate-800 text-center text-slate-500 text-xs bg-[#0b0f19] bg-opacity-70 backdrop-blur-sm">
+        <div class="container mx-auto px-4">
+            <p class="mb-2">&copy; <span id="footer-year"></span> NEXUS - Companhia dos Professores. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/plugin/relativeTime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/plugin/customParseFormat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/locale/pt-br.min.js"></script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_customParseFormat);
+        dayjs.extend(window.dayjs_plugin_relativeTime);
+        dayjs.locale('pt-br');
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
+    
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/promovidos.js" defer></script> 
+</body>
+</html>

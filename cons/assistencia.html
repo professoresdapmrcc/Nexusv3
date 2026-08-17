@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Assistência</title>
+
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/assistencia.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <!-- Loader Global -->
+    <div id="loader-global" class="loader-overlay hidden">
+        <div class="loader-content">
+            <div class="spinner-icon">
+                <i class="fa-solid fa-cloud-arrow-down fa-bounce"></i>
+            </div>
+            <h3>Aguarde</h3>
+            <p>Estamos buscando as informações...</p>
+            <div class="progress-container">
+                <div class="progress-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="nexus-toolbar-container">
+        <div class="nexus-toolbar-wrapper">
+
+            <div class="filtros-principais">
+                <div class="search-group">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="inputBusca" placeholder="Buscar membro..." class="nexus-input-search">
+                </div>
+
+                <select id="filtro-cargo" class="select-nexus">
+                    <option value="">Todos os Cargos</option>
+                    <option value="Professor">Professor(a)</option>
+                    <option value="Coordenador">Coordenador(a)</option>
+                    <option value="Graduador">Graduador(a)</option>
+                    <option value="Estagiário">Estagiário(a)</option>
+                    <option value="Conselheiro">Conselheiro(a)</option>
+                </select>
+
+                <select id="filtro-punicao" class="select-nexus">
+                    <option value="">Todas as Punições</option>
+                    <option value="Erro">Erros</option>
+                    <option value="Notificação">Notificações</option>
+                    <option value="Advertência">Advertências</option>
+                </select>
+
+                <button onclick="atualizarSistemaNexus()" class="btn-refresh" title="Sincronizar e Atualizar">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </button>
+            </div>
+
+            <div class="action-buttons">
+                <button onclick="abrirModalAdd()" class="btn-nexus btn-blue">
+                    <i class="fa-solid fa-plus"></i> Adicionar Punição
+                </button>
+                <button onclick="abrirImportadorAdv()" class="btn-nexus btn-purple">
+                    <i class="fa-solid fa-file-import"></i> Importar
+                </button>
+                <button onclick="postarRelatorioConclusao()" class="btn-nexus btn-cyan">
+                    <i class="fa-solid fa-check"></i> Postar Conclusão
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <main class="nexus-main-content">
+
+        <!-- Status de importação -->
+        <div id="import-status-container" class="hidden">
+            <div class="loading-wrapper">
+                <div class="nexus-spinner"></div>
+                <div class="loading-text">
+                    <span class="main-msg">Importando dados para o NEXUS...</span>
+                    <span class="sub-msg">Analisando requerimentos do fórum.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast salvando -->
+        <div id="toast-saving" class="nexus-toast hidden">
+            <div class="toast-content">
+                <div class="spinner-mini"></div>
+                <div class="toast-info">
+                    <span class="toast-title">Salvando informações...</span>
+                    <span class="toast-desc">Enviando dados, Aguarde!</span>
+                </div>
+            </div>
+            <div class="toast-progress-bg">
+                <div id="toast-bar" class="toast-progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- Área de revisão do importador -->
+        <div id="area-revisao-resultados" class="nexus-feed hidden"></div>
+
+        <!-- Quadro principal -->
+        <div id="container-quadro" class="view-lista">
+            <div class="text-center" id="loader-quadro" style="padding: 80px; color: rgba(255,255,255,0.4);">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                <p style="margin-top: 14px; font-size: 0.875rem;">Sincronizando registros...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Importador -->
+    <div id="modalImportTexto" class="nexus-modal hidden">
+        <div class="glass-card modal-w-large">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fa-solid fa-microchip text-purple"></i> Importador de Requerimentos
+                </h3>
+                <button onclick="fecharModais()" class="btn-close">&times;</button>
+            </div>
+            <p class="modal-subtitle">Cole o texto bruto do fórum abaixo:</p>
+            <textarea id="textoForumInput" class="nexus-textarea" placeholder="ERRO&#10;Cargo e nick: Professor(a) Nick..."></textarea>
+            <div class="modal-footer justify-end">
+                <button onclick="processarTextoParaFila()" class="btn-action btn-aprovar-purple">
+                    Analisar Dados <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nova Punição -->
+    <div id="modalAddPunicao" class="nexus-modal hidden" style="z-index: 9999;">
+        <div class="nexus-form-card">
+
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
+                <div>
+                    <span class="info-label" style="display: block; margin-bottom: 6px;">FORMULÁRIO</span>
+                    <h2 class="type-badge" style="font-size: 1.8rem; margin: 0; padding: 0; background: none; -webkit-text-fill-color: transparent;">
+                        NOVA PUNIÇÃO
+                    </h2>
+                </div>
+                <button onclick="fecharModais()" class="btn-close-nexus" title="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="info-grid" style="gap: 20px;">
+                    <div>
+                        <label class="info-label">CARGO</label>
+                        <select id="addCargo" class="nexus-input-dark">
+                            <option value="Professor(a)">Professor(a)</option>
+                            <option value="Coordenador(a)">Coordenador(a)</option>
+                            <option value="Graduador(a)">Graduador(a)</option>
+                            <option value="Estagiário(a)">Estagiário(a)</option>
+                            <option value="Conselheiro(a)">Conselheiro(a)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="info-label">NICKNAME</label>
+                        <input type="text" id="addNick" class="nexus-input-dark" placeholder="Ex: Sr.Gabriel.">
+                    </div>
+                </div>
+
+                <div class="info-grid" style="gap: 20px;">
+                    <div>
+                        <label class="info-label">TIPO DE PUNIÇÃO</label>
+                        <select id="addTipo" class="nexus-input-dark">
+                            <option value="Erro">Erro</option>
+                            <option value="Notificação">Notificação</option>
+                            <option value="Advertência Interna">Advertência Interna</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="info-label">DATA DE APLICAÇÃO</label>
+                        <input type="date" id="addData" class="nexus-input-dark">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="info-label">MOTIVO DETALHADO</label>
+                    <textarea id="addMotivo" class="nexus-input-dark" placeholder="Descreva o motivo da punição aqui..."></textarea>
+                </div>
+            </div>
+
+            <div style="margin-top: 28px; display: flex; justify-content: flex-end; gap: 12px;">
+                <button onclick="fecharModais()" class="btn-glass btn-reprovar-red" style="padding: 11px 28px;">
+                    CANCELAR
+                </button>
+                <button onclick="salvarPunicaoManual()" id="btnSalvarManual" class="btn-nexus btn-purple" style="padding: 11px 32px; font-weight: 700;">
+                    SALVAR REGISTRO
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Nexus AI -->
+    <div id="nexus-recomenda" class="rec-container minimized">
+        <div class="rec-header" onclick="toggleRecomendacoes()">
+            <div class="rec-title">
+                <i class="fa-solid fa-robot text-purple"></i>
+                <span>NEXUS AI</span>
+                <span id="badge-rec" class="badge-count hidden">0</span>
+            </div>
+            <div class="rec-controls">
+                <i class="fa-solid fa-chevron-up" id="rec-icon"></i>
+            </div>
+        </div>
+        <div class="rec-body">
+            <div id="lista-recomendacoes" class="rec-list">
+                <div class="rec-empty">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <p>Tudo limpo! Nenhuma ação necessária.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script>
+    <script src="/js/assistencia.js" defer></script>
+
+</body>
+</html>

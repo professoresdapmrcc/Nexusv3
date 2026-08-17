@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS</title>
+    <meta name="description" content="NEXUS — o ponto de encontro da Companhia dos Professores da RCC.">
+    <meta name="theme-color" content="#17051f">
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/home-experience.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <meta name="referrer" content="no-referrer">
+</head>
+<body class="auth-loading">
+
+    <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo principal</a>
+
+    <div id="header-placeholder"></div>
+
+    <main id="conteudo-principal" class="hero-section">
+        <div class="hero-glow hero-glow--one" aria-hidden="true"></div>
+        <div class="hero-glow hero-glow--two" aria-hidden="true"></div>
+        <div class="container hero-container">
+            <div class="vertical-text">
+                #SOBERANIAROXA
+            </div>
+
+            <div class="hero-content">
+                <div class="hero-copy">
+                    <p class="eyebrow"><span></span> Companhia dos Professores • RCC</p>
+                    <h1>Conhecimento que <span>conecta.</span><br>Pessoas que transformam.</h1>
+                    <p class="hero-lead">
+                        Um espaço feito para compartilhar saberes, desenvolver talentos e fortalecer
+                        quem ensina e aprende todos os dias.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#tour-start" class="btn btn-primary tour-button">
+                            Explorar o NEXUS <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+                        </a>
+                        <a href="/cursos.html" class="btn hero-courses-button">Explorar cursos <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+
+                <div class="hero-visual" aria-label="Identidade visual NEXUS">
+                    <div class="hero-orbit-system" aria-hidden="true">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="hero-visual-coordinate" aria-hidden="true">NEXUS / ORBIT 01</span>
+                    <div class="hero-logo-card">
+                        <span class="hero-logo-label">NEXUS</span>
+                        <img src="/imgs/logo.png" alt="Logo NEXUS em pixel art" class="logo-n">
+                        <span class="hero-logo-caption">Conhecimento em movimento</span>
+                    </div>
+                    <img src="/imgs/personagem-hero.png" alt="Personagem em pixel art acenando" class="hero-character">
+                    <img src="/imgs/estrela-hero.png" alt="" class="hero-star" aria-hidden="true">
+                    <div class="hero-floating-note">
+                        <span class="note-icon"><i class="fa-solid fa-star" aria-hidden="true"></i></span>
+                        <span><strong>Ensinar inspira.</strong> Aprender transforma.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main> 
+
+    <section class="cta-banner impact-sequence new-arrivals-section" aria-label="Novos membros da Companhia" data-reveal>
+        <div class="impact-panel new-arrivals-panel">
+            <div class="impact-heading new-arrivals-heading">
+                <span>Tripulação recém-chegada</span>
+                <h2>Novos professores.<br><strong>Já em órbita.</strong></h2>
+                <p class="new-arrivals-intro">As entradas mais recentes da Companhia, conectadas diretamente à nossa lista de membros.</p>
+            </div>
+            <div class="impact-flow new-arrivals-grid" id="new-arrivals-grid" aria-live="polite" aria-busy="true">
+                <article class="cta-item impact-step arrival-card arrival-card--loading" data-arrival-slot="0">
+                    <span class="cta-number">01</span>
+                    <div class="arrival-portrait arrival-skeleton" aria-hidden="true"></div>
+                    <div class="cta-copy arrival-copy"><small>Nova entrada</small><span class="cta-main-text">Carregando...</span><p class="cta-subtext">Consultando a tripulação.</p></div>
+                </article>
+                <article class="cta-item impact-step arrival-card arrival-card--loading" data-arrival-slot="1">
+                    <span class="cta-number">02</span>
+                    <div class="arrival-portrait arrival-skeleton" aria-hidden="true"></div>
+                    <div class="cta-copy arrival-copy"><small>Nova entrada</small><span class="cta-main-text">Carregando...</span><p class="cta-subtext">Consultando a tripulação.</p></div>
+                </article>
+                <article class="cta-item impact-step arrival-card arrival-card--loading" data-arrival-slot="2">
+                    <span class="cta-number">03</span>
+                    <div class="arrival-portrait arrival-skeleton" aria-hidden="true"></div>
+                    <div class="cta-copy arrival-copy"><small>Nova entrada</small><span class="cta-main-text">Carregando...</span><p class="cta-subtext">Consultando a tripulação.</p></div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+<section id="tour-start" class="valores-section" data-reveal>
+    <div class="container">
+        <div class="section-heading section-heading--center">
+            <p class="eyebrow"><span></span> Nossa constelação</p>
+            <h2 class="section-title">O que nos mantém em <em>órbita</em></h2>
+            <p class="section-intro">Três forças diferentes, conectadas pelo mesmo propósito: fazer o conhecimento chegar mais longe.</p>
+        </div>
+
+        <div class="values-constellation">
+            <div class="constellation-orbit constellation-orbit--outer" aria-hidden="true"></div>
+            <div class="constellation-orbit constellation-orbit--inner" aria-hidden="true"></div>
+            <div class="constellation-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+            <div class="values-core" data-reveal="zoom">
+                <span class="core-pulse" aria-hidden="true"></span>
+                <img src="/imgs/logo.png" alt="Símbolo NEXUS">
+                <small>Nosso propósito</small>
+                <strong>Conhecimento</strong>
+            </div>
+
+            <article class="value-node value-node--commitment" data-reveal="left">
+                <span class="value-node-index">01</span>
+                <span class="value-node-art value-node-art--commitment" aria-hidden="true"><i></i><i></i><i></i></span>
+                <div class="value-node-icon"><i class="fa-solid fa-handshake-angle" aria-hidden="true"></i></div>
+                <div><h3>Compromisso</h3><p>Assumimos cada missão como parte de algo maior e construímos impacto real juntos.</p></div>
+            </article>
+
+            <article class="value-node value-node--excellence" data-reveal="right">
+                <span class="value-node-index">02</span>
+                <span class="value-node-art value-node-art--excellence" aria-hidden="true"><i></i><i></i><i></i></span>
+                <div class="value-node-icon"><i class="fa-solid fa-gem" aria-hidden="true"></i></div>
+                <div><h3>Excelência</h3><p>Cuidamos dos detalhes e colocamos intenção, qualidade e paixão em tudo que fazemos.</p></div>
+            </article>
+
+            <article class="value-node value-node--inclusion" data-reveal="up">
+                <span class="value-node-index">03</span>
+                <span class="value-node-art value-node-art--inclusion" aria-hidden="true"><i></i><i></i><i></i></span>
+                <div class="value-node-icon"><i class="fa-solid fa-people-arrows" aria-hidden="true"></i></div>
+                <div><h3>Inclusão</h3><p>Criamos espaço para cada voz, reconhecendo que diferenças tornam a Companhia mais forte.</p></div>
+            </article>
+        </div>
+    </div>
+    </section>
+    
+<section class="mascote-section" data-reveal>
+    <div class="mascote-content">
+        <div class="mascote-stage" data-reveal="left">
+            <div class="pixel-grid" aria-hidden="true"></div>
+            <span class="mascote-stamp">NEXUS<br>CHARACTER<br>FILE #01</span>
+            <span class="mascote-spark mascote-spark--one" aria-hidden="true">✦</span>
+            <span class="mascote-spark mascote-spark--two" aria-hidden="true">✦</span>
+            <div class="mascote-image">
+                <img src="/imgs/grifo-image.png" alt="UVA, o grifo branco coroado e mascote dos Professores">
+                <span class="mascote-name" aria-hidden="true">UVA</span>
+            </div>
+            <div class="mascote-status"><span></span> Guardião em missão</div>
+        </div>
+
+        <div class="mascote-text" data-reveal="right">
+            <p class="eyebrow"><span></span> Arquivo do guardião</p>
+            <h2>Força de leão.<br>Visão de águia.<br>Alma de <em>professor.</em></h2>
+            <p class="mascote-lead">UVA é o grifo que protege o maior tesouro da Companhia: o conhecimento.</p>
+
+            <div class="dossier-facts" aria-label="Características do mascote UVA">
+                <div><span>Espécie</span><strong>Grifo real</strong></div>
+                <div><span>Virtude</span><strong>Sabedoria</strong></div>
+                <div><span>Missão</span><strong>Inspirar</strong></div>
+            </div>
+
+            <p>Com olhos atentos e asas que atravessam horizontes, ele representa a coragem de explorar, a generosidade de ensinar e a curiosidade de nunca parar de aprender.</p>
+            <div class="mascote-quote"><i class="fa-solid fa-quote-left" aria-hidden="true"></i><span>Aprender é uma aventura.<br><strong>Ensinar é uma missão.</strong></span></div>
+        </div>
+    </div>
+</section>
+
+<section class="grupos-section" data-reveal>
+    <div class="grupos-container">
+        <div class="grupos-heading">
+            <div class="section-heading">
+                <p class="eyebrow"><span></span> Arquitetura da Companhia</p>
+                <h2 class="section-title">Três subgrupos.<br><em>Um só propósito.</em></h2>
+            </div>
+            <p class="section-intro">Três especialidades que operam de formas diferentes e avançam na mesma direção.</p>
+        </div>
+
+        <div class="subgroups-clean-grid" id="grupos-grid">
+            
+            <button class="grupo-item subgroup-clean-card subgroup-clean-card--application" data-id="3" type="button" data-reveal="up">
+                <span class="subgroup-card-top"><small>01</small><strong>INTEGRAÇÃO</strong></span>
+                <span class="subgroup-monogram" aria-hidden="true">DA</span>
+                <span class="subgroup-emblem"><img src="imgs/da-imagem.png" alt="Emblema do Departamento de Aplicação" class="grupo-emblema"></span>
+                <span class="subgroup-card-copy"><strong class="grupo-titulo">Departamento de Aplicação</strong><small>A porta de entrada para novas trajetórias.</small></span>
+                <span class="grupo-action">Explorar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            </button>
+            
+            <button class="grupo-item subgroup-clean-card subgroup-clean-card--protection" data-id="2" type="button" data-reveal="up">
+                <span class="subgroup-card-top"><small>02</small><strong>PROTEÇÃO</strong></span>
+                <span class="subgroup-monogram" aria-hidden="true">SPP</span>
+                <span class="subgroup-emblem"><img src="imgs/spp-imagem.png" alt="Emblema do Serviço de Proteção dos Professores" class="grupo-emblema"></span>
+                <span class="subgroup-card-copy"><strong class="grupo-titulo">Serviço de Proteção dos Professores</strong><small>Confiança e segurança para quem ensina.</small></span>
+                <span class="grupo-action">Explorar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            </button>
+            
+            <button class="grupo-item subgroup-clean-card subgroup-clean-card--culture" data-id="1" type="button" data-reveal="up">
+                <span class="subgroup-card-top"><small>03</small><strong>CULTURA</strong></span>
+                <span class="subgroup-monogram" aria-hidden="true">CDC</span>
+                <span class="subgroup-emblem"><img src="imgs/cdc-imagem.png" alt="Emblema da Comissão de Desenvolvimento Cultural" class="grupo-emblema"></span>
+                <span class="subgroup-card-copy"><strong class="grupo-titulo">Comissão de Desenvolvimento Cultural</strong><small>Ideias e histórias que aproximam pessoas.</small></span>
+                <span class="grupo-action">Explorar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            </button>
+
+        </div>
+        <div class="subgroups-unity" aria-hidden="true">
+            <span>TRÊS FRENTES</span>
+            <i><b></b></i>
+            <strong>CONHECIMENTO EM MOVIMENTO</strong>
+        </div>
+    </div>
+</section>
+
+<section id="mural" class="mural-section" data-reveal>
+    <div class="container">
+        
+        <div class="mural-header">
+            <div class="mural-title-wrapper">
+                <p class="eyebrow"><span></span> Álbum coletivo</p>
+                <h2 class="section-title">Memórias que merecem ficar na <em>parede.</em></h2>
+                <p class="mural-subtitle">Retratos espontâneos, grandes conquistas e histórias que só quem viveu entende.</p>
+            </div>
+            <button id="showAddPhotoModalBtn" class="btn btn-primary btn-add-photo">
+                <span class="material-symbols-outlined">add_a_photo</span>
+                Pendurar uma memória
+            </button>
+        </div>
+
+        <div class="mural-board">
+            <span class="board-tape board-tape--left" aria-hidden="true"></span>
+            <span class="board-tape board-tape--right" aria-hidden="true"></span>
+            <div class="board-caption"><span>PROF • MEMÓRIAS</span><strong>Arquivo vivo</strong></div>
+            <div id="photoGrid" class="photo-grid">
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<div id="addPhotoModal" class="modal-overlay hidden">
+    <div class="modal-container">
+        <button id="close-modal-btn" class="modal-close-btn">&times;</button>
+        
+        <div class="modal-content">
+            <h2>Nova Foto</h2>
+            <p>Insira o link da imagem e uma legenda especial.</p>
+            
+            <form id="add-photo-form" class="modal-search-form">
+                <div class="form-group" style="width: 100%;">
+                    <label class="form-label">URL da Imagem</label>
+                    <input type="url" id="photo-url" class="form-control" placeholder="https://i.imgur.com/..." required>
+                </div>
+                
+                <div class="form-group" style="width: 100%;">
+                    <label class="form-label">Legenda</label>
+                    <textarea id="photo-description-input" class="form-control" placeholder="O que aconteceu nesse dia?" rows="3"></textarea>
+                </div>
+
+                <div class="form-actions" style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="button" id="cancel-btn" class="btn btn-outline">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Publicar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="photoViewerModal" class="modal-overlay hidden" style="z-index: 2000;">
+    <div class="modal-container" style="max-width: 90%; background: transparent; box-shadow: none;">
+        <button id="closeViewerBtn" class="modal-close-btn" style="color: #fff; font-size: 40px;">&times;</button>
+        <div class="viewer-content" style="text-align: center;">
+            <img id="viewerImage" src="" style="max-height: 80vh; border-radius: 12px; box-shadow: 0 0 30px rgba(0,0,0,0.8);">
+            <div id="viewerDescription" style="margin-top: 15px; color: #fff; font-size: 1.2rem; font-weight: bold;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay hidden" id="subgroup-modal-overlay">
+    <div class="modal-container" id="subgroup-modal-container">
+        <button class="modal-close-btn" id="modal-close-btn" title="Fechar">
+    <i class="fa-solid fa-xmark"></i>
+</button>
+        
+        <div class="modal-content" id="modal-content"></div>
+    </div>
+</div>
+    
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/index-scripts.js" defer></script>
+    <script src="/js/online-status.js" defer></script>
+</body>
+</html>

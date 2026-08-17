@@ -1,0 +1,236 @@
+<header class="desktop-header nexus-header-horizon" aria-label="Cabeçalho principal">
+    <div class="nexus-horizon-shell">
+        <a href="/index.html" class="nexus-horizon-brand" aria-label="NEXUS — Página inicial">
+            <span class="nexus-eclipse" aria-hidden="true"><i></i></span>
+            <span class="nexus-horizon-brand-copy">
+                <strong>NEXUS</strong>
+                <small>Conhecimento em movimento</small>
+            </span>
+        </a>
+
+        <nav class="top-nav-menu nexus-horizon-nav" id="top-nav-menu" aria-label="Navegação principal">
+            <ul>
+                <li><a href="/" title="Início"><span>Início</span></a></li>
+                <li class="dropdown">
+                    <a href="#" title="Central de Funções"><span>Central</span><i class="fa-solid fa-chevron-down dropdown-icon" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/companhia.html">Companhia</a></li>
+                        <li><a href="/cursos.html">Cursos</a></li>
+                        <li><a href="/subgrupos.html">Subgrupos</a></li>
+                        <li><a href="/inscricoes.html">Inscrições Departamentais</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" title="Diário Oficial"><span>Diário Oficial</span><i class="fa-solid fa-chevron-down dropdown-icon" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/documentos.html">Documentos</a></li>
+                        <li><a href="https://prof-dashboard.netlify.app/">Dashboard</a></li>
+                        <li><a href="https://prof-calendario.netlify.app/">Calendário</a></li>
+                        <li><a href="/aniversariantes.html">Aniversariantes</a></li>
+                        <li><a href="/transparencia/propostas.html">Transparência de Propostas</a></li>
+                        <li><a href="/transparencia/promocoes.html">Transparência de Promoções</a></li>
+                        <li><a href="https://prof-historia.netlify.app/">Nossa História</a></li>
+                        <li><a href="/ranking.html">Ranking Interno</a></li>
+                        <li><a href="/quadro.html">Quadro de Erros & Advertências</a></li>
+                        <li><a href="/mural.html">Mural de Fotos</a></li>
+                        <li><a href="/consulta.html">Desempenho</a></li>
+                    </ul>
+                </li>
+                <li><a href="/athena.html" title="IA dos Professores"><span>Athena IA</span></a></li>
+            </ul>
+        </nav>
+
+        <div class="profile-area nexus-horizon-controls">
+            <div class="auth-loader"><span>Aguarde...</span></div>
+            <a href="#" id="search-toggle-btn" class="header-action-icon" title="Pesquisar membro" aria-label="Pesquisar membro"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></a>
+            <a href="#" id="notification-toggle-btn" class="header-action-icon" title="Notificações" aria-label="Notificações">
+                <i class="fa-regular fa-bell" aria-hidden="true"></i><span id="notification-count" class="notification-badge active"></span>
+            </a>
+            <div class="profile-icon-logged-out hidden" id="profile-icon-logged-out"><a href="/login.html" class="btn-login-header">Entrar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
+            <div class="header-user-info hidden" id="header-user-info-logged-in">
+                <img src="" alt="Perfil" id="header-user-img">
+                <div class="user-details"><span id="header-user-name"></span><span id="user-main-role" class="user-main-role-item"></span></div>
+            </div>
+        </div>
+
+        <button class="menu-toggle nexus-horizon-toggle" id="menu-toggle" type="button" aria-label="Abrir menu" aria-controls="top-nav-menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="search-popup" id="search-popup">
+    <div class="search-popup-content">
+        <button class="close-search-btn" id="close-search-btn" title="Fechar">&times;</button>
+        <h3>Pesquisar Membro</h3>
+        <p>Digite o nick de um membro para encontrar seu perfil.</p>
+        <form id="popup-search-form">
+            <input type="text" id="popup-search-input" placeholder="Digite o nick aqui..." required>
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+</div>
+
+<div class="login-popup" id="login-popup">
+    <div class="popup-view" id="dashboard-view">
+        
+        <div class="user-profile-header">
+            <div class="avatar-wrapper">
+                <img src="" alt="Perfil" id="dashboard-user-photo" class="avatar-img">
+            </div>
+            <div class="user-greeting">
+                <span class="label">Bem-vindo,</span>
+                <h4 id="dashboard-user-name">Carregando...</h4>
+                <div id="dashboard-user-roles-container" class="roles-tag-container">
+                </div>
+            </div>
+        </div>
+
+        <div class="favorites-container">
+            <div class="section-header">
+                <span class="section-title">Meus Atalhos</span>
+                <button class="edit-favs-btn" title="Editar favoritos">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+            <div class="favorites-grid" id="favorites-grid">
+            </div>
+        </div>
+
+<div class="system-actions">
+    <a href="/perfil.html" id="meu-perfil-btn" class="sys-btn primary">
+        <i class="fa-solid fa-circle-user"></i> Meu Perfil
+    </a>
+    <a href="/admin/painel.html" id="admin-panel-button" class="sys-btn admin hidden">
+        <i class="fa-solid fa-shield-check"></i> Admin
+    </a>
+</div>
+
+        <div class="popup-footer">
+            <button id="logout-button" class="btn-exit">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair da Conta
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="fav-modal-overlay" id="fav-modal-overlay">
+    <div class="fav-modal-content">
+        <div class="fav-modal-header">
+            <h3>Escolher Atalhos</h3>
+            <button id="close-fav-modal" title="Fechar">&times;</button>
+        </div>
+        <p class="fav-modal-desc">Selecione até 3 páginas para fixar no seu perfil.</p>
+        
+        <input type="text" id="fav-search-input" class="fav-search-box" placeholder="🔍 Pesquisar página...">
+        
+        <div class="fav-options-grid" id="fav-options-grid"></div>
+        
+        <div class="fav-modal-footer">
+            <button id="save-favs-btn" class="sys-btn primary" style="width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-floppy-disk"></i> Salvar Atalhos
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="notification-panel" id="notification-panel">
+    <div class="notification-header">
+        <h3>Notificações</h3>
+        <a href="#" class="mark-as-read">Marcar como lidas</a>
+    </div>
+    <div class="notification-list">
+        <ul id="notification-items-list">
+        </ul>
+    </div>
+    <div class="notification-footer">
+        <a href="/notificacoes.html">Ver todas as notificações</a>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const body = document.body;
+    const overlay = document.getElementById('overlay');
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('top-nav-menu');
+    const searchBtn = document.getElementById('search-toggle-btn');
+    const searchPopup = document.getElementById('search-popup');
+    const closeSearchBtn = document.getElementById('close-search-btn');
+    const notifBtn = document.getElementById('notification-toggle-btn');
+    const notifPanel = document.getElementById('notification-panel');
+    const userInfoBtn = document.getElementById('header-user-info-logged-in'); 
+    const loginPopup = document.getElementById('login-popup');
+    
+    const allPopups = [navMenu, searchPopup, notifPanel, loginPopup, overlay];
+
+    function closeAllPopups() {
+        allPopups.forEach(el => { if (el) el.classList.remove('active'); });
+        body.classList.remove('noscroll');
+    }
+
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpening = !navMenu.classList.contains('active');
+            closeAllPopups();
+            if (isOpening) {
+                navMenu.classList.add('active');
+                if (overlay) overlay.classList.add('active');
+                body.classList.add('noscroll');
+            }
+        });
+    }
+
+    function setupPopupToggle(btn, popup) {
+        if (btn && popup) {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault(); e.stopPropagation();
+                const isOpening = !popup.classList.contains('active');
+                closeAllPopups();
+                if (isOpening) {
+                    popup.classList.add('active');
+                    if (popup === searchPopup) {
+                        body.classList.add('noscroll');
+                        setTimeout(() => document.getElementById('popup-search-input').focus(), 100);
+                    }
+                }
+            });
+        }
+    }
+
+    setupPopupToggle(searchBtn, searchPopup);
+    setupPopupToggle(notifBtn, notifPanel);
+    setupPopupToggle(userInfoBtn, loginPopup);
+
+    if (closeSearchBtn) closeSearchBtn.addEventListener('click', closeAllPopups);
+
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        const link = dropdown.querySelector('a');
+        link.addEventListener('click', function(e) {
+            if (window.innerWidth < 1024) {
+                e.preventDefault(); e.stopPropagation();
+                dropdowns.forEach(other => { if (other !== dropdown) other.classList.remove('open'); });
+                dropdown.classList.toggle('open');
+            }
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (
+            (notifPanel && !notifPanel.contains(e.target)) &&
+            (loginPopup && !loginPopup.contains(e.target)) &&
+            (navMenu && !navMenu.contains(e.target)) &&
+            (searchPopup && !searchPopup.contains(e.target)) &&
+            !e.target.closest('#menu-toggle')
+        ) {
+            closeAllPopups();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllPopups(); });
+});
+</script>

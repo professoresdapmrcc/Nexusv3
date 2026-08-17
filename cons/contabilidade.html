@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Painel de Contabilidade</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/templates/header.css"> 
+    <link rel="stylesheet" href="/css/contabilidade.css">
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container-cont">
+        <div class="header-contabilidade">
+            <i class="fa-solid fa-calculator"></i>
+            <h1>Painel de Contabilidade</h1>
+        </div>
+
+        <div class="import-section">
+            <div class="import-grid">
+                <div class="input-group">
+                    <label>Período de Análise</label>
+                    <div class="date-range">
+                        <input type="date" id="data-inicio">
+                        <span>até</span>
+                        <input type="date" id="data-fim">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Cargo Analisado</label>
+                    <select id="cargo-select">
+                        <option value="professores">Professores</option>
+                        <option value="graduadores">Graduadores</option>
+                        <option value="coordenadores">Coordenadores</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="textarea-group">
+                <label>Cole aqui os dados da Planilha (Colunas Nick até Motivo)</label>
+                <textarea id="dados-planilha" placeholder="Copie as linhas da planilha e cole aqui..."></textarea>
+            </div>
+
+            <button onclick="processarContabilidade()" class="btn-processar">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Analisar Desempenho
+            </button>
+        </div>
+
+        <div class="resultado-section" id="area-resultado" style="display: none;">
+            <div class="resultado-header">
+                <h3><i class="fa-solid fa-table-list"></i> Relatório Analisado</h3>
+                <span id="badge-periodo" class="badge-periodo"></span>
+            </div>
+
+            <div class="tabela-container">
+                <table class="tabela-contabilidade">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;">Nickname</th>
+                            <th>Entrada</th>
+                            <th>Promoção</th>
+                            <th>Meta (%)</th>
+                            <th>Status Final</th>
+                            <th style="text-align: left;">Motivo/Observação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-contabilidade"></tbody>
+                </table>
+            </div>
+
+            <button onclick="copiarTabelaFinal()" class="btn-copiar-relatorio">
+                <i class="fa-solid fa-copy"></i> Copiar Dados Processados
+            </button>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/contabilidade.js"></script>
+</body>
+</html>

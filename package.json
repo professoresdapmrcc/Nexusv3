@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "dependencies": {
+    "@policiarcc/rccsystem-atlas-oidc": "^0.1.3",
+    "@policiarcc/rccsystem-login-button": "^1.2.0",
+    "firebase-admin": "^13.7.0"
+  },
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "check:auth": "node --check netlify/functions/nexus-auth-core.mjs && node --check netlify/functions/nexus-auth-state.mjs && node --check netlify/functions/nexus-auth-login.mjs && node --check netlify/functions/nexus-auth-callback.mjs && node --check netlify/functions/nexus-auth-firebase-token.mjs && node --check netlify/functions/nexus-auth-logout.mjs && node --check js/login.js && node --check js/global.js",
+    "audit:legacy-nicknames": "node scripts/audit-legacy-nicknames.mjs",
+    "legacy-firebase": "node scripts/set-legacy-firebase-access.mjs",
+    "revoke:legacy-sessions": "node scripts/revoke-legacy-firebase-sessions.mjs"
+  }
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Professores</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/professores.css">
+    <link rel="stylesheet" href="/templates/header.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+
+<body class="light-theme aba-professores">
+
+    <body class="auth-loading">
+
+        <div id="header-placeholder"></div>
+
+        <main class="professores-page">
+
+            <div class="page-header">
+                <h1 class="page-title"><i class="fa-solid fa-graduation-cap"></i> Portal dos Professores</h1>
+                <p class="page-subtitle">Central de atividades, ferramentas e scripts</p>
+            </div>
+
+            <section class="top-section">
+                <div class="info-links">
+                    <a href="/companhia/cursos/professores/manual.html" class="modern-card info-card">
+                        <div class="card-icon"><img src="/imgs/manual-prof.png" alt="Manual"></div>
+                        <h2>Manual do Professor</h2>
+                        <p>Instruções completas para aplicar aulas com excelência.</p>
+                    </a>
+                    <a href="https://sites.google.com/view/profr5654456/faq" class="modern-card info-card">
+                        <div class="card-icon"><img src="/imgs/faq.png" alt="FAQ"></div>
+                        <h2>F.A.Q.</h2>
+                        <p>Respostas rápidas para as dúvidas mais frequentes.</p>
+                    </a>
+                </div>
+
+                <div class="modern-card destaques-card">
+                    <div class="destaques-header">
+                        <h3><i class="fa-solid fa-star"></i> Destaques da Semana</h3>
+                        <p class="date-range" id="destaques-date-range">Carregando data...</p>
+                    </div>
+                    <div class="destaques-avatars" id="destaques-avatars-container">
+                        <div class="loading-spinner"><i class="fa-solid fa-circle-notch fa-spin"></i> Buscando...</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="scripts-section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-book-open"></i> Scripts de Cursos</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <div class="scripts-grid">
+                    <div class="modern-card script-item">
+                        <a href="/companhia/cursos/professores/cac.html" class="script-button cac-btn">
+                            <i class="fa-solid fa-comments"></i> CAC
+                        </a>
+                        <p class="script-desc"><strong>Curso de Aperfeiçoamento Comunicativo</strong><br>Sargentos+ /
+                            Equivalências+</p>
+                    </div>
+
+                    <div class="modern-card script-item">
+                        <a href="/companhia/cursos/professores/cro.html" class="script-button cro-btn">
+                            <i class="fa-solid fa-spell-check"></i> CRO
+                        </a>
+                        <p class="script-desc"><strong>Curso de Revisão Ortográfica</strong><br>Cabos+ / Equivalências+
+                        </p>
+                    </div>
+
+                    <div class="modern-card script-item">
+                        <a href="/companhia/cursos/professores/cap.html" class="script-button cap-btn">
+                            <i class="fa-solid fa-user-graduate"></i> CAP
+                        </a>
+                        <p class="script-desc"><strong>Curso de Aperfeiçoamento de Praças</strong><br>Exclusivo para
+                            Subtenentes</p>
+                    </div>
+
+                    <div class="modern-card script-item">
+                        <a href="/companhia/cursos/professores/acl.html" class="script-button acl-btn">
+                            <i class="fa-solid fa-language"></i> ACL
+                        </a>
+                        <p class="script-desc"><strong>Avaliação de Conhecimento Linguístico</strong><br>Cabos+ /
+                            Equivalências+</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tools-section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-toolbox"></i> Ferramentas e Sistemas</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <div class="tools-grid">
+                    <a href="https://www.google.com/url?q=https%3A%2F%2Fwww.policiarcc.com%2Fh217-prof-relatorio&sa=D"
+                        class="modern-tool-link">
+                        <img src="/imgs/postar-aula.png" alt="">
+                        <span>Postar Relatórios</span>
+                    </a>
+                    <a href="https://www.google.com/url?q=https%3A%2F%2Fsystem.policercc.com.br%2Fcompanhia%2Fprofessores&sa=D"
+                        class="modern-tool-link">
+                        <img src="/imgs/postar-system.png" alt="">
+                        <span>Postar no System</span>
+                    </a>
+                    <a href="https://docs.google.com/spreadsheets/d/1L5t72kbIlRnHRp_OaOMbHdDjkOy_3QlGJdYqarhh-ac/edit"
+                        class="modern-tool-link">
+                        <img src="/imgs/verificar-relatorios.png" alt="">
+                        <span>Verificar Relatórios</span>
+                    </a>
+                    <a href="https://drive.google.com/drive/u/1/folders/13APldv68spVkoekt8kmoFJsIRhsyAnGe"
+                        class="modern-tool-link">
+                        <img src="/imgs/historico-aulas.png" alt="">
+                        <span>Histórico de Aulas</span>
+                    </a>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoB27_eFNrEIZ_esGVs1mcrm1nLiVTcuRhXPJVsVgnmT0qZQ/viewform"
+                        class="modern-tool-link">
+                        <img src="/imgs/postar-correção.png" alt="">
+                        <span>Postar Correções</span>
+                    </a>
+                    <a href="https://docs.google.com/spreadsheets/d/1-JinKLWlxa2nVRTJ-QIrQsYa4lkxX57NBWzrs1U-0kQ/edit#gid=1849101510"
+                        class="modern-tool-link">
+                        <img src="/imgs/verificar-correções.png" alt="">
+                        <span>Verificar Correções</span>
+                    </a>
+                    <a href="/justificativa.html"
+                        class="modern-tool-link">
+                        <img src="/imgs/justificar-metas.png" alt="">
+                        <span>Justificar Meta</span>
+                    </a>
+                    <a href="/painel-justificativa.html" class="modern-tool-link">
+                        <img src="/imgs/verificar-justificativa.png" alt="">
+                        <span>Verificar Justificativa</span>
+                    </a>
+                    <a href="https://profstatusv2.netlify.app/" class="modern-tool-link" target="_blank">
+                        <img src="/imgs/verificar-cursoos.png" alt="">
+                        <span>Verificar Cursos</span>
+                    </a>
+                    <a href="https://www.google.com/url?q=https%3A%2F%2Fwww.policiarcc.com%2Fh240-prof-central-prof&sa=D"
+                        class="modern-tool-link">
+                        <img src="/imgs/central-prof.png" alt="">
+                        <span>Central Prof</span>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+
+        <div id="footer-placeholder"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+        <script src="/js/loader.js"></script>
+        <script src="/js/global.js" defer></script>
+        <script src="/js/professores.js" defer></script>
+
+    </body>
+
+</html>

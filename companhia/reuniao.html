@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Dados para Reunião Quinzenal</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;700;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    colors: {
+                        nexus: {
+                            dark: '#0f0c29',
+                            purple: '#302b63',
+                            accent: '#ba4fc0',
+                            accentLight: '#d56ae0',
+                            success: '#2ecc71',
+                            warning: '#f1c40f',
+                            info: '#3498db',
+                            danger: '#e74c3c',
+                            orange: '#e67e22'
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 2s linear infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'slide-up': 'slideUp 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base styles & Custom Scrollbar */
+        body {
+            background-color: #050511;
+            background-image:
+                radial-gradient(circle at 15% 50%, rgba(48, 43, 99, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(186, 79, 192, 0.15), transparent 25%);
+            background-attachment: fixed;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(186, 79, 192, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(186, 79, 192, 0.8);
+        }
+
+        /* Component Classes used by JS */
+        .glass-panel {
+            background: rgba(20, 15, 35, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .sk {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 75%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+            border-radius: 0.5rem;
+        }
+
+        /* Progress Bar */
+        .prog-bar-container {
+            display: none;
+        }
+
+        .prog-bar-container.on {
+            display: block;
+        }
+
+        .prog-fill {
+            transition: width 0.4s ease;
+            background: linear-gradient(90deg, var(--tw-colors-nexus-purple), var(--tw-colors-nexus-accentLight));
+        }
+
+        /* Ranks */
+        .r1 {
+            background: rgba(241, 196, 15, 0.15);
+            border: 1px solid rgba(241, 196, 15, 0.3);
+            color: #f1c40f;
+        }
+
+        .r2 {
+            background: rgba(189, 195, 199, 0.15);
+            border: 1px solid rgba(189, 195, 199, 0.3);
+            color: #bdc3c7;
+        }
+
+        .r3 {
+            background: rgba(230, 126, 34, 0.15);
+            border: 1px solid rgba(230, 126, 34, 0.3);
+            color: #e67e22;
+        }
+
+        .rn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .toast.on {
+            bottom: 30px;
+        }
+
+        /* Tabs */
+        .tab-btn.active {
+            background: rgba(186, 79, 192, 0.2);
+            border-color: rgba(186, 79, 192, 0.5);
+            color: white;
+        }
+
+        /* Results Area Transition */
+        #results {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: none;
+        }
+
+        #results.visible {
+            opacity: 1;
+            display: block;
+        }
+
+        /* Toolkit Advanced Styles */
+        .filter-btn.active,
+        .fn-btn.active {
+            background: rgba(186, 79, 192, 0.4);
+            border-color: var(--tw-colors-nexus-accent);
+            color: white;
+            box-shadow: 0 0 15px rgba(186, 79, 192, 0.3);
+        }
+
+        .dropdown-header {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dropdown-header:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .dropdown-header .fa-chevron-down {
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-header.open .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+            opacity: 0;
+        }
+
+        .dropdown-content.open {
+            max-height: 2000px;
+            opacity: 1;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(4px);
+        }
+
+        .item-index {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--tw-colors-nexus-accentLight);
+            width: 24px;
+            flex-shrink: 0;
+        }
+
+        .item-text {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .fade-in {
+            animation: slideUp 0.4s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col selection:bg-nexus-accent selection:text-white auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-5xl" style="margin-top: 24px;">
+
+        <!-- Header Section -->
+        <header class="text-center mb-12 animate-slide-up">
+            <div
+                class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-nexus-purple/50 to-nexus-accent/50 border border-white/10 shadow-[0_0_30px_rgba(186,79,192,0.3)] mb-6">
+                <i class="fas fa-layer-group text-4xl text-white"></i>
+            </div>
+
+            <div class="flex flex-col items-center justify-center gap-2">
+                <div class="mb-4 opacity-40 hover:opacity-100 transition-opacity duration-500">
+                    <span class="text-[9px] uppercase tracking-[0.2em] text-white font-medium">Desenvolvido por <span
+                            class="text-nexus-accentLight">Pegas</span></span>
+                </div>
+                <h1
+                    class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-nexus-accentLight pb-2">
+                    Dados para Reunião
+                </h1>
+                <p class="text-gray-400 max-w-lg mt-2">
+                    Coleta e formatação automatizada de dados baseada nas planilhas.
+                </p>
+            </div>
+        </header>
+
+        <!-- Actions Section -->
+        <section class="flex flex-wrap items-center justify-center gap-4 mb-12 animate-slide-up"
+            style="animation-delay: 0.1s;">
+            <button id="btnFetch"
+                class="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-nexus-purple to-nexus-accent hover:from-nexus-purple/80 hover:to-nexus-accentLight text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_10px_30px_rgba(186,79,192,0.3)] hover:shadow-[0_15px_40px_rgba(186,79,192,0.5)] hover:-translate-y-1 overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                </div>
+                <i class="fas fa-sync-alt relative z-10" id="fetchIcon"></i>
+                <span id="fetchLabel" class="relative z-10 uppercase tracking-wider text-sm">Buscar Dados da
+                    Reunião</span>
+            </button>
+
+            <a href="https://drive.google.com/drive/u/0/folders/13APldv68spVkoekt8kmoFJsIRhsyAnGe" target="_blank"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 text-gray-400 hover:text-white text-sm transition-all duration-200">
+                <i class="fas fa-folder-open text-nexus-accentLight"></i>
+                <span>Acessar Pasta Manualmente</span>
+            </a>
+        </section>
+
+        <!-- Progress Bar -->
+        <div class="prog-bar-container w-full max-w-md mx-auto h-1.5 bg-white/5 rounded-full overflow-hidden mb-12"
+            id="prog">
+            <div class="prog-fill h-full w-0" id="progFill"></div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="space-y-8">
+
+            <!-- ═══ NOVOS MEMBROS ═══ -->
+            <div class="glass-panel rounded-3xl p-6 md:p-8 animate-slide-up">
+                <div class="flex flex-col md:flex-row md:items-center gap-4 mb-6 pb-6 border-b border-white/10">
+                    <div
+                        class="flex items-center justify-center w-12 h-12 rounded-xl bg-nexus-success/20 text-nexus-success shrink-0">
+                        <i class="fas fa-user-plus text-xl"></i>
+                    </div>
+                    <div class="flex-grow">
+                        <h2 class="text-xl font-bold text-white mb-1">Novos Membros</h2>
+                        <p class="text-sm text-gray-400">Professores aprovados nos dois últimos ciclos semanais de
+                            admissão.</p>
+                    </div>
+                    <div id="badgeNovos"
+                        class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-nexus-success/10 border border-nexus-success/20 text-nexus-success font-bold text-sm shrink-0">
+                        —
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-6" id="novosLinks"></div>
+
+                <div id="nicksList"
+                    class="nicks-box font-mono text-nexus-success bg-black/30 border border-white/5 rounded-xl p-5 break-all leading-relaxed text-sm md:text-base">
+                    Aguardando inicialização da busca...
+                </div>
+
+                <div class="flex flex-wrap gap-3 mt-6">
+                    <button
+                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white text-sm font-medium transition-colors"
+                        id="btnCopySlash">
+                        <i class="fas fa-slash text-gray-500"></i> Copiar Formato Barra
+                    </button>
+                    <button
+                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white text-sm font-medium transition-colors"
+                        id="btnCopyLines">
+                        <i class="fas fa-list-ul text-gray-500"></i> Copiar Formato Lista
+                    </button>
+                </div>
+            </div>
+
+            <!-- ═══ DESTAQUES ═══ -->
+            <div class="glass-panel rounded-3xl p-6 md:p-8 animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="flex items-center gap-4 mb-8">
+                    <div
+                        class="flex items-center justify-center w-12 h-12 rounded-xl bg-nexus-warning/20 text-nexus-warning shrink-0">
+                        <i class="fas fa-trophy text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white mb-1">Quadro de Destaques</h2>
+                        <p class="text-sm text-gray-400">Desempenho de Professores, Coordenadores, Graduadores e do DA.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="destGrid">
+                    <!-- Skeletons via JS -->
+                </div>
+            </div>
+
+            <!-- ═══ PROMOVIDOS ═══ -->
+            <div class="glass-panel rounded-3xl p-6 md:p-8 animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="flex items-center gap-4 mb-4 pb-4 border-b border-white/10">
+                    <div
+                        class="flex items-center justify-center w-12 h-12 rounded-xl bg-nexus-accent/20 text-nexus-accentLight shrink-0">
+                        <i class="fas fa-medal text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white mb-1">Processamento de Promoções</h2>
+                        <p class="text-sm text-gray-400">Insira os relatórios brutos para extração automática.</p>
+                    </div>
+                </div>
+
+                <!-- Inputs Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="flex flex-col">
+                        <label class="flex items-center gap-2 text-sm font-bold text-gray-300 mb-3 ml-1">
+                            <i class="fas fa-shield-alt text-nexus-accentLight"></i> Corpo Militar
+                        </label>
+                        <textarea id="militaryInput"
+                            class="w-full min-h-[160px] bg-black/40 border border-white/10 rounded-2xl p-4 text-white text-sm font-mono placeholder-gray-600 focus:outline-none focus:border-nexus-accent focus:ring-1 focus:ring-nexus-accent transition-all resize-y"
+                            placeholder="Cole a lista do Corpo Militar aqui...&#10;Ex: AndreHz. [WyO] 25 Mar 2026 [Grad.PROF/Av.OM] [Manhã]"></textarea>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label class="flex items-center gap-2 text-sm font-bold text-gray-300 mb-3 ml-1">
+                            <i class="fas fa-briefcase text-nexus-orange"></i> Corpo Executivo
+                        </label>
+                        <textarea id="executiveInput"
+                            class="w-full min-h-[160px] bg-black/40 border border-white/10 rounded-2xl p-4 text-white text-sm font-mono placeholder-gray-600 focus:outline-none focus:border-nexus-orange focus:ring-1 focus:ring-nexus-orange transition-all resize-y"
+                            placeholder="Cole a lista de ESPECIALIZAÇÕES do Corpo Executivo aqui...&#10;Ex: Karamell0 [Pgs] 22 Mar 2026 [Cons.PROF/Dir.CEM] [Manhã]"></textarea>
+                    </div>
+                </div>
+
+                <button id="processBtn"
+                    class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-nexus-purple hover:bg-nexus-purple/80 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_10px_20px_rgba(48,43,99,0.3)] hover:-translate-y-1 mb-10">
+                    <i class="fas fa-magic"></i> Analisar e Filtrar Listas
+                </button>
+
+                <!-- ── FILTERS AREA ── -->
+                <div id="filterSection" style="display:none;" class="space-y-6 mb-10">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div class="flex flex-wrap gap-2">
+                            <button
+                                class="filter-btn active px-5 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-bold transition-all"
+                                data-filter="all">Ver Tudo</button>
+                            <button
+                                class="filter-btn px-5 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-bold transition-all"
+                                data-filter="week">Semana</button>
+                            <button
+                                class="filter-btn px-5 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-bold transition-all"
+                                data-filter="fortnight">Quinzena</button>
+                            <button
+                                class="filter-btn px-5 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-bold transition-all"
+                                data-filter="month">Mês</button>
+                        </div>
+
+                        <div id="fortnightOptions" class="flex items-center gap-3">
+                            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Modo da
+                                Quinzena:</span>
+                            <div class="flex items-center p-1 bg-black/30 border border-white/10 rounded-xl gap-1">
+                                <button class="fn-btn active px-4 py-1.5 rounded-lg text-xs font-bold transition-all"
+                                    data-fn="current">Últimos 14d</button>
+                                <button class="fn-btn px-4 py-1.5 rounded-lg text-xs font-bold transition-all"
+                                    data-fn="first">1ª Qnz</button>
+                                <button class="fn-btn px-4 py-1.5 rounded-lg text-xs font-bold transition-all"
+                                    data-fn="second">2ª Qnz</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="dateInfo"
+                        class="p-4 bg-nexus-purple/10 border border-nexus-purple/20 rounded-2xl text-[13px] text-gray-300 italic leading-relaxed">
+                    </div>
+                </div>
+
+                <!-- ── RESULTS DASHBOARD ── -->
+                <div id="resultsSection" style="display:none;" class="space-y-8">
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white/5 border border-white/5 rounded-2xl p-4 text-center">
+                            <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">Total Geral</div>
+                            <div id="totalCount" class="text-3xl font-black text-white">0</div>
+                        </div>
+                        <div
+                            class="bg-white/5 border border-white/5 rounded-2xl p-4 text-center border-b-2 border-b-nexus-info">
+                            <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">Semana</div>
+                            <div id="weekCount" class="text-3xl font-black text-white">0</div>
+                        </div>
+                        <div
+                            class="bg-white/5 border border-white/5 rounded-2xl p-4 text-center border-b-2 border-b-nexus-accent">
+                            <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">Quinzena</div>
+                            <div id="fortnightCount" class="text-3xl font-black text-white">0</div>
+                        </div>
+                        <div
+                            class="bg-white/5 border border-white/5 rounded-2xl p-4 text-center border-b-2 border-b-nexus-warning">
+                            <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">Mês</div>
+                            <div id="monthCount" class="text-3xl font-black text-white">0</div>
+                        </div>
+                    </div>
+
+                    <!-- No Results -->
+                    <div id="noResults" style="display:none;"
+                        class="py-12 text-center border border-dashed border-white/10 rounded-3xl">
+                        <i class="fas fa-search text-3xl text-gray-700 mb-3"></i>
+                        <p class="text-gray-500">Nenhum promovido encontrado para os filtros selecionados.</p>
+                    </div>
+
+                    <!-- Groups -->
+                    <div class="space-y-4">
+                        <!-- Combined -->
+                        <div id="combinedResults" style="display:none;">
+                            <div class="flex items-center gap-3 mb-4 ml-1">
+                                <i class="fas fa-users text-nexus-accentLight"></i>
+                                <h3 class="font-bold text-lg text-white">Resultados Combinados</h3>
+                            </div>
+                            <div id="combGrid"
+                                class="grid grid-cols-1 md:grid-cols-3 gap-4 transition-all duration-500">
+                                <div id="combWeekBlock"
+                                    class="bg-black/20 border border-white/5 rounded-2xl overflow-hidden">
+                                    <div
+                                        class="bg-white/5 px-4 py-2 text-xs font-bold text-gray-400 border-b border-white/5 flex justify-between">
+                                        <span>Semana</span>
+                                        <button data-copy-target="combWeek" class="hover:text-white transition-colors"
+                                            title="Copiar"><i class="far fa-copy"></i></button>
+                                    </div>
+                                    <div id="combWeekList" class="max-h-[300px] overflow-y-auto"></div>
+                                </div>
+                                <div id="combFortnightBlock"
+                                    class="bg-black/20 border border-white/5 rounded-2xl overflow-hidden">
+                                    <div
+                                        class="bg-white/5 px-4 py-2 text-xs font-bold text-gray-400 border-b border-white/5 flex justify-between">
+                                        <span>Quinzena</span>
+                                        <button data-copy-target="combFortnight"
+                                            class="hover:text-white transition-colors" title="Copiar"><i
+                                                class="far fa-copy"></i></button>
+                                    </div>
+                                    <div id="combFortnightList" class="max-h-[300px] overflow-y-auto"></div>
+                                </div>
+                                <div id="combMonthBlock"
+                                    class="bg-black/20 border border-white/5 rounded-2xl overflow-hidden">
+                                    <div
+                                        class="bg-white/5 px-4 py-2 text-xs font-bold text-gray-400 border-b border-white/5 flex justify-between">
+                                        <span>Mês</span>
+                                        <button data-copy-target="combMonth" class="hover:text-white transition-colors"
+                                            title="Copiar"><i class="far fa-copy"></i></button>
+                                    </div>
+                                    <div id="combMonthList" class="max-h-[300px] overflow-y-auto"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dropdowns -->
+                        <!-- Militar -->
+                        <div id="militaryResults" style="display:none;"
+                            class="bg-black/20 border border-white/5 rounded-2xl overflow-hidden">
+                            <div id="milDropdownHeader"
+                                class="dropdown-header flex items-center justify-between px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-shield-alt text-nexus-accentLight"></i>
+                                    <span class="font-bold text-white">Corpo Militar</span>
+                                    <span id="milDropdownCount"
+                                        class="text-[10px] bg-nexus-accent/20 text-nexus-accentLight px-2 py-0.5 rounded-full font-bold ml-2">0
+                                        promovido(s)</span>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <button data-copy-target="milAll"
+                                        class="text-gray-400 hover:text-white transition-colors p-1"
+                                        title="Copiar Todos"><i class="far fa-copy"></i></button>
+                                    <i class="fas fa-chevron-down text-gray-600"></i>
+                                </div>
+                            </div>
+                            <div id="milDropdownContent" class="dropdown-content">
+                                <div class="p-6 pt-2 space-y-6">
+                                    <div id="milWeekBlock" class="space-y-3">
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest pl-2">
+                                            Semana</h4>
+                                        <div id="milWeekList"
+                                            class="rounded-xl overflow-hidden border border-white/5 bg-black/20"></div>
+                                    </div>
+                                    <div id="milFortnightBlock" class="space-y-3">
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest pl-2">
+                                            Quinzena</h4>
+                                        <div id="milFortnightList"
+                                            class="rounded-xl overflow-hidden border border-white/5 bg-black/20"></div>
+                                    </div>
+                                    <div id="milMonthBlock" class="space-y-3">
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest pl-2">Mês
+                                        </h4>
+                                        <div id="milMonthList"
+                                            class="rounded-xl overflow-hidden border border-white/5 bg-black/20"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Executivo -->
+                        <div id="executiveResults" style="display:none;"
+                            class="bg-black/20 border border-white/5 rounded-2xl overflow-hidden">
+                            <div id="execDropdownHeader"
+                                class="dropdown-header flex items-center justify-between px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-briefcase text-nexus-orange"></i>
+                                    <span class="font-bold text-white">Corpo Executivo</span>
+                                    <span id="execDropdownCount"
+                                        class="text-[10px] bg-nexus-orange/20 text-nexus-orange px-2 py-0.5 rounded-full font-bold ml-2">0
+                                        promovido(s)</span>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <button data-copy-target="execAll"
+                                        class="text-gray-400 hover:text-white transition-colors p-1"
+                                        title="Copiar Todos"><i class="far fa-copy"></i></button>
+                                    <i class="fas fa-chevron-down text-gray-600"></i>
+                                </div>
+                            </div>
+                            <div id="execDropdownContent" class="dropdown-content">
+                                <div class="p-6 pt-2 space-y-6">
+                                    <div id="execWeekBlock" class="space-y-3">
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest pl-2">
+                                            Semana</h4>
+                                        <div id="execWeekList"
+                                            class="rounded-xl overflow-hidden border border-white/5 bg-black/20"></div>
+                                    </div>
+                                    <div id="execFortnightBlock" class="space-y-3">
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest pl-2">
+                                            Quinzena</h4>
+                                        <div id="execFortnightList"
+                                            class="rounded-xl overflow-hidden border border-white/5 bg-black/20"></div>
+                                    </div>
+                                    <div id="execMonthBlock" class="space-y-3">
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest pl-2">Mês
+                                        </h4>
+                                        <div id="execMonthList"
+                                            class="rounded-xl overflow-hidden border border-white/5 bg-black/20"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ RELATÓRIO COMPLETO ═══ -->
+            <div id="reportArea" class="text-center py-12 animate-slide-up"
+                style="display:none; animation-delay: 0.3s;">
+                <div class="max-w-xl mx-auto glass-panel rounded-3xl p-8 relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-nexus-purple/20 to-transparent pointer-events-none">
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-white mb-2 relative z-10">Conclusão do Relatório</h3>
+                    <p class="text-gray-400 text-sm mb-8 relative z-10">Todos os dados foram processados. Gere o
+                        documento final para envio.</p>
+
+                    <button id="btnFullReport"
+                        class="w-full relative inline-flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-nexus-purple to-nexus-accent hover:from-nexus-purple/90 hover:to-nexus-accentLight text-white font-bold text-lg rounded-2xl transition-all duration-300 shadow-[0_10px_30px_rgba(186,79,192,0.2)] hover:shadow-[0_15px_40px_rgba(186,79,192,0.4)] hover:-translate-y-1">
+                        <i class="fas fa-file-export"></i> Copiar Relatório Completo
+                    </button>
+                </div>
+            </div>
+
+        </div><!-- /results -->
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle" id="toastIcon"></i>
+        <span id="toastMsg">Operação realizada!</span>
+    </div>
+
+    <!-- Scripts Externos -->
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+
+    <!-- Scripts Nexus -->
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script>
+    <script src="/js/online-status.js" defer></script>
+
+    <script>
+        'use strict';
+
+        // ── Config ────────────────────────────────────────────────────────
+        const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxylS6eaz5kwI4hsubzTq-EOHuoxLV0PtXWouMZi2cPFaJuLrGSAiTz-lgpWuw8yGOK/exec';
+
+        // ── Utils ─────────────────────────────────────────────────────────
+        const $ = id => document.getElementById(id);
+        dayjs.locale('pt-br');
+
+        // ── Globals ──────────────────────────────────────────────────────
+        let lastFetchedData = null;
+        let lastProcessedPromotions = null;
+        let toastTimer;
+
+        function showToast(msg, isErr = false) {
+            const t = $('toast');
+            const icon = $('toastIcon');
+
+            $('toastMsg').textContent = msg;
+
+            if (isErr) {
+                t.style.borderColor = 'rgba(231, 76, 60, 0.5)';
+                t.style.color = '#e74c3c';
+                icon.className = 'fas fa-exclamation-circle';
+            } else {
+                t.style.borderColor = 'rgba(46, 204, 113, 0.5)';
+                t.style.color = '#2ecc71';
+                icon.className = 'fas fa-check-circle';
+            }
+
+            t.classList.add('on');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('on'), 3000);
+        }
+
+        function copyText(text, btn) {
+            if (!text) { showToast('Nada para copiar!', true); return; }
+            navigator.clipboard.writeText(text).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = text; document.body.appendChild(ta); ta.select();
+                document.execCommand('copy'); document.body.removeChild(ta);
+            });
+            showToast('Copiado para a área de transferência!');
+
+            if (!btn) return;
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check text-nexus-success"></i> <span class="text-nexus-success">Copiado!</span>';
+            setTimeout(() => { btn.innerHTML = orig; }, 2000);
+        }
+
+        function fmtPct(v) {
+            if (v === null || v === undefined || v === '') return '—';
+            return String(v);
+        }
+
+        function esc(s) {
+            const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+        }
+
+        // ── Componentes UI (Atualizados com Tailwind) ─────────────────────
+        function makeSourceLink(nome, url, label) {
+            return `<a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-nexus-accent/50 text-gray-300 hover:text-white text-xs no-underline transition-all duration-200">
+                <i class="far fa-file-excel text-nexus-accentLight"></i>
+                <span class="truncate max-w-[200px]">${esc(label || nome)}</span>
+            </a>`;
+        }
+
+        function skeletonCards() {
+            return [0, 1, 2, 3].map(() => `
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="flex gap-3 items-center mb-6">
+                        <div class="w-10 h-10 rounded-xl sk"></div>
+                        <div class="flex-1 h-5 sk"></div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="h-12 w-full sk"></div>
+                        <div class="h-12 w-full sk"></div>
+                    </div>
+                </div>`).join('');
+        }
+
+        // ── Render: Novos Membros ─────────────────────────────────────────
+        function renderNovos(data) {
+            const nicksList = $('nicksList');
+            const badgeNovos = $('badgeNovos');
+            const novosLinks = $('novosLinks');
+
+            novosLinks.innerHTML = '';
+            if (data.planilhasConsultadas && data.planilhasConsultadas.length) {
+                novosLinks.innerHTML = data.planilhasConsultadas.map((p, i) =>
+                    makeSourceLink(p.nome, p.url, `Ref ${i + 1}: ${p.inicio.substring(0, 5)} a ${p.fim.substring(0, 5)}`)
+                ).join('');
+            }
+
+            if (data.error) {
+                const driveLink = 'https://drive.google.com/drive/u/0/folders/13APldv68spVkoekt8kmoFJsIRhsyAnGe';
+                nicksList.className = 'nicks-box font-mono bg-nexus-danger/10 border border-nexus-danger/20 rounded-xl p-5 text-sm';
+                nicksList.innerHTML = `
+                    <div class="text-nexus-danger font-medium mb-3 flex items-center gap-2">
+                        <i class="fas fa-exclamation-triangle"></i> ${esc(data.error)}
+                    </div>
+                    <a href="${driveLink}" target="_blank" class="inline-flex items-center gap-2 text-gray-400 hover:text-white text-xs transition-colors">
+                        <i class="fas fa-external-link-square-alt"></i> Verificar fontes manualmente
+                    </a>`;
+                return;
+            }
+
+            const aprovados = data.aprovados || [];
+            badgeNovos.textContent = `${aprovados.length} Aprovado${aprovados.length !== 1 ? 's' : ''}`;
+
+            nicksList.className = 'nicks-box font-mono bg-black/30 border border-white/5 rounded-xl p-5 break-all leading-relaxed text-sm md:text-base transition-colors ' + (aprovados.length ? 'text-nexus-success' : 'text-gray-500');
+            nicksList.textContent = aprovados.length ? aprovados.join(' / ') : 'Nenhum registro de aprovação encontrado no período analisado.';
+
+            // copy listeners
+            $('btnCopySlash').onclick = e => copyText(aprovados.join(' / '), e.currentTarget);
+            $('btnCopyLines').onclick = e => copyText(aprovados.join('\n'), e.currentTarget);
+        }
+
+        // ── Render: Card Genérico ─────────────────────────────────────────
+        function destCard({ title, icon, colorHex, bgClass, textClass, destaques, periodoStr, sourceLink, metaLabel }) {
+            const items = (destaques || []).map((d, i) => {
+                const rankClass = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+                const val = d.percentual !== undefined ? fmtPct(d.percentual) : (d.totalAplicacoes ?? d.aplicacoes ?? '—');
+                return `
+                <div class="flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-colors mb-2 last:mb-0">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 ${rankClass}">${i + 1}º</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-bold text-gray-200 truncate text-sm">${esc(d.nick || '—')}</div>
+                        <div class="text-[10px] text-gray-500 uppercase tracking-wider">${esc(metaLabel || '')}</div>
+                    </div>
+                    <div class="font-mono text-base font-bold text-white shrink-0">${val}</div>
+                </div>`;
+            }).join('');
+
+            return `
+            <div class="glass-panel rounded-2xl p-5 border-t-4" style="border-top-color: ${colorHex}">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center ${bgClass} ${textClass}">
+                        <i class="${icon}"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white leading-tight">${esc(title)}</h3>
+                    </div>
+                </div>
+                ${sourceLink ? `<div class="mb-4">${sourceLink}</div>` : ''}
+                <div class="flex flex-col">
+                    ${items || `<div class="py-6 text-center text-sm text-gray-500 border border-dashed border-white/10 rounded-xl">Nenhum dado apurado.</div>`}
+                </div>
+            </div>`;
+        }
+
+        // ── Render: Card Graduadores (com abas) ───────────────────────────
+        function gradCard(grad) {
+            const renderPanel = (d) => {
+                if (!d) return `<div class="py-6 text-center text-sm text-gray-500 border border-dashed border-white/10 rounded-xl">Nenhum dado apurado.</div>`;
+                if (d.error) return `<div class="p-3 text-xs text-nexus-danger bg-nexus-danger/10 rounded-lg"><i class="fas fa-exclamation-triangle"></i> ${esc(d.error)}</div>`;
+
+                return (d.destaques || []).map((item, i) => {
+                    const rankClass = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+                    return `
+                    <div class="flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-colors mb-2 last:mb-0">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 ${rankClass}">${i + 1}º</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-bold text-gray-200 truncate text-sm">${esc(item.nick || '—')}</div>
+                            <div class="text-[10px] text-gray-500 uppercase tracking-wider">Aplicações totais</div>
+                        </div>
+                        <div class="font-mono text-base font-bold text-white shrink-0">${item.totalAplicacoes ?? '—'}</div>
+                    </div>`;
+                }).join('') || `<div class="py-6 text-center text-sm text-gray-500 border border-dashed border-white/10 rounded-xl">Sem registros válidos.</div>`;
+            };
+
+            const mkLink = (p, label) => p && p.planilhaConsultada ? makeSourceLink(p.planilhaConsultada.nome, p.planilhaConsultada.url, label) : '';
+            const srcAtual = mkLink(grad.atual, 'Planilha Atual');
+            const srcAnt = mkLink(grad.anterior, 'Planilha Anterior');
+            const hasAnterior = !!grad.anterior;
+
+            return `
+            <div class="glass-panel rounded-2xl p-5 border-t-4" style="border-top-color: #e67e22">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-nexus-orange/20 text-nexus-orange">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white leading-tight">Graduadores</h3>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 mb-4 p-1 bg-black/20 rounded-lg">
+                    <button class="tab-btn active flex-1 py-1.5 px-3 rounded-md text-xs font-semibold text-gray-400 transition-all" id="tabGradAtual">Ciclo Atual</button>
+                    ${hasAnterior ? `<button class="tab-btn flex-1 py-1.5 px-3 rounded-md text-xs font-semibold text-gray-400 transition-all hover:text-gray-200" id="tabGradAnt">Ciclo Anterior</button>` : ''}
+                </div>
+
+                <div id="gradSrcAtual" class="mb-4">${mkLink(grad.atual, grad.atual?.planilhaConsultada ? `${grad.atual.planilhaConsultada.inicio} a ${grad.atual.planilhaConsultada.fim}` : 'Planilha Atual')}</div>
+                <div id="gradSrcAnt" class="mb-4" style="display:none">${mkLink(grad.anterior, grad.anterior?.planilhaConsultada ? `${grad.anterior.planilhaConsultada.inicio} a ${grad.anterior.planilhaConsultada.fim}` : 'Planilha Anterior')}</div>
+
+                <div id="gradPanelAtual" class="flex flex-col">${renderPanel(grad.atual)}</div>
+                ${hasAnterior ? `<div id="gradPanelAnt" class="flex flex-col" style="display:none;">${renderPanel(grad.anterior)}</div>` : ''}
+            </div>`;
+        }
+
+        // ── Render: Destaques ─────────────────────────────────────────────
+        function renderDestaques(fullData) {
+            const grid = $('destGrid');
+            const data = fullData.destaques || {};
+
+            if (fullData.error) {
+                grid.innerHTML = `
+                    <div class="col-span-full p-6 glass-panel rounded-2xl border-l-4 border-nexus-danger flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-nexus-danger/20 flex items-center justify-center text-nexus-danger"><i class="fas fa-times"></i></div>
+                        <div>
+                            <h4 class="font-bold text-white">Falha na Coleta</h4>
+                            <p class="text-sm text-gray-400">${esc(data.error)}</p>
+                        </div>
+                    </div>`;
+                return;
+            }
+
+            let html = '';
+
+            // Professores
+            if (data.professores) {
+                const p = data.professores;
+                if (p.error) {
+                    html += `<div class="glass-panel rounded-2xl p-5 border-t-4" style="border-top-color: #3498db"><h3 class="font-bold text-white mb-3"><i class="fas fa-chalkboard-teacher text-nexus-info mr-2"></i> Professores</h3><div class="text-xs text-nexus-danger p-3 bg-nexus-danger/10 rounded-lg">${esc(p.error)}</div></div>`;
+                } else {
+                    html += destCard({
+                        title: 'Professores', icon: 'fas fa-chalkboard-teacher', colorHex: '#3498db', bgClass: 'bg-nexus-info/20', textClass: 'text-nexus-info',
+                        destaques: p.destaques, sourceLink: p.planilhaConsultada ? makeSourceLink(p.planilhaConsultada.nome, p.planilhaConsultada.url, `${p.planilhaConsultada.inicio} a ${p.planilhaConsultada.fim}`) : '', metaLabel: 'Aproveitamento'
+                    });
+                }
+            }
+
+            // Coordenadores
+            if (data.coordenadores) {
+                const c = data.coordenadores;
+                if (c.error) {
+                    html += `<div class="glass-panel rounded-2xl p-5 border-t-4" style="border-top-color: #e74c3c"><h3 class="font-bold text-white mb-3"><i class="fas fa-users-cog text-nexus-danger mr-2"></i> Coordenadores</h3><div class="text-xs text-nexus-danger p-3 bg-nexus-danger/10 rounded-lg">${esc(c.error)}</div></div>`;
+                } else {
+                    html += destCard({
+                        title: 'Coordenadores', icon: 'fas fa-users-cog', colorHex: '#e74c3c', bgClass: 'bg-nexus-danger/20', textClass: 'text-nexus-danger',
+                        destaques: c.destaques, sourceLink: c.planilhaConsultada ? makeSourceLink(c.planilhaConsultada.nome, c.planilhaConsultada.url, `${c.planilhaConsultada.inicio} a ${c.planilhaConsultada.fim}`) : '', metaLabel: 'Aproveitamento'
+                    });
+                }
+            }
+
+            // Graduadores
+            if (data.graduadores) {
+                if (data.graduadores.error) {
+                    html += `<div class="glass-panel rounded-2xl p-5 border-t-4" style="border-top-color: #e67e22"><h3 class="font-bold text-white mb-3"><i class="fas fa-graduation-cap text-nexus-orange mr-2"></i> Graduadores</h3><div class="text-xs text-nexus-danger p-3 bg-nexus-danger/10 rounded-lg">${esc(data.graduadores.error)}</div></div>`;
+                } else {
+                    html += gradCard(data.graduadores);
+                }
+            }
+
+            // Destaque do DA
+            if (fullData.novosMembros && fullData.novosMembros.destaqueDA) {
+                const da = fullData.novosMembros.destaqueDA;
+                if (da.length > 0) {
+                    html += destCard({
+                        title: 'Destaque do DA', icon: 'fas fa-user-shield', colorHex: '#9b59b6', bgClass: 'bg-nexus-purple/20', textClass: 'text-nexus-purple',
+                        destaques: da, metaLabel: 'Aplicações Totais'
+                    });
+                }
+            }
+
+            grid.innerHTML = html;
+
+            // Setup Tabs Logic
+            const tabAtual = $('tabGradAtual');
+            const tabAnt = $('tabGradAnt');
+
+            if (tabAnt && $('gradPanelAnt')) {
+                tabAtual.addEventListener('click', () => {
+                    tabAtual.className = 'tab-btn active flex-1 py-1.5 px-3 rounded-md text-xs font-semibold transition-all';
+                    tabAnt.className = 'tab-btn flex-1 py-1.5 px-3 rounded-md text-xs font-semibold text-gray-400 hover:text-gray-200 transition-all';
+                    $('gradPanelAtual').style.display = 'flex'; $('gradPanelAnt').style.display = 'none';
+                    $('gradSrcAtual').style.display = 'block'; $('gradSrcAnt').style.display = 'none';
+                });
+                tabAnt.addEventListener('click', () => {
+                    tabAnt.className = 'tab-btn active flex-1 py-1.5 px-3 rounded-md text-xs font-semibold transition-all';
+                    tabAtual.className = 'tab-btn flex-1 py-1.5 px-3 rounded-md text-xs font-semibold text-gray-400 hover:text-gray-200 transition-all';
+                    $('gradPanelAnt').style.display = 'flex'; $('gradPanelAtual').style.display = 'none';
+                    $('gradSrcAnt').style.display = 'block'; $('gradSrcAtual').style.display = 'none';
+                });
+            }
+        }
+
+        // ── Fetch Principal ───────────────────────────────────────────────
+        $('btnFetch').addEventListener('click', async function () {
+            const btn = this;
+            const icon = $('fetchIcon');
+            const label = $('fetchLabel');
+            const prog = $('prog');
+            const progFill = $('progFill');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
+            icon.className = 'fas fa-spinner animate-spin relative z-10';
+            label.textContent = 'Sincronizando...';
+            prog.classList.add('on');
+
+            // Simula progresso visual
+            let p = 0;
+            const pInt = setInterval(() => { p += Math.random() * 10; if (p > 85) p = 85; progFill.style.width = p + '%'; }, 300);
+
+            $('results').classList.add('visible');
+            $('nicksList').className = 'nicks-box sk h-16';
+            $('nicksList').textContent = '';
+            $('badgeNovos').textContent = '—';
+            $('novosLinks').innerHTML = '';
+            $('destGrid').innerHTML = skeletonCards();
+
+            try {
+                const res = await fetch(WEBAPP_URL);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+
+                clearInterval(pInt);
+                progFill.style.width = '100%';
+
+                if (data.error) throw new Error(data.error);
+
+                lastFetchedData = data;
+                $('reportArea').style.display = 'block';
+
+                setTimeout(() => {
+                    renderNovos(data.novosMembros);
+                    renderDestaques(data);
+                    showToast('Sincronização concluída!');
+                }, 400);
+
+            } catch (e) {
+                clearInterval(pInt);
+                progFill.style.width = '100%';
+                progFill.style.background = '#e74c3c';
+
+                $('nicksList').className = 'nicks-box font-mono bg-nexus-danger/10 border border-nexus-danger/20 rounded-xl p-5 text-sm text-nexus-danger';
+                $('nicksList').innerHTML = `<i class="fas fa-wifi mr-2"></i> Erro de Conexão: ${esc(e.message)}`;
+                $('destGrid').innerHTML = `<div class="col-span-full p-6 glass-panel rounded-2xl border-l-4 border-nexus-danger"><div class="text-nexus-danger font-bold"><i class="fas fa-exclamation-circle"></i> Ocorreu um erro</div><p class="text-sm text-gray-400 mt-1">${esc(e.message)}</p></div>`;
+                showToast('Falha na sincronização.', true);
+            } finally {
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-80', 'cursor-not-allowed');
+                    icon.className = 'fas fa-sync-alt relative z-10';
+                    label.textContent = 'Atualizar Base de Dados';
+                    prog.classList.remove('on');
+                    progFill.style.width = '0%';
+                    progFill.style.background = ''; // reset color
+                }, 800);
+            }
+        });
+
+        // ── Toolkit: Promovidos ao Oficialato (Versão Avançada) ──────────
+        (function () {
+            "use strict";
+
+            const MONTH_MAP = {
+                jan: 0, fev: 1, mar: 2, abr: 3, mai: 4, jun: 5,
+                jul: 6, ago: 7, set: 8, out: 9, nov: 10, dez: 11
+            };
+
+            const militaryInput = $("militaryInput");
+            const executiveInput = $("executiveInput");
+            const processBtn = $("processBtn");
+            const filterSection = $("filterSection");
+            const resultsSection = $("resultsSection");
+            const dateInfo = $("dateInfo");
+            const fortnightOpts = $("fortnightOptions");
+            const noResults = $("noResults");
+            const combinedResults = $("combinedResults");
+            const militaryResults = $("militaryResults");
+            const executiveResults = $("executiveResults");
+
+            let currentFilter = "all";
+            let fortnightMode = "current";
+            let processedData = null;
+
+            // ── Date parse ───────────────────────────────────────────────────────
+            function parseDate(str) {
+                if (!str) return null;
+                const p = str.trim().split(/\s+/);
+                if (p.length !== 3) return null;
+                const day = parseInt(p[0], 10);
+                const mKey = p[1].toLowerCase().replace(".", "").substring(0, 3);
+                const year = parseInt(p[2], 10);
+                const mi = MONTH_MAP[mKey];
+                if (mi === undefined || isNaN(day) || isNaN(year)) return null;
+                return new Date(year, mi, day);
+            }
+
+            function getToday() {
+                const n = new Date();
+                return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+            }
+
+            // ── Ranges ───────────────────────────────────────────────────────────
+            function getWeekRange() {
+                const today = getToday();
+                const dow = today.getDay();
+                const lastSat = new Date(today);
+                lastSat.setDate(today.getDate() - dow - 1);
+                const lastSun = new Date(lastSat);
+                lastSun.setDate(lastSat.getDate() - 6);
+                return { start: lastSun, end: lastSat };
+            }
+
+            function getFortnightRange(mode) {
+                const today = getToday();
+                if (mode === "current") {
+                    const start = new Date(today);
+                    start.setDate(today.getDate() - 14);
+                    return { start, end: today };
+                }
+                if (mode === "first") {
+                    const start = new Date(today.getFullYear(), today.getMonth(), 1);
+                    const end = new Date(today.getFullYear(), today.getMonth(), 15);
+                    return { start, end: end > today ? today : end };
+                }
+                const start = new Date(today.getFullYear(), today.getMonth(), 16);
+                const last = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                return { start, end: last > today ? today : last };
+            }
+
+            function getMonthRange() {
+                const today = getToday();
+                return { start: new Date(today.getFullYear(), today.getMonth(), 1), end: today };
+            }
+
+            function inRange(date, range) {
+                if (!date) return false;
+                const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                return d >= range.start && d <= range.end;
+            }
+
+            // ── Parse line ───────────────────────────────────────────────────────
+            function parseLine(line) {
+                line = line.trim();
+                if (!line) return null;
+                const brackets = line.match(/\[[^\]]*\]/g);
+                if (!brackets) return null;
+                let hasProf = false;
+                for (const b of brackets) {
+                    if (/PROF/i.test(b)) { hasProf = true; break; }
+                }
+                if (!hasProf) return null;
+                const dateRx = /(\d{1,2})\s+(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)[a-z]*\.?\s+(\d{4})/i;
+                const dm = line.match(dateRx);
+                let date = null;
+                if (dm) date = parseDate(dm[1] + " " + dm[2] + " " + dm[3]);
+                const display = line.replace(/^\d+\.\s*/, "").trim();
+                return { original: line, display, date };
+            }
+
+            // ── Process ──────────────────────────────────────────────────────────
+            function processInput(text) {
+                const lines = text.split("\n");
+                const res = { week: [], fortnight: [], month: [], all: [] };
+                const wR = getWeekRange();
+                const fR = getFortnightRange(fortnightMode);
+                const mR = getMonthRange();
+                const seen = new Set();
+                for (const l of lines) {
+                    const p = parseLine(l);
+                    if (!p || !p.date) continue;
+                    if (seen.has(p.display)) continue;
+                    seen.add(p.display);
+                    let added = false;
+                    if (inRange(p.date, wR)) { res.week.push(p); added = true; }
+                    if (inRange(p.date, fR)) { res.fortnight.push(p); added = true; }
+                    if (inRange(p.date, mR)) { res.month.push(p); added = true; }
+                    if (added) res.all.push(p);
+                }
+                return res;
+            }
+
+            function mergeData(a, b) {
+                const merge = (a1, a2) => {
+                    const seen = new Set();
+                    const out = [];
+                    for (const it of [...a1, ...a2]) {
+                        if (seen.has(it.display)) continue;
+                        seen.add(it.display);
+                        out.push(it);
+                    }
+                    return out;
+                };
+                return {
+                    week: merge(a.week, b.week),
+                    fortnight: merge(a.fortnight, b.fortnight),
+                    month: merge(a.month, b.month),
+                    all: merge(a.all, b.all)
+                };
+            }
+
+            // ── Render ────────────────────────────────────────────────────────────
+            function renderList(container, items) {
+                container.innerHTML = "";
+                if (!items.length) {
+                    container.innerHTML = '<div class="py-6 text-center text-[11px] text-gray-600 italic">Nenhum promovido identificado neste ciclo</div>';
+                    return;
+                }
+                items.forEach((item, i) => {
+                    const div = document.createElement("div");
+                    div.className = "list-item fade-in";
+                    div.style.animationDelay = `${i * 0.03}s`;
+                    div.innerHTML = `<span class="item-index">${i + 1}.</span><span class="item-text">${esc(item.display)}</span>`;
+                    container.appendChild(div);
+                });
+            }
+
+            function animateNum(el, target) {
+                const cur = parseInt(el.textContent) || 0;
+                if (cur === target) { el.textContent = target; return; }
+                const t0 = performance.now(), dur = 400;
+                (function step(now) {
+                    const p = Math.min((now - t0) / dur, 1);
+                    el.textContent = Math.round(cur + (target - cur) * (1 - Math.pow(1 - p, 3)));
+                    if (p < 1) requestAnimationFrame(step);
+                })(t0);
+            }
+
+            // ── Copy builders ────────────────────────────────────────────────────
+            function buildCopy(data, period) {
+                const sec = [];
+                const add = (label, arr) => {
+                    if (!arr.length) return;
+                    sec.push(label);
+                    arr.forEach((it, i) => sec.push(`${i + 1}. ${it.display}`));
+                    sec.push("");
+                };
+                if (period === "all" || period === "week") add("📅 SEMANA:", data.week);
+                if (period === "all" || period === "fortnight") add("📆 QUINZENA:", data.fortnight);
+                if (period === "all" || period === "month") add("🗓️ MÊS:", data.month);
+                return sec.join("\n").trim();
+            }
+
+            function buildCopySingle(items) {
+                return items.map((it, i) => `${i + 1}. ${it.display}`).join("\n");
+            }
+
+            // ── Show / hide ──────────────────────────────────────────────────────
+            const show = (el, v) => { if (el) el.style.display = v ? "" : "none"; };
+
+            function getVisibleCount(data) {
+                const f = currentFilter;
+                if (f === "week") return data.week.length;
+                if (f === "fortnight") return data.fortnight.length;
+                if (f === "month") return data.month.length;
+                return data.all.length;
+            }
+
+            function renderGroup(prefix, data, containerEl) {
+                const wList = $(prefix + "WeekList");
+                const fList = $(prefix + "FortnightList");
+                const mList = $(prefix + "MonthList");
+                const wBlk = $(prefix + "WeekBlock");
+                const fBlk = $(prefix + "FortnightBlock");
+                const mBlk = $(prefix + "MonthBlock");
+                const f = currentFilter;
+
+                show(wBlk, f === "all" || f === "week");
+                show(fBlk, f === "all" || f === "fortnight");
+                show(mBlk, f === "all" || f === "month");
+
+                if (f === "all" || f === "week") renderList(wList, data.week);
+                if (f === "all" || f === "fortnight") renderList(fList, data.fortnight);
+                if (f === "all" || f === "month") renderList(mList, data.month);
+
+                const hasAny =
+                    (f === "all" && data.all.length > 0) ||
+                    (f === "week" && data.week.length > 0) ||
+                    (f === "fortnight" && data.fortnight.length > 0) ||
+                    (f === "month" && data.month.length > 0);
+
+                show(containerEl, hasAny);
+                return hasAny;
+            }
+
+            // ── Dropdown logic ───────────────────────────────────────────────────
+            function setupDropdown(headerId, contentId) {
+                const header = $(headerId);
+                const content = $(contentId);
+                header.addEventListener("click", (e) => {
+                    if (e.target.closest("[data-copy-target]")) return;
+                    const isOpen = header.classList.contains("open");
+                    header.classList.toggle("open", !isOpen);
+                    content.classList.toggle("open", !isOpen);
+                });
+            }
+
+            // ── Apply filter ─────────────────────────────────────────────────────
+            function applyFilter(filter) {
+                currentFilter = filter;
+                document.querySelectorAll(".filter-btn").forEach(b =>
+                    b.classList.toggle("active", b.dataset.filter === filter));
+                show(fortnightOpts, filter === "fortnight" || filter === "all");
+                if (!processedData) return;
+
+                const d = processedData;
+
+                // Adjust Grid Layout
+                const grid = $("combGrid");
+                if (filter === "all") {
+                    grid.className = "grid grid-cols-1 md:grid-cols-3 gap-4 transition-all duration-500";
+                } else {
+                    grid.className = "grid grid-cols-1 max-w-2xl mx-auto gap-4 transition-all duration-500";
+                }
+
+                const anyComb = renderGroup("comb", d.combined, combinedResults);
+                const anyMil = renderGroup("mil", d.military, militaryResults);
+                const anyExec = renderGroup("exec", d.executive, executiveResults);
+
+                $("milDropdownCount").textContent = getVisibleCount(d.military) + " promovido(s)";
+                $("execDropdownCount").textContent = getVisibleCount(d.executive) + " promovido(s)";
+
+                show(noResults, !anyComb && !anyMil && !anyExec);
+
+                const c = d.combined;
+                animateNum($("weekCount"), c.week.length);
+                animateNum($("fortnightCount"), c.fortnight.length);
+                animateNum($("monthCount"), c.month.length);
+                animateNum($("totalCount"), c.all.length);
+
+                updateDateInfo();
+            }
+
+            // ── Date info ────────────────────────────────────────────────────────
+            function updateDateInfo() {
+                const fmt = d => d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+                const wR = getWeekRange();
+                const fR = getFortnightRange(fortnightMode);
+                const mR = getMonthRange();
+                const fnLabel = fortnightMode === "current" ? "Últimos 14 dias"
+                    : fortnightMode === "first" ? "1ª quinzena (1–15)"
+                        : "2ª quinzena (16–fim)";
+                dateInfo.innerHTML =
+                    `<div class="flex flex-wrap gap-x-6 gap-y-2">
+                        <span><strong>📅 Semana:</strong> ${fmt(wR.start)} → ${fmt(wR.end)}</span>
+                        <span><strong>📆 Quinzena (${fnLabel}):</strong> ${fmt(fR.start)} → ${fmt(fR.end)}</span>
+                        <span><strong>🗓️ Mês:</strong> ${fmt(mR.start)} → ${fmt(mR.end)}</span>
+                    </div>`;
+            }
+
+            // ── Process ──────────────────────────────────────────────────────────
+            function process() {
+                const milText = militaryInput.value.trim();
+                const execText = executiveInput.value.trim();
+                if (!milText && !execText) { showToast("Cole pelo menos uma lista!", true); return; }
+
+                const empty = { week: [], fortnight: [], month: [], all: [] };
+                const mil = milText ? processInput(milText) : { ...empty };
+                const exec = execText ? processInput(execText) : { ...empty };
+                const comb = mergeData(mil, exec);
+
+                processedData = { military: mil, executive: exec, combined: comb };
+                lastProcessedPromotions = comb; // Sync for Full Report
+
+                show(filterSection, true);
+                show(resultsSection, true);
+                $('reportArea').style.display = 'block';
+
+                applyFilter(currentFilter);
+                showToast("Listas analisadas com sucesso!");
+            }
+
+            // ── Copy helper ─────────────────────────────────────────────────────
+            function getCopyText(target) {
+                if (!processedData) return "";
+                const d = processedData;
+                const f = currentFilter;
+                switch (target) {
+                    case "combWeek": return buildCopySingle(d.combined.week);
+                    case "combFortnight": return buildCopySingle(d.combined.fortnight);
+                    case "combMonth": return buildCopySingle(d.combined.month);
+                    case "combAll": return buildCopy(d.combined, f);
+                    case "milWeek": return buildCopySingle(d.military.week);
+                    case "milFortnight": return buildCopySingle(d.military.fortnight);
+                    case "milMonth": return buildCopySingle(d.military.month);
+                    case "milAll": return buildCopy(d.military, f);
+                    case "execWeek": return buildCopySingle(d.executive.week);
+                    case "execFortnight": return buildCopySingle(d.executive.fortnight);
+                    case "execMonth": return buildCopySingle(d.executive.month);
+                    case "execAll": return buildCopy(d.executive, f);
+                    default: return "";
+                }
+            }
+
+            // ── Events ───────────────────────────────────────────────────────────
+            processBtn.addEventListener("click", process);
+
+            document.querySelectorAll(".filter-btn").forEach(btn => {
+                btn.addEventListener("click", () => applyFilter(btn.dataset.filter));
+            });
+
+            document.querySelectorAll(".fn-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    fortnightMode = btn.dataset.fn;
+                    document.querySelectorAll(".fn-btn").forEach(b =>
+                        b.classList.toggle("active", b.dataset.fn === fortnightMode));
+                    if (processedData) process();
+                });
+            });
+
+            document.addEventListener("click", (e) => {
+                const btn = e.target.closest("[data-copy-target]");
+                if (!btn) return;
+                e.stopPropagation();
+                const text = getCopyText(btn.dataset.copyTarget);
+                copyText(text, btn);
+            });
+
+            [militaryInput, executiveInput].forEach(ta => {
+                ta.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" && e.ctrlKey) { e.preventDefault(); process(); }
+                });
+            });
+
+            setupDropdown("milDropdownHeader", "milDropdownContent");
+            setupDropdown("execDropdownHeader", "execDropdownContent");
+
+        })();
+
+        // ── Gerador Relatório Completo ──────────────────────────────────
+        $('btnFullReport').addEventListener('click', () => {
+            if (!lastFetchedData && !lastProcessedPromotions) {
+                showToast('Sincronize ou processe dados primeiro.', true);
+                return;
+            }
+
+            let report = '';
+
+            // Novos Membros
+            if (lastFetchedData && lastFetchedData.novosMembros) {
+                const aprovados = lastFetchedData.novosMembros.aprovados || [];
+                report += `*NOVOS MEMBROS:*\n${aprovados.length ? aprovados.join(' / ') : 'Nenhum'}\n\n`;
+            }
+
+            // Destaques
+            if (lastFetchedData && lastFetchedData.destaques) {
+                const d = lastFetchedData.destaques;
+
+                const formatTop2 = (arr, isPct) => {
+                    if (!arr || !arr.length) return 'Nenhum apurado';
+                    const first = arr[0];
+                    const second = arr[1];
+                    let val1 = isPct ? fmtPct(first.percentual) : (first.totalAplicacoes ?? first.aplicacoes ?? '—');
+                    let res = `${first.nick} (${val1})`;
+                    if (second) {
+                        let val2 = isPct ? fmtPct(second.percentual) : (second.totalAplicacoes ?? second.aplicacoes ?? '—');
+                        res += ` / ${second.nick} (${val2})`;
+                    }
+                    return res;
+                };
+
+                const prof = formatTop2(d.professores?.destaques, true);
+                const coord = formatTop2(d.coordenadores?.destaques, true);
+                const grad = formatTop2(d.graduadores?.atual?.destaques, false);
+                const da = formatTop2(lastFetchedData.novosMembros?.destaqueDA, false);
+
+                report += `*DESTAQUES DA SEMANA:*\n`;
+                report += `Professores: ${prof}\n`;
+                report += `Coordenadores: ${coord}\n`;
+                report += `Graduadores: ${grad}\n`;
+                report += `Destaque do DA: ${da}\n\n`;
+            }
+
+            // Promovidos
+            if (lastProcessedPromotions && lastProcessedPromotions.fortnight) {
+                report += `*PROMOVIDOS AO OFICIALATO:*\n`;
+                if (lastProcessedPromotions.fortnight.length > 0) {
+                    report += lastProcessedPromotions.fortnight.map((it, i) => `${i + 1}. ${it.display}`).join('\n');
+                } else {
+                    report += '(Nenhum registro para a quinzena)';
+                }
+            } else {
+                report += `*PROMOVIDOS AO OFICIALATO:*\n(Aguardando processamento manual de listas...)`;
+            }
+
+            copyText(report, $('btnFullReport'));
+        });
+    </script>
+</body>
+
+</html>

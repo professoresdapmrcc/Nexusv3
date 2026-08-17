@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Avaliação de Propostas</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/companhia/conselho/css/avproposta.css"> 
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="bg-[#0b0f19] text-slate-200 font-['Inter'] pt-24 min-h-screen flex flex-col selection:bg-purple-500/30">
+
+    <div id="header-container"></div>
+
+    <div id="access-denied-screen" class="hidden fixed inset-0 z-50 bg-[#0b0f19] flex flex-col items-center justify-center text-center px-4">
+        <i class="fas fa-lock text-6xl text-red-500 mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]"></i>
+        <h2 class="text-3xl font-bold text-white mb-2">Acesso Restrito</h2>
+        <p id="access-denied-msg" class="text-slate-400">Verificando credenciais...</p>
+    </div>
+
+    <div id="time-block-screen" class="hidden fixed inset-0 z-50 bg-[#0b0f19] flex flex-col items-center justify-center text-center px-4">
+        <i class="fas fa-calendar-times text-6xl text-purple-500 mb-6 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"></i>
+        <h2 class="text-3xl font-black text-white mb-2">Sistema Fechado</h2>
+        <p class="text-slate-400 text-lg">Avaliação semanal das propostas finalizada.</p>
+        <p class="text-sm font-bold text-purple-400 mt-6 px-4 py-2 bg-purple-900/20 border border-purple-500/30 rounded-lg">O sistema reabrirá Terça-feira às 00h00.</p>
+    </div>
+
+    <div id="modal-votos-conselho" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl overflow-hidden flex flex-col shadow-2xl border border-slate-700 max-h-[85vh]">
+            <div class="bg-[#0b0f19] p-5 border-b border-slate-800 flex justify-between items-center z-10">
+                <div>
+                    <h2 class="text-xl font-black text-white" id="modal-conselho-ordem">Parecer Técnico</h2>
+                </div>
+                <button onclick="fecharModalVotosConselho()" class="text-slate-400 hover:text-red-400 transition bg-slate-900 hover:bg-slate-800 w-10 h-10 rounded-xl flex items-center justify-center border border-slate-800"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto custom-scrollbar flex-1 bg-gradient-to-b from-[#0b0f19] to-slate-900" id="modal-conselho-content">
+                </div>
+        </div>
+    </div>
+
+    <main id="app-screen" class="hidden flex-1 container mx-auto px-4 max-w-[1200px] pb-12 relative">
+        
+        <div class="glass-panel p-5 rounded-2xl mb-8 flex flex-col md:flex-row justify-between items-center z-10 relative shadow-xl border border-purple-500/20">
+            <div class="mb-4 md:mb-0 text-center md:text-left flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-600/40">
+                    <i class="fas fa-lightbulb text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black text-white leading-tight tracking-tight">Central de Propostas</h1>
+                    <div id="sync-status" class="text-xs text-purple-400 font-bold mt-1"><i class="fas fa-sync fa-spin mr-1"></i> Conectando à base...</div>
+                </div>
+            </div>
+            <div class="flex gap-2 bg-[#05070c] p-1.5 rounded-xl border border-slate-800 shadow-inner">
+                <button id="nav-gallery" class="nav-btn active-tab px-6 py-2.5 rounded-lg text-sm font-bold text-white transition shadow-lg shadow-purple-900/40"><i class="fas fa-th-large mr-2"></i> Galeria</button>
+                <button id="nav-insights" class="nav-btn px-6 py-2.5 rounded-lg text-sm font-bold text-slate-500 hover:text-white hover:bg-slate-800 transition"><i class="fas fa-chart-pie mr-2"></i> Desempenho & Insights</button>
+            </div>
+        </div>
+
+        <div id="view-gallery" class="view-module block animate-fade-in relative">
+            
+            <div class="glass-panel p-5 rounded-2xl mb-6 flex flex-col md:flex-row gap-4 items-center border border-slate-800">
+                <div class="flex-1 w-full relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-500"></i>
+                    <input type="text" id="search-input" class="w-full bg-[#05070c] border border-slate-700 rounded-xl py-3 pl-12 pr-4 text-sm text-white outline-none focus:border-purple-500 transition shadow-inner" placeholder="Pesquisar por autor, título ou ID da proposta...">
+                </div>
+                <select id="filter-verdict" class="w-full md:w-48 bg-[#05070c] border border-slate-700 rounded-xl py-3 px-4 text-sm text-slate-300 outline-none focus:border-purple-500 font-bold shadow-inner cursor-pointer">
+                    <option value="">Status: Todos</option>
+                    <option value="Aprovada">Aprovada</option>
+                    <option value="Aprovada com alterações">C/ Alterações</option>
+                    <option value="Reprovada">Reprovada</option>
+                    <option value="pending">Pendentes</option>
+                </select>
+            </div>
+            
+            <div id="quick-stats" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
+            
+            <div id="proposals-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                </div>
+        </div>
+
+        <div id="view-reading" class="view-module hidden animate-fade-in">
+            
+            <div class="w-full bg-slate-800 rounded-full h-1.5 mb-6 overflow-hidden">
+                <div id="progress-bar-voting" class="bg-gradient-to-r from-purple-600 to-pink-500 h-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="voltarGaleria()" class="text-xs font-bold text-slate-400 hover:text-white bg-[#0b0f19] px-4 py-2 rounded-lg border border-slate-700 transition flex items-center shadow-md hover:shadow-slate-800">
+                    <i class="fas fa-arrow-left mr-2"></i> Voltar à Galeria
+                </button>
+                <span class="bg-purple-900/30 text-purple-300 border border-purple-500/30 font-mono font-bold px-3 py-1.5 rounded-lg text-xs" id="card-counter">1 / 10</span>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
+                
+                <div class="w-full lg:w-2/3 flex flex-col gap-6">
+                    
+                    <div class="bg-[#111827] rounded-3xl p-8 border border-slate-800 shadow-xl relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-purple-500 to-pink-500"></div>
+                        
+                        <div class="flex items-start justify-between gap-4 mb-6">
+                            <div>
+                                <p class="text-xs font-black uppercase tracking-widest text-purple-500 mb-2">Proposta Nº <span id="display-ordem" class="text-white">01</span></p>
+                                <h2 id="display-titulo" class="text-3xl font-black text-white leading-tight tracking-tight">Título da Proposta</h2>
+                            </div>
+                            <img id="character-avatar" src="" alt="Autor" class="w-16 h-16 rounded-full bg-black/50 border-2 border-slate-700 shadow-lg" style="image-rendering: pixelated;">
+                        </div>
+
+                        <div class="flex gap-4 border-t border-slate-800/50 pt-4">
+                            <div>
+                                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Autor</p>
+                                <p id="display-autor" class="text-sm font-bold text-slate-200">Nick</p>
+                            </div>
+                            <div class="w-px h-8 bg-slate-800"></div>
+                            <div>
+                                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Categoria</p>
+                                <p id="display-tipo" class="text-sm font-black text-pink-400">Projeto</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#0b0f19] rounded-3xl p-8 border border-slate-800 shadow-inner">
+                        <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center"><i class="fas fa-align-left mr-2"></i> Conteúdo Integral</h3>
+                        <div id="display-conteudo" class="text-slate-300 font-medium text-[15px] leading-relaxed whitespace-pre-line">
+                            Carregando conteúdo...
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-[#111827] to-[#0b0f19] rounded-3xl p-8 border border-purple-500/20 shadow-xl">
+                        <h3 class="text-sm font-black text-purple-400 mb-4 flex items-center uppercase tracking-widest"><i class="fas fa-pen-nib mr-2"></i> Seu Parecer Técnico</h3>
+                        <textarea id="dissertacao-text" rows="5" class="w-full bg-[#05070c] text-slate-200 p-5 rounded-2xl border border-slate-700 focus:border-purple-500 outline-none transition resize-none placeholder-slate-600 shadow-inner font-medium text-sm leading-relaxed" placeholder="Descreva os motivos que fundamentam a sua decisão..."></textarea>
+                    </div>
+
+                </div>
+
+                <div class="w-full lg:w-1/3 flex flex-col gap-6 lg:sticky lg:top-24">
+                    
+                    <div class="glass-panel p-6 rounded-3xl border border-slate-800 shadow-xl">
+                        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center"><i class="fas fa-tasks mr-2 text-pink-500"></i> Checklist Crítico</h3>
+                        <p class="text-[10px] text-slate-500 mb-4 leading-tight">Marque os pontos fortes da proposta antes de decidir:</p>
+                        
+                        <div class="space-y-3 max-h-[180px] overflow-y-auto custom-scrollbar pr-2">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <div class="w-5 h-5 rounded border border-slate-600 group-hover:border-purple-500 flex items-center justify-center bg-black/50 transition checklist-box flex-shrink-0">
+                                    <i class="fas fa-check text-purple-500 opacity-0 transition text-xs"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-300 group-hover:text-white transition leading-tight">A ideia é inovadora?</span>
+                            </label>
+                            
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <div class="w-5 h-5 rounded border border-slate-600 group-hover:border-purple-500 flex items-center justify-center bg-black/50 transition checklist-box flex-shrink-0">
+                                    <i class="fas fa-check text-purple-500 opacity-0 transition text-xs"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-300 group-hover:text-white transition leading-tight">Resolve um problema real da Companhia?</span>
+                            </label>
+
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <div class="w-5 h-5 rounded border border-slate-600 group-hover:border-purple-500 flex items-center justify-center bg-black/50 transition checklist-box flex-shrink-0">
+                                    <i class="fas fa-check text-purple-500 opacity-0 transition text-xs"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-300 group-hover:text-white transition leading-tight">A viabilidade técnica é alta?</span>
+                            </label>
+
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <div class="w-5 h-5 rounded border border-slate-600 group-hover:border-purple-500 flex items-center justify-center bg-black/50 transition checklist-box flex-shrink-0">
+                                    <i class="fas fa-check text-purple-500 opacity-0 transition text-xs"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-300 group-hover:text-white transition leading-tight">O texto da proposta é claro e objetivo?</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-3xl border border-slate-800 shadow-xl relative">
+                        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center"><i class="fas fa-users mr-2 text-blue-500"></i> Pareceres do Conselho</h3>
+                        <div id="colleagues-votes-placeholder" class="min-h-[60px]">
+                            </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-3xl border border-purple-500/30 shadow-2xl bg-gradient-to-b from-purple-900/10 to-[#0b0f19]">
+                        <h3 class="text-sm font-black text-white uppercase tracking-widest mb-4 text-center"><i class="fas fa-gavel mr-2 text-purple-400"></i> Veredito Final</h3>
+                        
+                        <select id="verdict-select" class="w-full bg-[#05070c] border-2 border-slate-700 rounded-xl p-3.5 text-white text-sm font-bold outline-none focus:border-purple-500 transition shadow-inner mb-6 cursor-pointer">
+                            <option value="" disabled selected>Escolha sua decisão...</option>
+                            <option value="Aprovada">✅ Aprovada Integralmente</option>
+                            <option value="Aprovada com alterações">☑️ Aprovada com alterações</option>
+                            <option value="Reprovada">❌ Reprovada</option>
+                            <option value="Reunião">👥 Levar para Reunião</option>
+                            <option value="Tutela">🛡️ Colocar em Tutela</option>
+                            <option value="Enviado à liderança">⬆️ Enviar à Liderança</option>
+                            <option value="Autoria própria">✍️ Autoria própria</option>
+                        </select>
+
+                        <div class="flex gap-2 w-full">
+                            <button id="prev-button" onclick="changePage(-1)" class="w-12 h-12 bg-slate-800 hover:bg-slate-700 rounded-xl flex items-center justify-center text-slate-300 transition disabled:opacity-30 disabled:cursor-not-allowed" title="Proposta Anterior">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button id="save-btn" onclick="salvarVotoAtual()" class="flex-1 bg-purple-600 hover:bg-purple-500 rounded-xl text-xs font-black uppercase tracking-wider text-white transition shadow-lg shadow-purple-900/50 border border-purple-400 flex items-center justify-center gap-2">
+                                Confirmar Voto <i class="fas fa-check"></i>
+                            </button>
+                            <button id="next-button" onclick="avancarProxima()" class="w-12 h-12 bg-slate-800 hover:bg-slate-700 rounded-xl flex items-center justify-center text-slate-300 transition disabled:opacity-30 disabled:cursor-not-allowed" title="Próxima Proposta">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="view-insights" class="view-module hidden animate-fade-in">
+            
+            <div class="mb-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-black text-white">Desempenho & Insights</h2>
+                    <p class="text-sm text-slate-400 mt-1">Selecione uma proposta para visualizar o engajamento e os pareceres.</p>
+                </div>
+                <button id="refresh-insights" class="mt-4 md:mt-0 text-xs font-bold text-slate-400 hover:text-white bg-slate-900 px-4 py-2 rounded-lg border border-slate-700 transition shadow-md"><i class="fas fa-sync-alt mr-2"></i> Atualizar Dados</button>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-slate-800 shadow-xl mb-6">
+                <label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 block"><i class="fas fa-search text-pink-500 mr-2"></i> Selecione a Proposta</label>
+                <select id="insight-proposal-select" class="w-full bg-[#05070c] border-2 border-slate-700 rounded-xl p-3.5 text-white text-sm font-bold outline-none focus:border-purple-500 transition shadow-inner cursor-pointer">
+                    <option value="" disabled selected>Carregando propostas...</option>
+                </select>
+            </div>
+
+            <div id="insights-stats" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <div class="glass-panel p-6 rounded-3xl border border-slate-800 shadow-xl">
+                    <h3 class="text-sm font-black text-purple-400 mb-6 flex items-center uppercase tracking-widest"><i class="fas fa-medal mr-2"></i> Engajamento do Conselho</h3>
+                    <div id="ranking-container" class="space-y-3 overflow-y-auto custom-scrollbar max-h-[400px] pr-2">
+                        <p class="text-slate-500 text-center py-6 text-sm font-bold">Selecione uma proposta acima.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-3xl border border-slate-800 shadow-xl relative min-h-[250px]">
+                    <h3 class="text-sm font-black text-pink-400 mb-6 flex items-center uppercase tracking-widest"><i class="fas fa-comments mr-2"></i> Pareceres do Conselho</h3>
+                    <div id="insights-container" class="space-y-4 overflow-y-auto custom-scrollbar max-h-[400px] pr-2 relative">
+                        <p class="text-slate-500 text-center py-6 text-sm font-bold">Selecione uma proposta acima.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="mt-auto py-8 border-t border-slate-800 text-center text-slate-500 text-xs relative z-10 bg-[#0b0f19]">
+        <div class="container mx-auto px-4">
+            <p class="mb-2">&copy; <span id="footer-year"></span> NEXUS - Companhia dos Professores. Todos os direitos reservados.</p>
+            <p class="text-slate-500">
+                <span class="font-mono text-purple-500 font-bold">&lt;/&gt;</span> por <span class="text-purple-400 font-bold">Sr.Gabriel.</span>, com base no anterior pelo <span class="text-pink-400 font-bold">Pegas</span>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/plugin/relativeTime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/locale/pt-br.min.js"></script>
+    
+    <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+    
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/companhia/conselho/js/avpropostas.js" defer></script> 
+</body>
+</html>

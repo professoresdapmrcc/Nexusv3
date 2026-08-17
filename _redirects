@@ -1,0 +1,11 @@
+/api/auth/login /.netlify/functions/nexus-auth-login 200
+/api/auth/callback /.netlify/functions/nexus-auth-callback 200
+/api/auth/firebase-token /.netlify/functions/nexus-auth-firebase-token 200
+/api/auth/logout /.netlify/functions/nexus-auth-logout 200
+/backup/login.html /login.html 302
+/padrão/padrão.html /login.html 302
+/redefinicao.html /login.html 302
+
+/membros/* /membros/perfil.html    200
+
+/* /404.html    404

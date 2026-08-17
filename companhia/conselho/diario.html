@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Escalas e Diário do Conselho</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/templates/header.css"> 
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/companhia/conselho/css/diario.css">  
+    <link rel="stylesheet" href="/companhia/conselho/css/estilo.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script> 
+</head>
+<body class="light-theme aba-conselho"></body>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <main class="container">
+        
+        <div class="cabecalho-escalas">
+            <div class="bloco-titulo-filtro">
+                <h2 class="titulo-pagina">Escalas de Atividades do Conselho</h2>
+                
+                <div class="periodo-atual-badge">
+                    <i class="fa-solid fa-calendar-week"></i>
+                    <span id="texto-periodo">Calculando semana atual...</span>
+                </div>
+            </div>
+            
+            <div class="abas-limpas">
+                <button class="aba-btn active" data-target="tab-conselheiros">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Conselheiros
+                </button>
+                <button class="aba-btn" data-target="tab-estagiarios">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    Estagiários
+                </button>
+            </div>
+        </div>
+
+
+        <div class="painel-roxo">
+            
+            <div id="tab-conselheiros" class="tabela-view active">
+                <table class="tabela-nexus">
+                    <thead>
+                        <tr>
+                            <th>Conselho</th>
+                            <th>Membro</th>
+                            <th>Atividade</th>
+                            <th>Prazo</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-conselheiros">
+                        </tbody>
+                </table>
+            </div>
+
+            <div id="tab-estagiarios" class="tabela-view">
+                <table class="tabela-nexus">
+                    <thead>
+                        <tr>
+                            <th>Conselho</th>
+                            <th>Estagiário</th>
+                            <th>Atividade</th>
+                            <th>Prazo</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-estagiarios">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="secao-conselhos">
+            <h3 class="titulo-conselhos">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                Conselhos
+            </h3>
+            
+            <div class="grid-conselhos">
+                <a href="/companhia/conselho/administracao.html" class="btn-conselho">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle><path d="M12 11l4-4"></path></svg>
+                    Administração
+                </a>
+                
+                <a href="/companhia/conselho/assistencia.html" class="btn-conselho">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+                    Assistência
+                </a>
+
+                <a href="/companhia/conselho/atualizacao1.html" class="btn-conselho">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    Atualização 1
+                </a>
+
+                <a href="/companhia/conselho/atualizacao2.html" class="btn-conselho">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+                    Atualização 2
+                </a>
+
+                <a href="/companhia/conselho/contabilidade.html" class="btn-conselho">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="14.01"></line><line x1="12" y1="14" x2="12" y2="14.01"></line><line x1="8" y1="14" x2="8" y2="14.01"></line><line x1="16" y1="18" x2="16" y2="18.01"></line><line x1="12" y1="18" x2="12" y2="18.01"></line><line x1="8" y1="18" x2="8" y2="18.01"></line></svg>
+                    Contabilidade
+                </a>
+
+                <a href="/companhia/conselho/documentacao.html" class="btn-conselho">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Documentação
+                </a>
+
+                <a href="/companhia/conselho/financas.html" class="btn-conselho">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                    Finanças
+                </a>
+
+                <a href="/companhia/conselho/seguranca.html" class="btn-conselho">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Segurança
+                </a>
+            </div>
+        </div>
+
+        <section class="secao-links-uteis">
+    <div class="cabecalho-links">
+        <i class="fa-solid fa-star icone-estrela"></i>
+        <h2>Links Úteis e Frequentes</h2>
+    </div>
+
+    <div class="grid-links-uteis">
+        <a href="https://www.policiarcc.com/t31762-prof-cons-atas-de-reunioes-do-conselho" target="_blank" class="card-link-util">
+            <i class="fa-solid fa-handshake"></i>
+            <span>Atas de Reuniões</span>
+        </a>
+
+        <a href="https://www.policiarcc.com/t35034-prof-cons-script-do-teste-de-admissao" target="_blank" class="card-link-util">
+            <i class="fa-solid fa-file-signature"></i>
+            <span>Script de Admissão</span>
+        </a>
+
+        <a href="/companhia/conselho/proposta.html" target="_blank" class="card-link-util">
+            <i class="fa-solid fa-file-powerpoint"></i>
+            <span>Aval. Propostas</span>
+        </a>
+
+        <a href="/companhia/conselho/promocoes.html" target="_blank" class="card-link-util">
+            <i class="fa-solid fa-user-graduate"></i>
+            <span>Aval. Promoções</span>
+        </a>
+
+        <a href="https://www.policiarcc.com/t35032-prof-cons-codigo-de-disciplina-e-etica-do-conselho" target="_blank" class="card-link-util">
+            <i class="fa-solid fa-gavel"></i>
+            <span>Cód. Disciplina</span>
+        </a>
+
+        <a href="https://www.policiarcc.com/t31561-prof-cons-portal-de-envio" target="_blank" class="card-link-util">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Portal de Envio</span>
+        </a>
+
+        <a href="/companhia/conselho/forms.html" target="_blank" class="card-link-util">
+            <i class="fa-solid fa-list-check"></i>
+            <span>Registro de Função</span>
+        </a>
+
+        <a href="/consulta.html" target="_blank" class="card-link-util">
+            <i class="fa-solid fa-magnifying-glass-chart"></i>
+            <span>Consulta Desempenho</span>
+        </a>
+
+        <a href="https://www.policiarcc.com/t35734-prof-ouvidoria" target="_blank" class="card-link-util">
+            <i class="fa-solid fa-ear-listen"></i>
+            <span>Ouvidoria</span>
+        </a>
+
+        <a href="/quadro.html" target="_blank" class="card-link-util">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span>Quadro de Erros</span>
+        </a>
+    </div>
+</section>
+
+<section class="secao-links-uteis">
+    <div class="cabecalho-links">
+        <i class="fa-thin fa-people-group"></i>
+        <h2>Ferramentas do Conselho</h2>
+    </div>
+
+    <div class="grid-links-uteis">
+        <a href="/cons/assistencia.html" class="card-link-util">
+            <i class="fa-solid fa-handshake-angle"></i>
+            <span>Assistência</span>
+        </a>
+
+        <a href="/cons/centralpropostas.html" class="card-link-util">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Central de Propostas</span>
+        </a>
+
+        <a href="/cons/contabilidade.html" class="card-link-util">
+            <i class="fa-solid fa-calculator"></i>
+            <span>Contabilidade</span>
+        </a>
+
+        <a href="/cons/financas.html" class="card-link-util">
+            <i class="fa-solid fa-coins"></i>
+            <span>Finanças</span>
+        </a>
+
+        <a href="https://www.policiarcc.com/h396-prof-cons-portal-de-envio" class="card-link-util">
+            <i class="fa-solid fa-envelope"></i>
+            <span>Portal de Envio</span>
+        </a>
+    </div>
+
+</section>
+
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/companhia/conselho/js/diario.js" defer></script> 
+</body>
+</html>

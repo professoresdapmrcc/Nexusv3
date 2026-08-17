@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Central de Sugestões</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/sugestoes.css">
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+
+ 
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <main class="feedback-page">
+        <div class="page-header" style="text-align: center; margin-bottom: 3rem; margin-top: 2rem;">
+            <h1 class="page-title" style="color: #fff; font-weight: 800; font-size: 2.5rem;">
+                <i class="fa-solid fa-inbox" style="color: #e056fd;"></i> Caixa de Feedbacks
+            </h1>
+            <p class="page-subtitle" style="color: #cfaadb; font-size: 1.1rem;">Acompanhe os relatos de bugs e sugestões enviados</p>
+        </div>
+
+        <div class="feedback-intro">
+            <p>Monitore, resolva ou arquive os feedbacks reportados para a melhoria do ecossistema da Companhia.</p>
+            <div class="feedback-contador" id="feedback-contador">Sincronizando base...</div>
+        </div>
+
+        <div class="grid-feedbacks" id="feedbacks-wrapper">
+            <div class="estado-painel-vazio">
+                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                Carregando registros do banco de dados Firestore...
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/sugestoes.js" defer></script>
+</body>
+</html>

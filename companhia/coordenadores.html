@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Coordenadores</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/professores.css">
+    <link rel="stylesheet" href="/templates/header.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+
+<body class="light-theme aba-professores">
+
+    <body class="auth-loading">
+
+        <div id="header-placeholder"></div>
+
+        <main class="professores-page">
+
+            <div class="page-header">
+                <h1 class="page-title"><i class="fa-solid fa-briefcase"></i> Portal dos Coordenadores</h1>
+                <p class="page-subtitle">Central de atividades, ferramentas e scripts</p>
+            </div>
+
+            <section class="top-section">
+                <div class="info-links">
+                    <a href="/companhia/cursos/coordenadores/manual.html" class="modern-card info-card">
+                        <div class="card-icon"><img src="/imgs/manual-prof.png" alt="Ícone de Manual"></div>
+                        <h2>Manual do Coordenador</h2>
+                        <p>Confira aqui todas as instruções para o cargo de coordenador.</p>
+                    </a>
+                    <a href="https://sites.google.com/view/coord34535/faq" class="modern-card info-card">
+                        <div class="card-icon"><img src="/imgs/faq.png" alt="Ícone de F.A.Q."></div>
+                        <h2>F.A.Q.</h2>
+                        <p>Dúvidas? Veja as perguntas mais frequentes sobre o seu cargo.</p>
+                    </a>
+                </div>
+
+                <div class="modern-card destaques-card">
+                    <div class="destaques-header">
+                        <h3><i class="fa-solid fa-star"></i> Destaque da Semana</h3>
+                        <p class="date-range" id="destaques-date-range">Carregando data...</p>
+                    </div>
+                    <div class="destaques-avatars" id="destaques-avatars-container">
+                        <div class="loading-spinner"><i class="fa-solid fa-circle-notch fa-spin"></i> Buscando...</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="scripts-section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-clipboard-list"></i> Atividades e Cursos</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <div class="scripts-grid">
+                    <div class="modern-card script-item" style="grid-column: 1 / -1;">
+                        <a href="https://www.policiarcc.com/h204-prof-coord-mp-de-auxilio" class="script-button">
+                            <i class="fa-solid fa-hands-holding-circle"></i> Carta de Auxílio
+                        </a>
+                        <p class="script-desc"><strong>Obrigatória para a meta semanal.</strong><br>Clique aqui para
+                            enviar a Carta de Auxílio.</p>
+                    </div>
+
+                    <div class="modern-card script-item">
+                        <a href="/companhia/cursos/coordenadores/acompanhamento.html" class="script-button">
+                            <i class="fa-solid fa-chalkboard-user"></i> Acompanhamento
+                        </a>
+                        <p class="script-desc">Script do acompanhamento de aula.</p>
+                    </div>
+
+                    <div class="modern-card script-item">
+                        <a href="/companhia/cursos/coordenadores/orientações.html" class="script-button">
+                            <i class="fa-solid fa-compass"></i> Orientações
+                        </a>
+                        <p class="script-desc">Script das orientações (I, II, III, IV e V) aplicadas aos professores.
+                        </p>
+                    </div>
+
+                    <div class="modern-card script-item">
+                        <a href="/companhia/cursos/coordenadores/cop.html" class="script-button">
+                            <i class="fa-solid fa-bullhorn"></i> COP
+                        </a>
+                        <p class="script-desc"><strong>Curso de Oratória Pública</strong><br>Destinado a aspirantes+ /
+                            equivalências+.</p>
+                    </div>
+
+                    <div class="modern-card script-item">
+                        <a href="/companhia/cursos/coordenadores/cda.html" class="script-button">
+                            <i class="fa-solid fa-comments"></i> CDA
+                        </a>
+                        <p class="script-desc"><strong>Curso de Desenvolvimento Argumentativo</strong><br>Subtenentes+
+                            com cursos obrigatórios concluídos.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tools-section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-toolbox"></i> Ferramentas e Sistemas</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <div class="tools-grid">
+                    <a href="https://www.google.com/url?q=https%3A%2F%2Fwww.policiarcc.com%2Fh223-prof-coord-relatorio&sa=D"
+                        class="modern-tool-link">
+                        <img src="/imgs/postar-aula.png" alt="">
+                        <span>Postar Relatórios</span>
+                    </a>
+                    <a href="https://www.google.com/url?q=https%3A%2F%2Fsystem.policercc.com.br%2Fcompanhia%2Fprofessores&sa=D"
+                        class="modern-tool-link">
+                        <img src="/imgs/postar-system.png" alt="">
+                        <span>Postar no System</span>
+                    </a>
+                    <a href="https://docs.google.com/spreadsheets/d/1EzyhvK4zEI_940ATXnaNQ8KUCxr-2Xj0qRY1MS6extI/edit?usp=sharing"
+                        class="modern-tool-link">
+                        <img src="/imgs/verificar-relatorios.png" alt="">
+                        <span>Verificar Relatórios</span>
+                    </a>
+                    <a href="https://drive.google.com/drive/u/1/folders/13APldv68spVkoekt8kmoFJsIRhsyAnGe"
+                        class="modern-tool-link">
+                        <img src="/imgs/historico-aulas.png" alt="">
+                        <span>Histórico de Aulas</span>
+                    </a>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoB27_eFNrEIZ_esGVs1mcrm1nLiVTcuRhXPJVsVgnmT0qZQ/viewform"
+                        class="modern-tool-link">
+                        <img src="/imgs/postar-correção.png" alt="">
+                        <span>Postar Correções</span>
+                    </a>
+                    <a href="https://docs.google.com/spreadsheets/d/1-JinKLWlxa2nVRTJ-QIrQsYa4lkxX57NBWzrs1U-0kQ/edit#gid=1849101510"
+                        class="modern-tool-link">
+                        <img src="/imgs/verificar-correções.png" alt="">
+                        <span>Verificar Correções</span>
+                    </a>
+                    <a href="/justificativa.html"
+                        class="modern-tool-link">
+                        <img src="/imgs/justificar-metas.png" alt="">
+                        <span>Justificar Meta</span>
+                    </a>
+                    <a href="/painel-justificativa.html"
+                        class="modern-tool-link">
+                        <img src="/imgs/verificar-justificativa.png" alt="">
+                        <span>Verificar Justificativa</span>
+                    </a>
+                    <a href="https://profstatusv2.netlify.app/" class="modern-tool-link" target="_blank">
+                        <img src="/imgs/verificar-cursoos.png" alt="">
+                        <span>Verificar Cursos</span>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+
+        <div id="footer-placeholder"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+
+        <script src="/js/loader.js"></script>
+        <script src="/js/global.js" defer></script>
+        <script src="/js/coordenadores.js" defer></script>
+        <script src="/js/online-status.js" defer></script>
+    </body>
+
+</html>

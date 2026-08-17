@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>NEXUS - Justificativas</title>
+
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/companhia/cursos/coordenadores/manual.css">
+    <link rel="stylesheet" href="/companhia/cursos/professores/cursos.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+<div class="manual-container">
+        
+        <!-- Cabeçalho do Manual -->
+        <header class="manual-header">
+            <h2>MANUAL DO GRADUADOR</h2>
+            <p>O <strong>MANUAL DO GRADUADOR</strong> ajuda-o a guiar-se pelas suas responsabilidades enquanto <strong>GRADUADOR</strong> da companhia. Em caso de dúvidas adicionais contacte um conselheiro+.</p>
+        </header>
+
+        <!-- Seção 1: Introdução -->
+        <section class="glass-card flex-row align-center">
+            <div class="img-placeholder icon-size">
+                <!-- Usando a mesma imagem base de ícone -->
+                <img src="/imgs/manual-prof.png" alt="Ícone Laptop Graduador">
+            </div>
+            <div class="text-content">
+                <h3>SOU GRADUADOR/A. E AGORA?</h3>
+                <p>Aguarde ser postada sua promoção no <strong>Nexus</strong>.
+            </div>
+        </section>
+
+        <!-- Seção 2: Meta Semanal e Atividades -->
+        <section class="glass-card">
+            <h3 class="text-center highlight mb-20">META SEMANAL E ATIVIDADES DISPONÍVEIS</h3>
+            <p class="text-center mb-20">Os graduadores têm a responsabilidade de orientar os membros, aplicando a <strong>Graduação I</strong> para os professores recém-chegados e a <strong>Graduação II</strong> para novos coordenadores da companhia:</p>
+
+            <ul class="lista-regras mb-30">
+                <li><strong class="highlight">Graduação I:</strong> Aplicada aos <strong>novos professores</strong>, instruindo-os na aplicação dos cursos de comunicação;</li>
+                <li><strong class="highlight">Graduação II:</strong> Aplicada aos <strong>novos coordenadores</strong>, orientando-os nas novas responsabilidades do cargo, nomeadamente a realização dos acompanhamentos de aulas, carta de auxílio e orientações e aplicação dos cursos COP e CDA.</li>
+            </ul>
+
+            <h4 class="text-center highlight mb-20">A meta passa pela aplicação de, no mínimo, 02 (duas) graduações na quinzena:</h4>
+            
+            <ul class="lista-regras">
+                <li>É fundamental verificar, antes de iniciar a graduação, se o membro já recebeu a graduação, sendo possível fazê-lo através dos relatórios de graduações aplicadas, além da verificação da conta ativa no Nexus, por meio da pesquisa do nickname no site;</li>
+                <li>O graduador detém autonomia para chamar os membros que carecem da sua graduação para a realizar. O membro que evitar ativamente a graduação sem uma justificativa válida estará sujeito a punições;</li>
+                <li>O corredor dos Professores entrega toda a infraestrutura necessária para a aplicação das graduações. Para isso, basta dizer o comando <strong>:grad</strong> no corredor, trazendo o teleporte para o centro.</li>
+            </ul>
+        </section>
+
+        <!-- Seção 3: Graduação I -->
+        <section class="glass-card">
+            <div class="flex-row align-center mb-20 reverse-mobile">
+                <div class="text-content flex-grow text-right">
+                    <h3 class="highlight">GRADUAÇÃO I</h3>
+                    <p>O professor, ao ser aprovado no teste de admissão, recebe a carta de boas-vindas. Nela, além de todas as informações essenciais para a adaptação ao cargo, encontra-se o slide de graduação, com todas as informações necessárias para realizar a <strong>avaliação teórica</strong>. Também o membro é orientado a criar a conta no Nexus, sendo seu dever auxiliá-lo em casos de dificuldade e não aplicar a graduação até que a conta esteja criada e ativada.</p>
+                </div>
+                <div class="img-placeholder icon-size">
+                    <img src="/imgs/manual-prof.png" alt="Ícone Laptop Graduador">
+                </div>
+            </div>
+
+            <ul class="lista-regras mt-20">
+                <li>Após a <strong>leitura do slide</strong> o professor deverá buscar um graduador para a realização da avaliação teórica. A sua participação nesse processo influencia bastante a caminhada do professor dentro do nosso grupo de tarefas, por isso busque auxiliá-lo com atenção e gentileza;</li>
+                <li>A execução da graduação deve ocorrer na <strong>sala destinada às graduações</strong>. Caso esta esteja ocupada ou inacessível, disponibiliza-se a <strong>sala dos estagiários</strong>;</li>
+                <li>Após a finalização da graduação, poste o relatório no formulário dos graduadores, usando o link presente no final do script de graduação;</li>
+                <li>Caso o professor caia durante a aplicação, printe o perfil dele offline com o histórico aberto ao lado, contendo balões visíveis de ambos envolvidos e, por fim, poste a queda no formulário dos graduadores;</li>
+                <li>A meta é contabilizada por policiais presentes, portanto <strong>as graduações deverão ser postadas separadamente no formulário</strong>.</li>
+            </ul>
+        </section>
+
+        <!-- Seção 4: Graduação II -->
+        <section class="glass-card">
+            <div class="flex-row align-center mb-20">
+                <div class="img-placeholder icon-size">
+                    <img src="/imgs/manual-prof.png" alt="Ícone Laptop Graduador">
+                </div>
+                <div class="text-content">
+                    <h3 class="highlight">GRADUAÇÃO II</h3>
+                    <p>Graduação destinada aos <strong>membros recém-promovidos ao cargo de coordenador</strong>, composta apenas por uma parte teórica, onde é apresentado um slide com todas as informações necessárias para o entendimento de sua nova função. O graduando terá de responder a um <strong>teste teórico</strong>, realizado via formulário, e acertar a, pelo menos, <strong>cinco (05) perguntas</strong> para obter a aprovação.</p>
+                </div>
+            </div>
+
+            <ul class="lista-regras mt-20">
+                <li>A execução da graduação deve ocorrer na <strong>sala destinada às graduações</strong>. Caso esta esteja ocupada ou inacessível, disponibiliza-se a <strong>sala dos estagiários</strong>;</li>
+                <li>Após a finalização da graduação, poste o relatório no formulário dos graduadores, usando o link presente no final do script de graduação;</li>
+                <li>Caso o professor caia durante a aplicação, printe o perfil dele offline com o histórico aberto ao lado, contendo balões visíveis de ambos envolvidos e, por fim, poste a queda no formulário dos graduadores;</li>
+                <li>A meta é contabilizada por policiais presentes, portanto <strong>as graduações deverão ser postadas separadamente no formulário</strong>.</li>
+            </ul>
+        </section>
+
+        <!-- Rodapé de Créditos -->
+        <div class="creditos-manual">
+            <p>Elaborado por <strong>Granno</strong> e reformulado por <strong>,Novembro</strong></p>
+            <p>Contribuições: <strong>Abismy</strong></p>
+            <p class="direitos">Todos os direitos reservados à Companhia dos Professores</p>
+        </div>
+
+    </div>
+        
+        <hr class="section-separator">
+        <section class="tools-section">
+            <div class="tools-grid five-items">
+                <a href="https://www.policiarcc.com/h222-prof-grad-relatorio&sa=D" class="tool-link"><img src="/imgs/postar-aula.png" alt=""><span>Postar Relatórios</span></a>
+                <a href="https://docs.google.com/spreadsheets/u/1/d/154ToDPq8wakIM9W0LIiM_TExwAjunT696pqq0xmP2I8/edit?resourcekey#gid=230455547" class="tool-link"><img src="/imgs/verificar-relatorios.png" alt=""><span>Verificar Relatórios</span></a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoB27_eFNrEIZ_esGVs1mcrm1nLiVTcuRhXPJVsVgnmT0qZQ/viewform" class="tool-link"><img src="/imgs/postar-correção.png" alt=""><span>Postar Correções</span></a>
+                <a href="https://docs.google.com/spreadsheets/d/1-JinKLWlxa2nVRTJ-QIrQsYa4lkxX57NBWzrs1U-0kQ/edit#gid=1849101510" class="tool-link"><img src="/imgs/verificar-correções.png" alt=""><span>Verificar Correções</span></a>
+                <a href="https://drive.google.com/drive/u/1/folders/13APldv68spVkoekt8kmoFJsIRhsyAnGe" class="tool-link"><img src="/imgs/historico-aulas.png" alt=""><span>Histórico de Aplicações</span></a>
+            </div>
+        </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js" defer></script>
+
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/paineljust.js" defer></script> 
+</body>
+</html>

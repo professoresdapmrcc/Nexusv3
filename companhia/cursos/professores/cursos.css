@@ -1,0 +1,602 @@
+/* ==========================================================================
+   1. ARQUIVO DE ESTILOS - CURSOS E SCRIPTS (IDENTIDADE NEXUS PREMIUM)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+/* ==========================================================================
+   2. VARIÁVEIS DO TEMA (ALINHADO COM ASSISTENCIA.CSS)
+   ========================================================================== */
+
+:root {
+    --purple-main: #9333ea;
+    --purple-light: #a855f7;
+    --purple-glow: rgba(168, 85, 247, 0.4);
+    
+    --dark-bg: #0a0f18;
+    --card-bg: rgba(15, 23, 42, 0.85); /* Fundo escuro azulado/ardósia */
+    --card-bg-hover: rgba(30, 41, 59, 0.8);
+    
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.12);
+    
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    
+    --sucesso: #10b981;
+    --erro: #ef4444;
+    --aviso: #f59e0b;
+
+    --border-radius-lg: 24px;
+    --border-radius-md: 16px;
+    --border-radius-sm: 8px;
+    --transicao: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* ==========================================================================
+   3. ESTRUTURA GERAL (CONTAINER PRINCIPAL)
+   ========================================================================== */
+
+.document-page {
+    max-width: 1000px;
+    margin: 2rem auto 4rem;
+    padding: 3.5rem;
+    
+    /* Visual Dark Glassmorphism */
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* Cabeçalho da Página */
+.page-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+.page-header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--purple-main);
+    border-radius: 10px;
+    box-shadow: 0 0 15px var(--purple-glow);
+}
+
+.page-header h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.8rem;
+    color: #c084fc;
+    background: linear-gradient(135deg, #e9d5ff, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-header p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    font-weight: 500;
+}
+
+/* Títulos das Seções */
+.script-section-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #e2e8f0;
+    margin: 3.5rem 0 1.5rem;
+    padding-left: 1.2rem;
+    border-left: 4px solid var(--purple-main);
+    letter-spacing: 1px;
+}
+
+.script-subsection-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.content-body p {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+/* ==========================================================================
+   4. AVISOS E INSTRUÇÕES (ALERTS)
+   ========================================================================== */
+
+.instruction {
+    background: rgba(147, 51, 234, 0.1);
+    padding: 1.2rem 1.5rem;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid rgba(147, 51, 234, 0.2);
+    border-left: 4px solid var(--purple-main);
+    color: #d8b4fe;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.instruction-attention {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.2);
+    border-left-color: var(--erro);
+    color: #fca5a5;
+}
+
+/* ==========================================================================
+   5. ACCORDIONS / SPOILERS (MODERNIZADOS)
+   ========================================================================== */
+
+details.indice-wrapper, 
+details.accordion-item {
+    margin-bottom: 1rem;
+    background: #0b0e14; /* Fundo bem escuro */
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--glass-border);
+    transition: var(--transicao);
+    overflow: hidden;
+}
+
+details[open] {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(147, 51, 234, 0.4);
+    box-shadow: 0 5px 20px rgba(147, 51, 234, 0.1);
+}
+
+summary {
+    padding: 1.2rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    color: #e2e8f0;
+    user-select: none;
+    transition: background 0.3s;
+}
+
+summary::-webkit-details-marker { display: none; } /* Remove seta padrão no Safari/Chrome */
+
+summary:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+summary h2, summary h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+summary i, summary::after {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-muted);
+}
+
+details[open] summary i,
+details[open] summary::after {
+    transform: rotate(180deg);
+    color: var(--purple-light);
+}
+
+.indice-container, 
+.accordion-content {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    animation: fadeIn 0.4s ease;
+}
+
+/* ==========================================================================
+   6. BLOCOS DE CÓDIGO (BBCODE)
+   ========================================================================== */
+
+.bbcode-block {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    color: #c084fc; /* Roxo claro estilo terminal neon */
+    padding: 1.5rem;
+    border-radius: var(--border-radius-sm);
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+}
+
+/* ==========================================================================
+   7. LINHAS DE CÓPIA (SCRIPT LINES)
+   ========================================================================== */
+
+.script-line, .script-line-container {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    background: #0f121a; /* Fundo sólido para contraste */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    transition: var(--transicao);
+}
+
+.script-line:hover, .script-line-container:hover {
+    background: #161b26;
+    border-color: rgba(147, 51, 234, 0.3);
+}
+
+.script-text {
+    flex-grow: 1;
+    margin: 0;
+    font-size: 0.9rem;
+    color: #e2e8f0;
+    font-weight: 500;
+}
+
+/* Botões de Copiar (Pequenos) */
+.btn-copy-line {
+    flex-shrink: 0;
+    background: rgba(147, 51, 234, 0.1);
+    color: #c084fc;
+    border: 1px solid rgba(147, 51, 234, 0.2);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transicao);
+}
+
+.btn-copy-line:hover {
+    background: var(--purple-main);
+    color: white;
+    border-color: var(--purple-main);
+    box-shadow: 0 4px 15px var(--purple-glow);
+    transform: translateY(-2px);
+}
+
+.btn-copy-line.copied {
+    background: var(--sucesso);
+    border-color: var(--sucesso);
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* Botão de Copiar Tudo (Grande) */
+.btn-copy-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #3b82f6; /* Azul moderno */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: var(--transicao);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-copy-all:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* ==========================================================================
+   8. TABS (SELETORES DE AULA)
+   ========================================================================== */
+
+.aula-selector {
+    text-align: center;
+    margin: 2.5rem 0;
+    padding: 2rem;
+    background: #0b0e14;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-md);
+}
+
+.aula-selector p {
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    color: #cbd5e1;
+    font-size: 0.85rem;
+}
+
+.tabs-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-tab {
+    padding: 10px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    transition: var(--transicao);
+    outline: none;
+}
+
+.btn-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btn-tab.active {
+    background: var(--purple-main);
+    color: white;
+    border-color: var(--purple-main);
+    box-shadow: 0 5px 15px var(--purple-glow);
+}
+
+/* ==========================================================================
+   9. BOTÕES DE LINKS E FERRAMENTAS EXTRAS
+   ========================================================================== */
+
+.send-orientation-section {
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.orientation-link {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.15), rgba(0, 0, 0, 0.4));
+    border: 1px solid rgba(147, 51, 234, 0.3);
+    padding: 20px 30px;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: var(--transicao);
+    max-width: fit-content;
+}
+
+.orientation-link:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.25), rgba(0, 0, 0, 0.6));
+    border-color: var(--purple-light);
+    box-shadow: 0 10px 25px var(--purple-glow);
+}
+
+.orientation-img {
+    width: 60px;
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
+}
+
+.orientation-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.orientation-text span {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.orientation-text small {
+    color: #94a3b8;
+    margin-top: 5px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Grid de Ferramentas / Documentos Extras */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.tool-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    transition: var(--transicao);
+    text-align: center;
+}
+
+.tool-link:hover {
+    background: rgba(147, 51, 234, 0.05);
+    border-color: rgba(147, 51, 234, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.tool-link img {
+    width: 50px;
+    margin-bottom: 1rem;
+    transition: 0.3s;
+}
+
+.tool-link:hover img {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
+}
+
+.tool-link span {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    text-transform: uppercase;
+}
+
+.tool-link.disabled-tool {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.tool-link.disabled-tool:hover {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.05);
+    transform: none;
+    box-shadow: none;
+}
+
+.tool-link.disabled-tool:hover img {
+    transform: none;
+    filter: none;
+}
+
+/* ==========================================================================
+   10. ANIMAÇÕES E RESPONSIVO
+   ========================================================================== */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#conteudo-slide, #conteudo-habbo, #secao-final {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.script-footer {
+    text-align: center;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .document-page {
+        padding: 1.5rem;
+        margin: 1rem auto;
+        border-radius: 0;
+        border: none;
+        background: transparent; /* No mobile, tira o fundo de vidro pesado pra evitar lag */
+        box-shadow: none;
+    }
+
+    .page-header h1 { 
+        font-size: 1.8rem; 
+    }
+    
+    .script-line, .script-line-container {
+        flex-direction: column; /* No mobile, botão de copiar desce pra baixo do texto */
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .btn-copy-line {
+        width: 100%; /* Botão largo no mobile */
+    }
+
+    .tools-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+    }
+    
+    .orientation-link {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .orientation-text {
+        align-items: center;
+        text-align: center;
+    }
+}
+
+body::before {
+    content: "";
+    position: fixed; /* Fica travada na tela mesmo se der scroll */
+    top: 55%; /* Centraliza verticalmente */
+    transform: translateY(-50%);
+    
+    /* O SEGREDO DO CORTE: Joga metade da imagem pra fora da tela */
+    right: -200px; /* Ajuste esse valor dependendo do tamanho da sua logo */
+    
+    width: 500px;  /* Tamanho grande pra dar destaque */
+    height: 500px;
+    
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+    /* OPACIDADE (0.01 é quase invisível, 1.0 é 100% visível) */
+    opacity: 0.1; 
+    
+    z-index: -1; /* Joga a imagem pro fundo, atrás de tudo */
+    pointer-events: none; /* Impede que a imagem roube os cliques do mouse */
+}
+
+body.aba-professores::before {
+    background-image: url('/imgs/emblema-prof.png');
+}
+
+body.aba-graduadores::before {
+    background-image: url('/imgs/emblema-grad.png');
+}
+
+/* ==========================================================================
+   ALERTA DE DESTAQUE (ESTILO PRINT)
+   ========================================================================== */
+.alerta-print {
+    background: rgba(239, 68, 68, 0.08); /* Fundo vermelho suave e transparente */
+    border: 1px solid var(--erro); /* Borda vermelha completa (usando sua variável) */
+    border-radius: var(--border-radius-sm); /* Arredondamento padrão do seu tema */
+    padding: 15px 20px;
+    margin-bottom: 2rem; /* Espaçamento ideal antes da barra roxa de Orientações */
+    color: #fca5a5; /* Texto num tom de rosa/vermelho claro para leitura no dark mode */
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.alerta-print strong {
+    color: var(--erro); /* Usa o vermelho vivo para destacar as palavras em negrito */
+    font-weight: 800;
+}

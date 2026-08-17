@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Painel de Propostas</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/promocoes.css">
+
+     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="bg-[#0b0f19] text-slate-200 font-['Inter'] pt-24 min-h-screen flex flex-col bg-[url('/imgs/bg-pattern.svg')] bg-fixed bg-cover selection:bg-purple-500/30">
+
+    <div id="header-container"></div>
+
+    <div id="access-denied-screen" class="hidden fixed inset-0 z-50 bg-[#0b0f19] flex flex-col items-center justify-center text-center px-4">
+        <i class="fas fa-lock text-6xl text-red-500 mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]"></i>
+        <h2 class="text-3xl font-bold text-white mb-2">Acesso Restrito</h2>
+        <p class="text-slate-400">Você precisa ter cargo de Gestão para acessar o Painel.</p>
+    </div>
+
+    <main id="main-app-screen" class="hidden flex-1 container mx-auto px-4 max-w-[1200px] pb-12 animate-fade-in">
+        
+        <div class="glass-panel p-6 rounded-2xl mb-8 flex flex-col md:flex-row justify-between items-center z-10 relative shadow-xl">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <i class="fas fa-layer-group text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black text-white leading-tight">Painel de Propostas</h1>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Lançamentos, Resultados e Backups</p>
+                </div>
+            </div>
+            <div class="flex gap-2 mt-4 md:mt-0 bg-[#0b0f19] p-1.5 rounded-xl border border-slate-800">
+                <button id="nav-cadastro" class="nav-btn active-cargo px-5 py-2.5 rounded-lg text-sm font-bold text-white transition shadow-lg shadow-purple-900/40"><i class="fas fa-plus-circle mr-2"></i> Lançar Proposta</button>
+                <button id="nav-resultados" class="nav-btn px-5 py-2.5 rounded-lg text-sm font-bold text-slate-400 hover:text-white transition"><i class="fas fa-poll mr-2"></i> Ver Resultados</button>
+                <button id="nav-historico" class="nav-btn px-5 py-2.5 rounded-lg text-sm font-bold text-slate-400 hover:text-white transition"><i class="fas fa-archive mr-2"></i> Histórico</button>
+            </div>
+        </div>
+
+        <div id="view-cadastro" class="view-module block animate-fade-in max-w-4xl mx-auto">
+            <div class="glass-panel rounded-3xl p-8 md:p-10 border-t-4 border-purple-500 shadow-2xl relative">
+                <h3 class="text-xl font-black text-white mb-6"><i class="fas fa-pen-nib text-purple-400 mr-2"></i> Cadastrar Nova Proposta</h3>
+                
+                <form id="form-proposta" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Número da Ordem</label>
+                            <input type="number" id="prop-ordem" required min="1" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-4 text-white font-black outline-none focus:border-purple-500 transition shadow-inner">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Autor (Nick)</label>
+                            <input type="text" id="prop-autor" required class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-4 text-white font-bold outline-none focus:border-purple-500 transition shadow-inner">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Categoria da Proposta</label>
+                        <select id="prop-tipo" required class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-4 text-slate-200 font-bold outline-none focus:border-pink-500 transition shadow-inner cursor-pointer">
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="Sugestão">Sugestão</option>
+                            <option value="Projeto">Projeto</option>
+                            <option value="Correção">Correção</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Título da Proposta</label>
+                        <input type="text" id="prop-titulo" required class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-4 text-white font-bold outline-none focus:border-purple-500 transition shadow-inner">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Conteúdo Integral</label>
+                        <textarea id="prop-conteudo" required rows="6" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-4 text-slate-300 font-medium outline-none focus:border-purple-500 transition shadow-inner resize-y custom-scrollbar"></textarea>
+                    </div>
+                    <button type="submit" id="btn-submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-wider py-4 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all transform hover:-translate-y-1 mt-4">
+                        <i class="fas fa-cloud-upload-alt mr-2"></i> Salvar na Base Ativa
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div id="view-resultados" class="view-module hidden animate-fade-in">
+            
+            <div class="glass-panel p-6 rounded-2xl mb-8 shadow-xl border border-slate-800">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-black text-purple-400"><i class="fas fa-user-tie mr-2"></i> Participação do Conselho</h3>
+                    <span class="text-xs font-bold text-slate-500 bg-black/50 px-2 py-1 rounded">Votos no ciclo atual</span>
+                </div>
+                <div id="conselho-tracker-placeholder" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                </div>
+            </div>
+
+            <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-700 to-transparent mb-8"></div>
+
+            <div class="flex justify-between items-end mb-6">
+                <h3 class="text-xl font-black text-white">Propostas em Andamento</h3>
+            </div>
+
+            <div id="resultados-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            </div>
+
+            <div class="glass-panel p-8 rounded-3xl border border-red-500/30 bg-red-900/10 text-center shadow-xl mt-8">
+                <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4 animate-pulse"></i>
+                <h3 class="text-2xl font-black text-white mb-2">Encerrar Ciclo e Tratar Propostas</h3>
+                <p class="text-slate-400 max-w-2xl mx-auto mb-6">Ao clicar neste botão, o sistema gerará um Backup, <b>enviará as propostas aprovadas para a aba "Tratamento" da Planilha</b>, salvará tudo no Histórico e zerará a base atual para o novo ciclo.</p>
+                <button onclick="encerrarCicloEArquivar()" id="btn-arquivar" class="bg-red-600 hover:bg-red-500 text-white px-8 py-3.5 rounded-xl font-black transition shadow-lg shadow-red-900/50 flex items-center justify-center gap-2 mx-auto">
+                    <i class="fas fa-archive text-lg"></i> Gerar Backup e Zerar Sistema
+                </button>
+            </div>
+
+        </div>
+
+        <div id="view-historico" class="view-module hidden animate-fade-in">
+            
+            <div class="glass-panel p-6 rounded-3xl mb-8 shadow-xl border border-slate-800">
+                <label class="block text-xs font-black text-slate-500 mb-2 uppercase tracking-wider">Selecionar Backup Anterior</label>
+                <select id="hist-backup-select" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl p-3.5 text-slate-200 font-bold outline-none focus:border-purple-500 transition cursor-pointer">
+                    <option value="" disabled selected>Carregando backups...</option>
+                </select>
+            </div>
+
+            <div id="historico-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-80 hover:opacity-100 transition duration-300">
+                <div class="col-span-full text-center py-10 text-slate-500 font-bold"><i class="fas fa-folder-open text-3xl mb-3 block"></i> Selecione um backup acima para visualizar o histórico de avaliações.</div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <div id="modal-leitura-votos" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-[#0b0f19] w-full max-w-2xl rounded-3xl overflow-hidden flex flex-col shadow-2xl border border-slate-700 max-h-[85vh]">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center bg-[#05070c]">
+                <h2 class="text-lg font-black text-white" id="modal-votos-titulo">Pareceres do Conselho</h2>
+                <button onclick="fecharModalVotos()" class="text-slate-400 hover:text-red-400 bg-slate-800 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-4" id="modal-votos-conteudo"></div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/plugin/relativeTime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/locale/pt-br.min.js"></script>
+
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/companhia/conselho/js/centralproposta.js" defer></script> 
+</body>
+</html>

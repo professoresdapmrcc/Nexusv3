@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[PROF] Inscrições Departamentais</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/central-pages.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        :root {
+            --purple-dark: #0f0518;
+            --purple-main: #4a00e0;
+            --purple-light: #8e2de2;
+            --purple-glow: rgba(142, 45, 226, 0.6);
+            --glass-bg: rgba(30, 15, 50, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8f5fa;
+            --text-muted: #c9bde0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #0b0213, #21043b, #3b0a6b, #15022e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 100px 15px 40px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        ::selection {
+            background-color: var(--purple-light);
+            color: #fff;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            z-index: 1;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 100%;
+        }
+
+        .main-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-align: center;
+            background: linear-gradient(to right, #fff, var(--purple-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .intro-text {
+            text-align: center;
+            color: var(--text-muted);
+            max-width: 700px;
+            line-height: 1.7;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            width: 100%;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 35px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(142, 45, 226, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .option-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--purple-light);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px var(--purple-glow);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .option-card:hover::before {
+            opacity: 1;
+        }
+
+        .option-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin: 0 auto 20px;
+            display: block;
+            transition: transform 0.4s;
+        }
+
+        .option-card:hover .option-logo {
+            transform: scale(1.1);
+        }
+
+        .option-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .description-wrapper,
+        .form-wrapper {
+            display: none;
+            width: 100%;
+        }
+
+        #description-logo {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 25px;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px var(--purple-glow));
+        }
+
+        .content-container {
+            text-align: center;
+        }
+
+        .content-container h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .content-container h3 {
+            font-size: 1.3rem;
+            color: var(--purple-light);
+            margin: 25px 0 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+        }
+
+        .content-container p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            text-align: left;
+            font-weight: 300;
+        }
+
+        .content-container .quote {
+            text-align: center;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 25px;
+        }
+
+        .subscribe-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .subscribe-section p {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .input-description {
+            font-size: 0.85rem !important;
+            color: rgba(255, 255, 255, 0.5) !important;
+            margin-bottom: 10px !important;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 0.95rem;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--purple-light);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 15px rgba(142, 45, 226, 0.3);
+        }
+
+        select option {
+            background-color: var(--purple-dark);
+            color: #fff;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-option,
+        .checkbox-option {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .radio-option:hover,
+        .checkbox-option:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .radio-option input,
+        .checkbox-option input {
+            display: none;
+        }
+
+        .radio-custom,
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-muted);
+            margin-right: 15px;
+            display: inline-block;
+            position: relative;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .radio-custom {
+            border-radius: 50%;
+        }
+
+        .checkbox-custom {
+            border-radius: 6px;
+        }
+
+        input:checked+.radio-custom,
+        input:checked+.checkbox-custom {
+            border-color: var(--purple-light);
+            background-color: var(--purple-main);
+            box-shadow: 0 0 10px var(--purple-glow);
+        }
+
+        input:checked+.radio-custom::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        input:checked+.checkbox-custom::after {
+            content: '\f00c';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            font-size: 11px;
+            color: #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .scale-group {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .scale-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .scale-option input {
+            display: none;
+        }
+
+        .scale-option label {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .scale-option label:hover {
+            border-color: var(--purple-light);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scale-option input:checked+label {
+            background: var(--purple-main);
+            border-color: var(--purple-light);
+            box-shadow: 0 0 15px var(--purple-glow);
+            transform: translateY(-2px);
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .main-btn {
+            flex: 1;
+            padding: 14px 24px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, var(--purple-main), var(--purple-light));
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--purple-glow);
+            filter: brightness(1.1);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            box-shadow: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        .credits {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 20px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .glass-panel {
+                padding: 25px 20px;
+            }
+
+            .main-title {
+                font-size: 2rem;
+            }
+
+            .form-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/inscricoes-redesign.css">
+</head>
+
+<body class="auth-loading applications-body">
+    <div id="header-placeholder"></div>
+
+
+
+    <div class="container applications-shell">
+        <nav class="central-context-nav" aria-label="Áreas da Central">
+            <span>Central NEXUS</span><a href="/companhia.html">Companhia</a><a href="/cursos.html">Cursos</a><a href="/subgrupos.html">Subgrupos</a><a href="/inscricoes.html" class="is-active">Inscrições</a>
+        </nav>
+        <section class="applications-hero" aria-labelledby="applications-title">
+            <div><p class="applications-eyebrow"><span></span> Novas jornadas</p><h1 class="main-title" id="applications-title">Escolha onde sua<br><strong>presença fará diferença.</strong></h1><p class="intro-text">Conheça cada departamento, entenda sua missão e envie sua manifestação de interesse por uma jornada guiada.</p></div>
+            <div class="applications-steps" aria-label="Etapas da inscrição"><span><b>01</b> Escolha</span><span><b>02</b> Conheça</span><span><b>03</b> Inscreva-se</span></div>
+        </section>
+
+        <div class="applications-choice-heading"><p class="applications-eyebrow">Departamentos disponíveis</p><h2>Qual caminho combina com você?</h2></div>
+
+        <div class="options-grid">
+            <div class="option-card" data-department="da">
+                <span class="option-index">01 / Integração</span><img src="/imgs/da-imagem.png" alt="DA" class="option-logo">
+                <div><h3 class="option-title">Departamento de Aplicação</h3><p>Avalie, acompanhe e ajude novos membros a iniciarem sua jornada.</p></div><span class="option-action">Conhecer <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+            <div class="option-card" data-department="cdc">
+                <span class="option-index">02 / Cultura</span><img src="/imgs/cdc-imagem.png" alt="CDC" class="option-logo">
+                <div><h3 class="option-title">Desenvolvimento Cultural</h3><p>Crie, comunique e transforme ideias em experiências para a Companhia.</p></div><span class="option-action">Conhecer <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+            <div class="option-card" data-department="spp">
+                <span class="option-index">03 / Proteção</span><img src="/imgs/spp-imagem.png" alt="SPP" class="option-logo">
+                <div><h3 class="option-title">Serviço de Proteção</h3><p>Fortaleça a integridade, a segurança e o cumprimento das normas.</p></div><span class="option-action">Conhecer <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+        </div>
+
+        <div id="description-wrapper" class="description-wrapper">
+            <div class="glass-panel content-container">
+                <img id="description-logo" src="" alt="Logo">
+                <h2 id="description-title"></h2>
+                <div id="description-text"></div>
+                <div class="subscribe-section">
+                    <p>Pronto para assumir este desafio?</p>
+                    <button id="show-form-btn" class="main-btn">Inscrever-se <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <button id="back-to-options-btn" class="main-btn back-btn" style="margin-top: 20px; width: 100%;"><i
+                    class="fas fa-arrow-left"></i> Voltar</button>
+        </div>
+
+        <div id="form-wrapper" class="form-wrapper">
+            <div class="glass-panel">
+                <form id="subscription-form">
+
+                    <div id="initial-form-step" class="form-step">
+                        <h2>Informações Gerais</h2>
+                        <div class="input-group">
+                            <label for="nickname">Nickname:</label>
+                            <p class="input-description">Idêntico ao do jogo (ex: Amy.Love.Girl)</p>
+                            <input type="text" id="nickname" name="Nickname" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="cargo">Seu cargo na companhia:</label>
+                            <select id="cargo" name="Cargo" required>
+                                <option value="" disabled selected>Selecione...</option>
+                                <option value="Professor(a)">Professor(a)</option>
+                                <option value="Coordenador(a)">Coordenador(a)</option>
+                                <option value="Graduador(a)">Graduador(a)</option>
+                                <option value="Estagiário(a)">Estagiário(a)</option>
+                                <option value="Conselheiro(a)">Conselheiro(a)</option>
+                            </select>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" id="back-to-description-btn" class="main-btn back-btn"><i
+                                    class="fas fa-arrow-left"></i> Voltar</button>
+                            <button type="button" id="next-btn" class="main-btn">Próximo <i
+                                    class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="da-form-step" class="form-step">
+                        <h2>Departamento de Aplicação</h2>
+                        <div class="input-group">
+                            <label>Aptidão para avaliar testes (0 a 10):</label>
+                            <div class="scale-group">
+                                <div class="scale-options da-scale-aptidao"></div>
+                                <div class="scale-labels"><span>Ruim</span><span>Excelente</span></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Possui responsabilidade e presença?</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="responsabilidade_da" value="Sim"
+                                        required><span class="radio-custom"></span>Sim</label>
+                                <label class="radio-option"><input type="radio" name="responsabilidade_da"
+                                        value="Não"><span class="radio-custom"></span>Não</label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Turnos disponíveis:</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-option"><input type="checkbox" name="turno_da"
+                                        value="Manhã"><span class="checkbox-custom"></span>Manhã (08h às 12h)</label>
+                                <label class="checkbox-option"><input type="checkbox" name="turno_da"
+                                        value="Tarde"><span class="checkbox-custom"></span>Tarde (12h às 18h)</label>
+                                <label class="checkbox-option"><input type="checkbox" name="turno_da"
+                                        value="Noite"><span class="checkbox-custom"></span>Noite (18h às 00h)</label>
+                                <label class="checkbox-option"><input type="checkbox" name="turno_da"
+                                        value="Madrugada"><span class="checkbox-custom"></span>Madrugada (00h às
+                                    05h)</label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="razao_da">Por que deseja integrar o DA?</label>
+                            <textarea id="razao_da" name="razao_da" required></textarea>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="main-btn back-btn form-back-btn"
+                                data-target="#initial-form-step"><i class="fas fa-arrow-left"></i> Voltar</button>
+                            <button type="submit" class="main-btn">Enviar Inscrição <i
+                                    class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="cdc-form-step-1" class="form-step">
+                        <h2>Desenvolvimento Cultural (Parte 1)</h2>
+                        <div class="input-group">
+                            <label>Responsabilidade e presença (1 a 10):</label>
+                            <div class="scale-group">
+                                <div class="scale-options cdc-scale-responsabilidade"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Administração de tempo (0 a 10):</label>
+                            <div class="scale-group">
+                                <div class="scale-options cdc-scale-tempo"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="razao_cdc">Por que deseja integrar a CDC?</label>
+                            <textarea id="razao_cdc" name="razao_cdc" required></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label>Área de atuação desejada:</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="area_cdc" value="Analista"
+                                        data-area="Analista" required><span class="radio-custom"></span>Comunicação
+                                    visual e marketing (Analista)</label>
+                                <label class="radio-option"><input type="radio" name="area_cdc" value="Docente"
+                                        data-area="Docente"><span class="radio-custom"></span>Aulas gerais e eventos
+                                    (Docente)</label>
+                                <label class="radio-option"><input type="radio" name="area_cdc" value="Promotor"
+                                        data-area="Promotor"><span class="radio-custom"></span>Envio de MPs e Marketing
+                                    (Promotor)</label>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="main-btn back-btn form-back-btn"
+                                data-target="#initial-form-step"><i class="fas fa-arrow-left"></i> Voltar</button>
+                            <button type="button" id="next-cdc-btn" class="main-btn">Próximo <i
+                                    class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="cdc-analista-step" class="form-step">
+                        <h3>Área: Analista (Comunicação Visual)</h3>
+                        <div class="input-group">
+                            <label>Habilidade com Canva/Design (0 a 10):</label>
+                            <div class="scale-group">
+                                <div class="scale-options cdc-scale-imagens"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Aptidão para elaboração de textos (0 a 10):</label>
+                            <div class="scale-group">
+                                <div class="scale-options cdc-scale-textos"></div>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="main-btn back-btn form-back-btn"
+                                data-target="#cdc-form-step-1"><i class="fas fa-arrow-left"></i> Voltar</button>
+                            <button type="submit" class="main-btn">Enviar Inscrição <i
+                                    class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="cdc-docente-step" class="form-step">
+                        <h3>Área: Docente (Aulas e Eventos)</h3>
+                        <div class="input-group">
+                            <label>Disposição, criatividade e organização (0 a 10):</label>
+                            <div class="scale-group">
+                                <div class="scale-options cdc-scale-organizacao"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Capacidade de trabalhar em equipe (0 a 10):</label>
+                            <div class="scale-group">
+                                <div class="scale-options cdc-scale-equipe"></div>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="main-btn back-btn form-back-btn"
+                                data-target="#cdc-form-step-1"><i class="fas fa-arrow-left"></i> Voltar</button>
+                            <button type="submit" class="main-btn">Enviar Inscrição <i
+                                    class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="cdc-promotor-step" class="form-step">
+                        <h3>Área: Promotor (Marketing e MPs)</h3>
+                        <div class="input-group">
+                            <label>Aptidão para envio de MPs em massa (0 a 10):</label>
+                            <div class="scale-group">
+                                <div class="scale-options cdc-scale-mkt"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Disponibilidade para se manter atualizado?</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="disponibilidade_promotor"
+                                        value="Sim" required><span class="radio-custom"></span>Sim</label>
+                                <label class="radio-option"><input type="radio" name="disponibilidade_promotor"
+                                        value="Não"><span class="radio-custom"></span>Não</label>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="main-btn back-btn form-back-btn"
+                                data-target="#cdc-form-step-1"><i class="fas fa-arrow-left"></i> Voltar</button>
+                            <button type="submit" class="main-btn">Enviar Inscrição <i
+                                    class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="spp-form-step-1" class="form-step">
+                        <h2>Serviço de Proteção (Parte 1)</h2>
+                        <div class="input-group">
+                            <label for="whatsapp_spp">WhatsApp (Opcional):</label>
+                            <input type="text" id="whatsapp_spp" name="WhatsApp" placeholder="(XX) XXXXX-XXXX">
+                        </div>
+                        <div class="input-group">
+                            <label>Responsabilidade e presença (0 a 10):</label>
+                            <div class="scale-group">
+                                <div class="scale-options spp-scale-responsabilidade"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Conhecimento dos documentos internos (0 a 10):</label>
+                            <div class="scale-group">
+                                <div class="scale-options spp-scale-conhecimento"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Experiência prévia em Fiscalização?</label>
+                            <textarea id="experiencia_spp" name="experiencia_spp" required></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label>Importância do SPP para a companhia:</label>
+                            <textarea id="importancia_spp" name="importancia_spp" required></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label>Por que devemos convocá-lo?</label>
+                            <textarea id="razao_spp_1" name="razao_spp_1" required></textarea>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="main-btn back-btn form-back-btn"
+                                data-target="#initial-form-step"><i class="fas fa-arrow-left"></i> Voltar</button>
+                            <button type="button" id="next-spp-btn" class="main-btn">Próximo <i
+                                    class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="spp-form-step-2" class="form-step">
+                        <h2>Questionário SPP (Parte 2)</h2>
+                        <div class="input-group">
+                            <label>01. Situação de quebra de sigilo por print no WhatsApp. Resolva:</label>
+                            <textarea name="spp_q1" required></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label>02. SPP tem autonomia para punir até qual cargo?</label>
+                            <textarea name="spp_q2" required></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label>03. Cite três ações enquadradas em nepotismo:</label>
+                            <textarea name="spp_q3" required></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label>04. As punições administrativas da companhia são:</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="spp_q4" value="A" required><span
+                                        class="radio-custom"></span>Adv. verbal, adv. interna, bloqueio e
+                                    expulsão.</label>
+                                <label class="radio-option"><input type="radio" name="spp_q4" value="B"><span
+                                        class="radio-custom"></span>Adv. interna, bloqueio e expulsão.</label>
+                                <label class="radio-option"><input type="radio" name="spp_q4" value="C"><span
+                                        class="radio-custom"></span>Adv. verbal, adv. interna, medalhas negativas,
+                                    rebaixamento, expulsão e exoneração.</label>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="main-btn back-btn form-back-btn"
+                                data-target="#spp-form-step-1"><i class="fas fa-arrow-left"></i> Voltar</button>
+                            <button type="submit" class="main-btn">Enviar Inscrição <i
+                                    class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="credits"><p>Companhia dos Professores • NEXUS</p></div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let selectedDepartment = null;
+
+            const mainContainer = $('.container');
+            const optionsGrid = $('.options-grid');
+            const mainTitle = $('.main-title');
+            const introText = $('.intro-text');
+            const choiceHeading = $('.applications-choice-heading');
+            const applicationsHero = $('.applications-hero');
+            const descriptionWrapper = $('#description-wrapper');
+            const formWrapper = $('#form-wrapper');
+            const subscriptionForm = $('#subscription-form');
+            const overlay = $('#submission-overlay');
+
+            const departmentInfo = {
+                da: {
+                    title: "Departamento de Aplicação dos Professores",
+                    text: "<p class='quote'>\"A porta de entrada para um futuro brilhante.\"</p><p>O Departamento de Aplicação é a vanguarda de nossa Companhia, o primeiro contato que futuros membros têm com nossa cultura e nossos valores. Com a responsabilidade de gerir o fluxo de novos professores, esta equipe é a grande guardiã do nosso crescimento.</p>"
+                },
+                cdc: {
+                    title: "Comissão de Desenvolvimento Cultural",
+                    text: "<p class='quote'>\"Onde criatividade encontra propósito.\"</p><p>Pulsante, inovadora e vibrante. Com a nobre missão de elevar o marketing, organizar eventos memoráveis e ministrar aulas gerais que inspiram, esta equipe é a alma de nossa Companhia. Aqui, a criatividade não tem limites.</p>"
+                },
+                spp: {
+                    title: "Serviço de Proteção dos Professores",
+                    text: "<p class='quote'>\"A força silenciosa que mantém a Companhia firme.\"</p><p>Zelando pela ordem, disciplina e segurança, o Serviço de Proteção dos Professores é o pilar que sustenta a integridade da nossa companhia. Baseado em diretrizes rigorosas, garante um ambiente seguro e justo para todos.</p>"
+                }
+            };
+
+            function generateScaleOptions(containerClass, name, min, max, required) {
+                const scaleContainer = $(`.${containerClass}`);
+                if (scaleContainer.children().length > 0) return;
+                let optionsHtml = '';
+                for (let i = min; i <= max; i++) {
+                    optionsHtml += `<div class="scale-option"><input type="radio" id="scale-${name}-${i}" name="${name}" value="${i}" ${required ? 'required' : ''}><label for="scale-${name}-${i}">${i}</label></div>`;
+                }
+                scaleContainer.html(optionsHtml);
+            }
+
+            generateScaleOptions('da-scale-aptidao', 'aptidao_da', 0, 10, true);
+            generateScaleOptions('cdc-scale-responsabilidade', 'responsabilidade_cdc', 1, 10, true);
+            generateScaleOptions('cdc-scale-tempo', 'tempo_cdc', 0, 10, true);
+            generateScaleOptions('cdc-scale-imagens', 'imagens_cdc', 0, 10, true);
+            generateScaleOptions('cdc-scale-textos', 'textos_cdc', 0, 10, true);
+            generateScaleOptions('cdc-scale-organizacao', 'organizacao_cdc', 0, 10, true);
+            generateScaleOptions('cdc-scale-equipe', 'equipe_cdc', 0, 10, true);
+            generateScaleOptions('cdc-scale-mkt', 'mkt_cdc', 0, 10, true);
+            generateScaleOptions('spp-scale-responsabilidade', 'responsabilidade_spp', 0, 10, true);
+            generateScaleOptions('spp-scale-conhecimento', 'conhecimento_spp', 0, 10, true);
+
+            function showStep(stepIdToShow) {
+                const currentVisibleStep = $('.form-step:visible');
+                const targetStep = $(stepIdToShow);
+
+                if (currentVisibleStep.length && currentVisibleStep.attr('id') !== targetStep.attr('id')) {
+                    currentVisibleStep.removeClass('fade-in').addClass('fade-out');
+                    setTimeout(() => {
+                        currentVisibleStep.hide().removeClass('fade-out');
+                        targetStep.show().addClass('fade-in');
+                        targetStep.find('input, select, textarea').prop('disabled', false);
+                    }, 400);
+                } else {
+                    targetStep.show().addClass('fade-in');
+                    targetStep.find('input, select, textarea').prop('disabled', false);
+                }
+                $('.form-step').not(targetStep).find('input, select, textarea').prop('disabled', true);
+            }
+
+            $('.option-card').each(function (i) {
+                $(this).css('animation-delay', `${i * 0.1}s`).addClass('fade-in');
+            });
+
+            $('.option-card').on('click', function () {
+                selectedDepartment = $(this).data('department');
+                const info = departmentInfo[selectedDepartment];
+                const logoSrc = $(this).find('.option-logo').attr('src');
+
+                if (info) {
+                    $('#description-logo').attr('src', logoSrc);
+                    $('#description-title').text(info.title);
+                    $('#description-text').html(info.text);
+
+                    optionsGrid.addClass('fade-out');
+                    mainTitle.addClass('fade-out');
+                    introText.addClass('fade-out');
+                    choiceHeading.addClass('fade-out');
+                    applicationsHero.addClass('fade-out');
+
+                    setTimeout(() => {
+                        optionsGrid.hide().removeClass('fade-out');
+                        mainTitle.hide().removeClass('fade-out');
+                        introText.hide().removeClass('fade-out');
+                        choiceHeading.hide().removeClass('fade-out');
+                        applicationsHero.hide().removeClass('fade-out');
+                        descriptionWrapper.show().addClass('fade-in');
+                    }, 400);
+                }
+            });
+
+            $('#back-to-options-btn').on('click', function () {
+                descriptionWrapper.removeClass('fade-in').addClass('fade-out');
+                setTimeout(() => {
+                    descriptionWrapper.hide().removeClass('fade-out');
+                    mainTitle.show().addClass('fade-in');
+                    introText.show().addClass('fade-in');
+                    choiceHeading.show().addClass('fade-in');
+                    applicationsHero.show().addClass('fade-in');
+                    optionsGrid.show().addClass('fade-in');
+                }, 400);
+            });
+
+            $('#show-form-btn').on('click', function () {
+                descriptionWrapper.removeClass('fade-in').addClass('fade-out');
+                setTimeout(() => {
+                    descriptionWrapper.hide().removeClass('fade-out');
+                    formWrapper.show().addClass('fade-in');
+                    showStep('#initial-form-step');
+                }, 400);
+            });
+
+            $('#back-to-description-btn').on('click', function () {
+                formWrapper.removeClass('fade-in').addClass('fade-out');
+                setTimeout(() => {
+                    formWrapper.hide().removeClass('fade-out');
+                    descriptionWrapper.show().addClass('fade-in');
+                    $('.form-step').find('input, select, textarea').prop('disabled', true);
+                }, 400);
+            });
+
+            $('.form-back-btn').on('click', function () {
+                showStep($(this).data('target'));
+            });
+
+            $('#next-btn').on('click', function () {
+                if (!$('#nickname').val() || !$('#cargo').val()) {
+                    showError("Por favor, preencha seu nickname e cargo.");
+                    return;
+                }
+                if (selectedDepartment === 'da') showStep('#da-form-step');
+                if (selectedDepartment === 'cdc') showStep('#cdc-form-step-1');
+                if (selectedDepartment === 'spp') showStep('#spp-form-step-1');
+            });
+
+            $('#next-cdc-btn').on('click', function () {
+                const selectedRadio = $('input[name="area_cdc"]:checked');
+                if (selectedRadio.length === 0) {
+                    showError("Por favor, selecione uma área de atuação.");
+                    return;
+                }
+                const area = selectedRadio.data('area');
+                if (area === 'Analista') showStep('#cdc-analista-step');
+                if (area === 'Docente') showStep('#cdc-docente-step');
+                if (area === 'Promotor') showStep('#cdc-promotor-step');
+            });
+
+            $('#next-spp-btn').on('click', function () { showStep('#spp-form-step-2'); });
+
+            // === FEEDBACK DINÂMICO (à prova de conflito CSS) ===
+            function criarFeedbackOverlay(tipo) {
+                // Remove overlay anterior se existir
+                var old = document.getElementById('feedback-overlay-dinamico');
+                if (old) old.remove();
+
+                var overlay = document.createElement('div');
+                overlay.id = 'feedback-overlay-dinamico';
+                overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;z-index:9999999;font-family:Poppins,sans-serif;';
+
+                var box = document.createElement('div');
+                box.style.cssText = 'background:rgba(30,15,50,0.95);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:40px;text-align:center;max-width:400px;width:90%;box-shadow:0 20px 50px rgba(0,0,0,0.6);';
+
+                if (tipo === 'loading') {
+                    box.innerHTML = '<h2 style="color:#fff;margin-bottom:10px;font-size:1.4rem;">Enviando...</h2>'
+                        + '<div style="border:4px solid rgba(255,255,255,0.1);border-top:4px solid #8e2de2;border-radius:50%;width:50px;height:50px;margin:20px auto;animation:spin 1s linear infinite;"></div>';
+                } else if (tipo === 'sucesso') {
+                    box.innerHTML = '<i class="fas fa-check-circle" style="font-size:55px;color:#4ade80;display:block;margin-bottom:15px;"></i>'
+                        + '<h2 style="color:#fff;font-size:1.4rem;">Inscrição Enviada!</h2>'
+                        + '<p style="color:rgba(255,255,255,0.6);margin-top:10px;font-size:0.95rem;">Sua manifestação de interesse foi registrada com sucesso.</p>';
+                } else if (tipo === 'erro') {
+                    box.innerHTML = '<i class="fas fa-times-circle" style="font-size:55px;color:#f87171;display:block;margin-bottom:15px;"></i>'
+                        + '<h2 style="color:#fff;font-size:1.4rem;">Erro ao Enviar</h2>'
+                        + '<p style="color:rgba(255,255,255,0.6);margin:10px 0 20px;font-size:0.95rem;">Não foi possível enviar. Tente novamente.</p>'
+                        + '<button onclick="document.getElementById(\'feedback-overlay-dinamico\').remove()" style="padding:12px 30px;background:linear-gradient(135deg,#4a00e0,#8e2de2);color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:1rem;font-weight:600;">Fechar</button>';
+                }
+
+                overlay.appendChild(box);
+                document.body.appendChild(overlay);
+                return overlay;
+            }
+
+            function removerFeedback() {
+                var el = document.getElementById('feedback-overlay-dinamico');
+                if (el) el.remove();
+            }
+
+            subscriptionForm.on('submit', function (e) {
+                e.preventDefault();
+
+                // Mostrar loading
+                criarFeedbackOverlay('loading');
+
+                var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEePXTujDidSOtdQMdrSM7Vu8ggBO5t1Mszro4szwNtP0otwcNOuwZVrVRredoLb2vNg/exec';
+                var data = {};
+
+                subscriptionForm.find('input, select, textarea').each(function () {
+                    var input = $(this);
+                    var type = input.prop('type');
+                    var name = input.prop('name');
+
+                    if (!name) return;
+                    if (type === 'checkbox') {
+                        if (input.is(':checked')) {
+                            if (!data[name]) data[name] = [];
+                            data[name].push(input.val());
+                        }
+                    } else if (type === 'radio') {
+                        if (input.is(':checked')) data[name] = input.val();
+                    } else {
+                        data[name] = input.val();
+                    }
+                });
+
+                if (Array.isArray(data.turno_da)) data.turno_da = data.turno_da.join(', ');
+                data['Departamento'] = departmentInfo[selectedDepartment]?.title || '';
+
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(data)
+                })
+                .then(function() {
+                    criarFeedbackOverlay('sucesso');
+                    setTimeout(function() {
+                        removerFeedback();
+                        subscriptionForm[0].reset();
+                        $('.form-step').find('input, select, textarea').prop('disabled', true);
+                        formWrapper.hide();
+                        mainTitle.show().removeClass('fade-out').addClass('fade-in');
+                        introText.show().removeClass('fade-out').addClass('fade-in');
+                        choiceHeading.show().removeClass('fade-out').addClass('fade-in');
+                        applicationsHero.show().removeClass('fade-out').addClass('fade-in');
+                        optionsGrid.show().removeClass('fade-out').addClass('fade-in');
+                    }, 2500);
+                })
+                .catch(function(err) {
+                    criarFeedbackOverlay('erro');
+                });
+            });
+        });
+
+    </script>
+    <div id="footer-placeholder"></div>
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script>
+</body>
+
+</html>

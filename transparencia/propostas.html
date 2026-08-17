@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Transparência de propostas</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/companhia/conselho/css/avproposta.css"> 
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="text-slate-200 font-['Inter'] pt-24 min-h-screen flex flex-col selection:bg-purple-500/30">
+
+    <div id="header-container"></div>
+
+    <div id="access-denied-screen" class="hidden fixed inset-0 z-50 bg-[#0b0f19] flex flex-col items-center justify-center text-center px-4" style="background-color: #0b0f19 !important;">
+        <i class="fas fa-lock text-6xl text-red-500 mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]"></i>
+        <h2 class="text-3xl font-bold text-white mb-2">Acesso Restrito</h2>
+        <p class="text-slate-400">Faça login para consultar a transparência.</p>
+    </div>
+
+    <main id="app-screen" class="hidden flex-1 container mx-auto px-4 max-w-[1400px] pb-12 relative animate-fade-in">
+        
+        <div class="bg-[#05070c] p-8 md:p-10 mb-6 rounded-3xl flex flex-col md:flex-row justify-between items-center border border-slate-800 shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-20 -top-20 w-64 h-64 bg-purple-600/10 blur-[80px] rounded-full pointer-events-none"></div>
+            
+            <div class="flex items-center gap-6 relative z-10">
+                <div class="w-16 h-16 rounded-2xl bg-[#0b0f19] border border-purple-500/30 flex items-center justify-center shadow-inner">
+                    <i class="fas fa-balance-scale text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-pink-500 text-3xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-black text-white leading-tight tracking-tight drop-shadow-md">Portal de Transparência</h1>
+                    <p class="text-sm text-slate-400 font-medium mt-1">Acompanhe as decisões oficiais e os pareceres da equipe.</p>
+                </div>
+            </div>
+            <div class="mt-6 md:mt-0 relative z-10 w-full md:w-auto">
+                <button id="btn-sync" class="w-full bg-[#0b0f19] hover:bg-slate-800 border border-slate-700 hover:border-purple-500 text-slate-300 px-6 py-3 rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-3 shadow-inner">
+                    <i class="fas fa-sync-alt text-purple-500" id="sync-icon"></i> <span id="sync-text">Atualizar Tabela</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-[#05070c] border border-purple-500/30 rounded-3xl p-6 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl hover:border-purple-500/60 transition-colors relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-transparent pointer-events-none"></div>
+            <div class="flex items-center gap-4 relative z-10">
+                <div class="w-12 h-12 rounded-xl bg-[#0b0f19] border border-purple-500/30 flex items-center justify-center text-purple-400 shadow-inner">
+                    <i class="fas fa-archive text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold text-base tracking-wide">Arquivo Histórico do Conselho</h4>
+                    <p class="text-slate-400 text-xs mt-0.5">Procurando por pareceres e votações antigas?</p>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/u/1/folders/1DK-WSVt0JYOk0cZfFglDvVolv6-ISydI" class="relative z-10 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-colors shadow-lg flex items-center gap-2">
+                Ver antes de 1377 <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="bg-[#05070c] p-6 rounded-3xl mb-8 border border-slate-800 shadow-xl flex flex-col lg:flex-row gap-4">
+            <div class="flex-1 relative">
+                <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block"><i class="fas fa-hashtag text-pink-500 mr-1"></i> Ordem / Número da Proposta</label>
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-500"></i>
+                    <input type="number" id="filter-id" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl py-3.5 pl-10 pr-4 text-sm text-white outline-none focus:border-purple-500 transition shadow-inner" placeholder="Ex: 1377">
+                </div>
+            </div>
+            <div class="flex-1">
+                <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block"><i class="fas fa-calendar-alt text-blue-500 mr-1"></i> Período de Votação</label>
+                <select id="filter-date" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl py-3.5 px-4 text-sm text-slate-300 font-bold outline-none focus:border-blue-500 transition shadow-inner cursor-pointer">
+                    <option value="7">Últimos 7 dias</option>
+                    <option value="15">Últimos 15 dias</option>
+                    <option value="30">Último Mês</option>
+                    <option value="all" selected>Tudo (A partir da Ordem 1377)</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="view-gallery" class="block animate-fade-in">
+            <div id="gallery-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="col-span-full text-center py-20 text-slate-500 bg-[#05070c] border border-slate-800 rounded-3xl shadow-xl">
+                    <i class="fas fa-circle-notch fa-spin text-5xl text-purple-500 mb-6 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"></i>
+                    <p class="font-black uppercase tracking-widest text-sm text-slate-400">Puxando dados da base oficial...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-details" class="hidden animate-fade-in">
+            <div class="mb-6">
+                <button onclick="voltarGaleria()" class="bg-[#05070c] hover:bg-slate-800 border border-slate-700 text-slate-300 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-3 shadow-lg hover:-translate-x-1">
+                    <i class="fas fa-arrow-left text-purple-500 text-base"></i> Voltar à Galeria
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                
+                <div class="xl:col-span-1">
+                    <div class="bg-[#05070c] border border-slate-800 rounded-3xl p-8 sticky top-24 shadow-xl">
+                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center justify-center text-center"><i class="fas fa-chart-pie mr-2 text-purple-500"></i> Termômetro de Aprovação</h3>
+                        
+                        <div class="relative w-full aspect-square max-w-[200px] mx-auto mb-8">
+                            <canvas id="votosChart"></canvas>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-2">
+                                <span id="chart-total" class="text-4xl font-black text-white drop-shadow-md">0</span>
+                                <span class="text-[9px] uppercase font-black text-slate-500 tracking-widest mt-1">Votos</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="bg-[#0b0f19] border border-emerald-500/20 p-4 rounded-xl flex justify-between items-center shadow-inner">
+                                <span class="text-xs font-bold text-emerald-500 uppercase tracking-widest"><i class="fas fa-check-circle mr-1.5"></i> Favoráveis</span>
+                                <span class="text-lg font-black text-white" id="stat-fav">0</span>
+                            </div>
+                            <div class="bg-[#0b0f19] border border-red-500/20 p-4 rounded-xl flex justify-between items-center shadow-inner">
+                                <span class="text-xs font-bold text-red-500 uppercase tracking-widest"><i class="fas fa-times-circle mr-1.5"></i> Negativos</span>
+                                <span class="text-lg font-black text-white" id="stat-neg">0</span>
+                            </div>
+                            <div class="bg-[#0b0f19] border border-blue-500/20 p-4 rounded-xl flex justify-between items-center shadow-inner">
+                                <span class="text-xs font-bold text-blue-500 uppercase tracking-widest"><i class="fas fa-minus-circle mr-1.5"></i> Neutros/Outros</span>
+                                <span class="text-lg font-black text-white" id="stat-neu">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="xl:col-span-2 flex flex-col gap-6">
+                    <div class="bg-[#05070c] border border-slate-800 rounded-3xl p-8 relative overflow-hidden group shadow-xl">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+                            <div class="flex items-start gap-5">
+                                <div class="bg-[#0b0f19] border border-purple-500/30 w-16 h-16 rounded-2xl flex flex-col items-center justify-center shadow-inner flex-shrink-0">
+                                    <span class="text-[9px] text-purple-400 font-bold uppercase tracking-widest leading-none">Ordem</span>
+                                    <span class="text-xl font-black text-white leading-none mt-1" id="det-ordem">0000</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl md:text-2xl font-black text-white leading-tight mb-3" id="det-titulo">Título</h3>
+                                    <div class="flex flex-wrap gap-2 text-[10px] uppercase font-bold tracking-widest">
+                                        <span class="text-slate-300 bg-[#0b0f19] px-3 py-1.5 rounded-lg border border-slate-700 shadow-inner flex items-center"><i class="fas fa-user text-slate-500 mr-2 text-sm"></i> <span id="det-autor">Nick</span></span>
+                                        <span class="text-pink-400 bg-[#0b0f19] px-3 py-1.5 rounded-lg border border-pink-500/30 shadow-inner flex items-center"><i class="fas fa-tag text-pink-500 mr-2 text-sm"></i> <span id="det-tipo">Projeto</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-[#0b0f19] border border-slate-800 p-4 rounded-2xl w-full md:w-40 shadow-inner flex-shrink-0">
+                                <div class="flex justify-between items-end mb-2">
+                                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Aprovação</span>
+                                    <span class="text-lg font-black text-white leading-none" id="det-percent">0%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                    <div id="det-progress" class="bg-emerald-500 h-full transition-all duration-1000" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#05070c] border border-slate-800 rounded-3xl p-8 min-h-[400px] shadow-xl">
+                        <div class="flex items-center justify-between mb-8 border-b border-slate-800/50 pb-4">
+                            <h3 class="text-sm font-black text-white uppercase tracking-widest flex items-center"><i class="fas fa-comments mr-3 text-purple-500 text-lg"></i> Pareceres Oficiais</h3>
+                            <span class="text-[10px] font-black text-purple-400 uppercase tracking-widest bg-[#0b0f19] px-3 py-1.5 rounded-lg border border-purple-500/30 shadow-inner"><span id="det-qtd">0</span> Registros</span>
+                        </div>
+                        <div id="det-votes-list" class="space-y-4"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-auto py-8 border-t border-slate-800 text-center text-slate-500 text-xs bg-[#0b0f19] bg-opacity-70 backdrop-blur-sm">
+        <div class="container mx-auto px-4">
+            <p class="mb-2">&copy; <span id="footer-year"></span> NEXUS - Companhia dos Professores. Todos os direitos reservados.</p>
+            <p><span class="font-mono text-purple-500 font-bold">&lt;/&gt;</span> por <span class="text-purple-400 font-bold">Sr.Gabriel.</span>, com base no anterior pelo <span class="text-pink-400 font-bold">Pegas</span></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/plugin/relativeTime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/plugin/customParseFormat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/locale/pt-br.min.js"></script>
+    <script>
+        dayjs.extend(window.dayjs_plugin_customParseFormat);
+        dayjs.extend(window.dayjs_plugin_relativeTime);
+        dayjs.locale('pt-br');
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
+    
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/transparencia.js" defer></script> 
+</body>
+</html>

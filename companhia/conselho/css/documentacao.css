@@ -1,0 +1,381 @@
+/* ==========================================================================
+   PAINEL DOS CONSELHOS - DESIGN DARK PREMIUM & GLASSMORPHISM
+   ========================================================================== */
+
+:root {
+    /* COR EXCLUSIVA DA DOCUMENTAÇÃO (Verde Floresta) */
+    --cor-tema-conselho: #2e7d32; 
+    --vidro-bg: rgba(15, 5, 20, 0.45);
+    --vidro-borda: rgba(255, 255, 255, 0.08);
+    --cor-texto-mutado: #9ca3af;
+    --cor-destaque-suave: #a5d6a7; /* Verde clarinho para destaque */
+}
+
+.container-conselho { 
+    padding: 40px 20px; 
+    max-width: 1500px; 
+    margin: 0 auto; 
+    font-family: 'Poppins', sans-serif;
+}
+
+/* --- HEADER E BOTÃO --- */
+.header-pagina {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 40px;
+}
+
+.header-pagina h1 { 
+    font-size: 2rem; 
+    color: #ffffff; 
+    letter-spacing: 2px; 
+    font-weight: 800;
+    margin: 0;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.btn-postar {
+    background: var(--cor-tema-conselho);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-postar:hover {
+    background: #1b5e20;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(46, 125, 50, 0.4);
+}
+
+/* --- GRID E CARDS DE VIDRO (CONTAINERS) --- */
+.grid-conselho {
+    display: grid; 
+    grid-template-columns: 1.8fr 1fr; 
+    gap: 30px;
+    align-items: start; 
+}
+
+.card-vidro {
+    background: var(--vidro-bg); 
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--vidro-borda); 
+    border-radius: 16px; 
+    padding: 25px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.topo-card { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    margin-bottom: 25px; 
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.topo-card i { font-size: 1.2rem; color: var(--cor-tema-conselho); }
+.topo-card h2 { 
+    font-size: 1.1rem; 
+    text-transform: uppercase; 
+    margin: 0; 
+    color: #ffffff; 
+    letter-spacing: 1px; 
+    font-weight: 700; 
+}
+
+/* --- TABELA DE LOGS (COLUNA ESQUERDA) --- */
+.tabela-container { 
+    overflow-x: auto; 
+    max-height: 600px; 
+    overflow-y: auto; 
+    padding-right: 5px; 
+}
+
+.tabela-container::-webkit-scrollbar, .lista-prazos-cards::-webkit-scrollbar { width: 6px; height: 6px; }
+.tabela-container::-webkit-scrollbar-track, .lista-prazos-cards::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 4px; }
+.tabela-container::-webkit-scrollbar-thumb, .lista-prazos-cards::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+.tabela-container::-webkit-scrollbar-thumb:hover, .lista-prazos-cards::-webkit-scrollbar-thumb:hover { background: var(--cor-tema-conselho); }
+
+table { 
+    width: 100%; 
+    border-collapse: separate; 
+    border-spacing: 0; 
+    color: #cccccc; 
+    font-size: 0.85rem; 
+}
+
+th { 
+    text-align: left; 
+    padding: 15px 12px; 
+    color: #ffffff; 
+    font-weight: 600; 
+    text-transform: uppercase; 
+    font-size: 0.75rem; 
+    letter-spacing: 1px;
+    position: sticky; 
+    top: 0; 
+    background: rgba(20, 8, 26, 0.95);
+    z-index: 2;
+    border-bottom: 2px solid var(--cor-tema-conselho);
+}
+
+td { 
+    padding: 16px 12px; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03); 
+    transition: background 0.2s ease; 
+}
+
+.txt-center { text-align: center; }
+
+tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.015); }
+tbody tr:hover td { background: rgba(255, 255, 255, 0.04); color: #ffffff; }
+
+.nick-destaque { color: var(--cor-destaque-suave); font-weight: 700; }
+
+.link-comprovante { 
+    color: #2ecc71; 
+    text-decoration: none; 
+    font-weight: 700; 
+    font-size: 0.75rem; 
+    background: rgba(46, 204, 113, 0.1); 
+    padding: 6px 12px; 
+    border-radius: 6px; 
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+.link-comprovante:hover { background: #2ecc71; color: #000; box-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
+
+/* --- CARDS DE ESCALA (COLUNA DIREITA) --- */
+.lista-prazos-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.card-tarefa {
+    background: rgba(20, 8, 26, 0.75); 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-left: 4px solid var(--cor-tema-conselho);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+.card-tarefa:hover {
+    background: rgba(30, 15, 40, 0.9);
+    transform: translateX(4px);
+}
+
+.tarefa-detalhes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.tarefa-titulo {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.tarefa-responsavel {
+    color: #b0b0b0; 
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge-prazo {
+    background: rgba(255, 255, 255, 0.05);
+    color: #cccccc;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    text-align: center;
+    display: inline-block;
+    min-width: 90px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.separador-escala {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    line-height: 0.1em;
+    margin: 25px 0 15px;
+}
+
+.separador-escala span {
+    background: #25102e; 
+    padding: 0 15px;
+    color: #888;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+/* --- AVATAR HABBO NOS CARDS (SÓ A CABEÇA) --- */
+.avatar-card-pequeno {
+    width: 30px;  
+    height: 30px; 
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0; 
+    object-fit: contain; 
+    object-position: center center; 
+    margin-right: 8px; 
+}
+
+@media (max-width: 1024px) {
+    .grid-conselho { grid-template-columns: 1fr; }
+    .header-pagina { flex-direction: column; gap: 20px; align-items: flex-start; }
+}
+
+/* --- EDIÇÃO INLINE (ESTILO PLANILHA) --- */
+.td-editavel {
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.td-editavel:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+.input-inline {
+    width: 100%;
+    min-width: 120px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--cor-tema-conselho);
+    color: #fff;
+    padding: 8px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+}
+
+.input-inline:focus {
+    box-shadow: 0 0 10px rgba(117, 117, 117, 0.5); /* Cor da Segurança */
+}
+
+/* ==========================================================================
+   BOTÃO DE APAGAR (AÇÕES DA LIDERANÇA)
+   ========================================================================== */
+
+.td-acoes {
+    text-align: center;
+    vertical-align: middle;
+    width: 60px; /* Mantém a coluna fininha */
+}
+
+.btn-acao {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #b0b0b0; /* Cinza claro padrão */
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Efeito ao passar o mouse por cima do botão */
+.btn-acao:hover {
+    transform: scale(1.15); /* Dá uma leve crescida */
+}
+
+/* Cores específicas da lixeira ao passar o mouse (Vermelho) */
+.btn-delete:hover {
+    background: rgba(231, 76, 60, 0.2);
+    border-color: #e74c3c;
+    color: #e74c3c;
+    box-shadow: 0 0 12px rgba(231, 76, 60, 0.4); /* Brilho vermelho */
+}
+
+/* ========================================== */
+/* MODAL DO MANUAL                            */
+/* ========================================== */
+.modal-nexus {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 20, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-nexus.show { display: flex; opacity: 1; }
+
+.modal-nexus .modal-content {
+    background: rgba(30, 8, 32, 0.95);
+    border: 1px solid rgba(186, 79, 192, 0.3);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 750px;
+    max-height: 85vh;
+    padding: 30px;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-nexus.show .modal-content { transform: translateY(0); }
+
+/* Estilo do botão Manual */
+.btn-manual {
+    background-color: rgba(186, 79, 192, 0.2) !important;
+    border: 1px solid rgba(186, 79, 192, 0.5) !important;
+    color: #ffffff !important;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-manual:hover {
+    background-color: rgba(186, 79, 192, 0.6) !important;
+    border-color: #ba4fc0 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(186, 79, 192, 0.3);
+}
+
+/* Scrollbar do Modal */
+.modal-content::-webkit-scrollbar { width: 8px; }
+.modal-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+.modal-content::-webkit-scrollbar-thumb { background: rgba(186, 79, 192, 0.5); border-radius: 10px; }
+.modal-content::-webkit-scrollbar-thumb:hover { background: rgba(186, 79, 192, 0.8); }

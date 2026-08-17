@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Assistência</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/templates/header.css"> 
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/companhia/conselho/css/assistencia.css">  
+    <link rel="stylesheet" href="/companhia/conselho/css/estilo.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script> 
+</head>
+<body class="light-theme aba-conselho>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container-conselho">
+        <header class="header-pagina">
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <h1>CONSELHO DA ASSISTÊNCIA</h1>
+                
+                <div class="periodo-atual-badge" style="display: inline-flex; align-items: center; gap: 10px; background: rgba(186, 79, 192, 0.15); border: 1px solid rgba(186, 79, 192, 0.4); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; width: fit-content; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+                    <i class="fa-solid fa-calendar-week"></i>
+                    <span id="texto-periodo">Calculando semana atual...</span>
+                </div>
+            </div>
+
+            <div class="botoes-acao" style="display: flex; gap: 15px; align-items: center;">
+                <a href="forms.html" class="btn-postar"><i class="fa-solid fa-plus"></i> Registrar Função</a>
+                <a href="/quadro.html" class="btn-manual"><i class="fa-solid fa-triangle-exclamation"></i> Quadro de Erros</a>
+                <a href="/cons/assistencia.html" class="btn-manual"><i class="fa-solid fa-magnifying-glass"></i></i> Fiscalizador</a>                
+                <button onclick="abrirModalManual()" class="btn-postar btn-manual"><i class="fa-solid fa-book"></i> Manual</button>
+            </div>
+        </header>
+
+        <div class="grid-conselho">
+            <section class="secao-logs card-vidro">
+                <div class="topo-card">
+                    <i class="fa-solid fa-list-check"></i>
+                    <h2>Histórico de Registros</h2>
+                </div>
+                <div class="tabela-container">
+                    <table id="tabela-logs">
+                        <thead>
+                            <tr>
+                                <th>Nick</th>
+                                <th>Data/Hora</th>
+                                <th>Função Realizada</th>
+                                <th>Comprovante</th>
+                                <th>Comentários</th>
+                                <th class="th-acoes" style="display: none;">Ações</th> 
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-logs">
+                            <tr><td colspan="5" class="txt-center">Carregando registros...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="secao-escalas card-vidro">
+                <div class="topo-card">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <h2>Funções e Prazos</h2>
+                </div>
+                <div class="lista-prazos-cards" id="lista-prazos">
+                    <div style="padding: 20px; text-align: center; color: #888;">Carregando escalas...</div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <div id="modal-manual" class="modal-nexus">
+    <div class="modal-content glass-card max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-2xl">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+            <h2 style="font-size: 1.5rem; font-weight: bold; color: var(--cor-primaria-clara); margin: 0;"><i class="fa-solid fa-hands-helping" style="margin-right: 10px;"></i> Manual da Assistência</h2>
+            <button onclick="fecharModalManual()" style="background: none; border: none; color: #888; font-size: 2rem; cursor: pointer; transition: 0.3s;">&times;</button>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 20px; color: #e2e8f0; font-size: 0.9rem;">
+            
+            <a href="https://docs.google.com/document/d/126ZZ2mX-Lg3X14tBJmoERJS8QKdk2X1JulFmHYmuQQI/edit?tab=t.0" target="_blank" style="display: block; width: 100%; text-align: center; padding: 12px; font-size: 1.1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(168,85,247,0.3); border-radius: 8px; color: #fff; text-decoration: none; font-weight: 600; transition: 0.3s;">
+                <i class="fa-solid fa-book" style="margin-right: 8px;"></i> Acessar Documento Completo
+            </a>
+            
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                <h3 style="font-size: 1.1rem; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 12px; margin-top: 0; color: #fff;">ATUALIZAÇÃO DO QUADRO DE ADVERTÊNCIAS</h3>
+                <p style="font-weight: 600; margin-bottom: 5px; color: var(--cor-primaria-clara);">Resumo (Diariamente, até 23h59):</p>
+                <ul style="list-style-type: disc; padding-left: 20px; margin: 0; line-height: 1.6;">
+                    <li>Fiscalizar se as punições postadas no tópico estão constando no fiscalizador.</li>
+                    <li>Aja conforme os vereditos citada na IA, mas sempre verificando a veracidade.</li>
+                    <li>Em caso de acúmulo, aplique rebaixamento/expulsão e poste medalhas negativas.</li>
+                    <li>Ao finalizar, poste a marca de atualização no tópico.</li>
+                </ul>
+                <div style="margin-top: 10px;">
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[table class=&quot;rank attprof&quot; style=&quot;border: none!important; margin: 1em; line-height: 1.4em;&quot;][tr style=&quot;border: none;&quot;][td style=&quot;border: none!important;&quot;][img]https://www.habbo.com.br/habbo-imaging/badge/b09204s43131s50134s17013s17015e67ac4b5a387bfeccd908069913929bc.gif[/img][font=Poppins][size=15][color=white][b][PROF] ATUALIZADO [TAG][/b][/color][/size][color=white]Em virtude do Conselho da Assistência, foi realizada uma atualização neste horário. Em caso de dúvidas ou erros consulte um conselheiro+.\n#SoberaniaROXA[/color][/font][/td][/tr][/table]" style="background: var(--cor-primaria-clara); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;"><i class="fa-solid fa-copy"></i> Copiar BBCode de Atualização</button>
+                </div>
+            </div>
+
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                <h3 style="font-size: 1.1rem; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 12px; margin-top: 0; color: #fff;">FISCALIZAÇÃO DA OUVIDORIA</h3>
+                <p style="font-weight: 600; margin-bottom: 5px; color: var(--cor-primaria-clara);">Resumo (Sexta-feira, até 23h59):</p>
+                <ul style="list-style-type: disc; padding-left: 20px; margin: 0; line-height: 1.6; margin-bottom: 15px;">
+                    <li>Verifique propostas recentes por erros simples e corrija com um AVISO.</li>
+                    <li>Reprove automaticamente propostas com erros que afetam a avaliação.</li>
+                    <li>Feche a ouvidoria na sexta-feira com o BBCode de "Semana Encerrada".</li>
+                </ul>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[center][table style=&quot;border: none!important; margin: 0em; color: white; font-weight: 450; border-radius: 25px; max-width: 500px; line-height: 1.4em;&quot; bgcolor=&quot;#e70874&quot;][tr style=&quot;border: none;&quot;][td style=&quot;border: none!important;&quot;][img]https://imgur.com/gGV0wFp.png[/img][font=Poppins][b][size=15][PROF.CONS] AVISO [TAG][/size][/b]\nAcrescente aqui o motivo do aviso.[/font][/td][/tr][/table][/center]" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px; border-radius: 6px; cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-copy"></i> BBCode de Aviso</button>
+                    
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[font=Poppins][b]Veredito: [color=#810404]Reprovada pela fiscalização. Acrescente aqui o motivo.[/color][/b][/font]" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px; border-radius: 6px; cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-copy"></i> BBCode Reprovação</button>
+
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[table class=&quot;rank attprof&quot; style=&quot;border: none!important; margin: 1em; line-height: 1.4em;&quot;][tr style=&quot;border: none;&quot;][td style=&quot;border: none!important;&quot;][img]https://imgur.com/o3eS2xK.png[/img][font=Poppins][size=15][color=white][b][PROF] Semana Encerrada [TAG][/b][/color][/size][color=white][size=12]As propostas pendentes de análise terão os seus vereditos atualizados até às 23h59 de domingo.\nEm caso de dúvidas, entre em contato com o(a) Conselheiro(a) da Assistência.[/size]\nPróxima ordem: XXXX\n#SoberaniaROXA[/color][/font][/td][/tr][/table]" style="grid-column: span 2; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px; border-radius: 6px; cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-copy"></i> BBCode de Fechamento</button>
+                </div>
+            </div>
+
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                <h3 style="font-size: 1.1rem; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 12px; margin-top: 0; color: #fff;">ATUALIZAÇÃO DOS VEREDITOS</h3>
+                <p style="font-weight: 600; margin-bottom: 5px; color: var(--cor-primaria-clara);">Resumo (Aos domingos):</p>
+                <ul style="list-style-type: disc; padding-left: 20px; margin: 0; line-height: 1.6; margin-bottom: 15px;">
+                    <li>Atualize os vereditos das propostas na ouvidoria usando os BBcodes corretos abaixo.</li>
+                    <li>Poste 20 medalhas temporárias no RCCSystem para projetos aprovados.</li>
+                </ul>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px;">
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[b]Veredito: [color=#0c8a0a]Aprovada[/color].[/b]" style="background: rgba(12, 138, 10, 0.2); border: 1px solid #0c8a0a; color: white; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Aprovada</button>
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[b]Veredito: [color=#810404]Reprovada[/color].[/b]" style="background: rgba(129, 4, 4, 0.2); border: 1px solid #810404; color: white; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Reprovada</button>
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[b]Veredito: [color=#d96e17]Aprovada com alterações[/color].[/b]" style="background: rgba(217, 110, 23, 0.2); border: 1px solid #d96e17; color: white; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Aprov. c/ alt.</button>
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[b]Veredito: [color=#c7c7c7]Tutela[/color].[/b]" style="background: rgba(199, 199, 199, 0.2); border: 1px solid #c7c7c7; color: white; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Tutela</button>
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[b]Veredito: [color=#c7c7c7]Reunião[/color].[/b]" style="background: rgba(199, 199, 199, 0.2); border: 1px solid #c7c7c7; color: white; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Reunião</button>
+                    
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[b]Veredito: [color=#0c8a0a]Aprovada pela liderança[/color].[/b]" style="background: rgba(12, 138, 10, 0.2); border: 1px solid #0c8a0a; color: white; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Aprovada Lid.</button>
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[b]Veredito: [color=#810404]Reprovada pela liderança[/color].[/b]" style="background: rgba(129, 4, 4, 0.2); border: 1px solid #810404; color: white; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Reprovada Lid.</button>
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[b]Veredito: [color=#d96e17]Aprovada com alterações pela liderança[/color].[/b]" style="background: rgba(217, 110, 23, 0.2); border: 1px solid #d96e17; color: white; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Apr. c/ alt. Lid.</button>
+                    <button onclick="copiarTexto(this, this.getAttribute('data-bbcode'))" data-bbcode="[b]Veredito: [color=#810404]Vetado pela liderança[/color].[/b]" style="background: rgba(129, 4, 4, 0.2); border: 1px solid #810404; color: white; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Vetado Lid.</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/companhia/conselho/js/assistencia.js" defer></script>
+</body>
+</html>

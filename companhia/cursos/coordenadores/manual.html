@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>NEXUS - Justificativas</title>
+
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/companhia/cursos/coordenadores/manual.css">
+    <link rel="stylesheet" href="/companhia/cursos/professores/cursos.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+<div class="manual-container">
+        
+        <!-- Cabeçalho do Manual -->
+        <header class="manual-header">
+            <h2>MANUAL DO COORDENADOR</h2>
+            <p>O <strong>MANUAL DO COORDENADOR</strong> ajuda-o a guiar-se pelas suas responsabilidades enquanto <strong>COORDENADOR</strong> da companhia. Em caso de dúvidas adicionais contacte um conselheiro+.</p>
+        </header>
+
+        <!-- Seção 1: Introdução -->
+        <section class="glass-card flex-row align-center">
+            <div class="img-placeholder icon-size">
+                <img src="/imgs/manual-prof.png" alt="Ícone Laptop Coordenador">
+            </div>
+            <div class="text-content">
+                <h3>SOU COORDENADOR/A. E AGORA?</h3>
+                <p>Aguarde ser postada sua promoção no <strong>Nexus</strong>.
+            </div>
+        </section>
+
+        <!-- Seção 2: Meta Semanal -->
+        <section class="glass-card">
+            <h3 class="text-center highlight mb-20">META SEMANAL E ATIVIDADES DISPONÍVEIS</h3>
+            <p class="text-center mb-20">Os coordenadores são responsáveis pelo <strong>acompanhamento e orientação dos professores</strong>. Sendo assim, devem possuir um contato direto com os membros, auxiliando-os e orientando sobre suas metas e responsabilidades.</p>
+            <p class="text-center highlight mb-30"><strong>A meta semanal do coordenador é de 100%.</strong></p>
+            <p class="mb-20">De forma objetiva, as aplicações disponíveis ao complemento de meta dos coordenadores estão subdivididas abaixo:</p>
+
+            <ul class="curso-lista">
+                <li><strong class="highlight">Envio da Carta de Auxílio (OBRIGATÓRIO):</strong> a Mensagem Privada deve ser enviada ao professor com que se ficou escalado, sendo OBRIGATÓRIO fazê-lo até QUINTA-FEIRA às 23h59;</li>
+                <li><strong class="highlight">Acompanhamento de aula:</strong> acompanhar a aplicação do professor, valendo 50% na meta semanal;</li>
+                <li><strong class="highlight">Orientações:</strong> existem um total de 05 (cinco) orientações que só podem ser aplicadas aos professores da companhia, valendo 50% na meta semanal;</li>
+                <li><strong class="highlight">Aplicação do curso opcional COP (Curso de Oratória Pública):</strong> é destinado a subtenentes/equivalências+, valendo 50% na meta semanal;</li>
+                <li><strong class="highlight">Aplicação do curso opcional CDA (Curso de Desenvolvimento Argumentativo):</strong> é destinado a subtenentes/equivalências+ com os respetivos cursos obrigatórios concluídos, valendo 50% na meta semanal.</li>
+            </ul>
+        </section>
+
+        <!-- Seção 3: Carta de Auxílio -->
+        <section class="glass-card">
+            <div class="flex-row align-center mb-20">
+                <div class="img-placeholder icon-size">
+                    <img src="/imgs/manual-prof.png" alt="Ícone Laptop Coordenador">
+                </div>
+                <div class="text-content">
+                    <h3 class="highlight">O ENVIO DA CARTA DE AUXÍLIO É OBRIGATÓRIO!</h3>
+                    <p>A cada semana o coordenador é escalado com um professor (pode verificar a escala de auxílio <a href="#" class="link-destaque">clicando aqui</a>). O coordenador deverá, então, enviar a Carta a esse professor através do fórum da RCC, cujo BBCODE está disponível no subfórum dos coordenadores.</p>
+                </div>
+            </div>
+
+            <ul class="lista-regras mt-20">
+                <li>O envio desta Mensagem Privada é <strong>OBRIGATÓRIO</strong>, sendo necessário fazê-lo, no máximo, até <strong>QUINTA-FEIRA às 23h59 no fuso de Brasília</strong>;</li>
+                <li>O coordenador que <strong>não atender a este envio no prazo ficará em casos especiais</strong>. Caso não atinja a meta semanal mínima, ficará negativo na meta semanal;</li>
+                <li>Para <strong>comprovar o envio da Carta de Auxílio</strong> é necessário tirar um print da <strong>caixa de envio do fórum da RCC</strong>, devendo a MP em causa ficar devidamente enquadrada. <a href="https://ibb.co/gDGCVrf" class="link-destaque">Clique aqui</a> para acessar o exemplo de comprovação.</li>
+                <li>O coordenador que identificar o desligamento da instituição ou a saída da companhia de seu tutelado deve obrigatoriamente capturar em <strong>tela cheia</strong> (sem recortes) o requerimento que conste essa ação, seja por meio do tópico "<strong>[PROF] Requerimentos da Companhia</strong>" ou do <strong>perfil no RCCSystem</strong>, e postá-lo no local da comprovação.</li>
+            </ul>
+        </section>
+
+        <!-- Seção 4: Acompanhamento de Aula -->
+        <section class="glass-card">
+            <div class="flex-row align-center mb-20 reverse-mobile">
+                <div class="text-content flex-grow text-right">
+                    <h3 class="highlight">ACOMPANHAMENTO DE AULA</h3>
+                    <p>Outra atividade disponível ao coordenador é o <strong>acompanhamento de aulas dos professores</strong>. Você deverá estar presente na sala de aplicação enquanto um professor aplica um dos cursos de comunicação e, após isso, chamará o professor e realizará uma apreciação da aula aplicada, avaliando os pontos positivos e os pontos negativos que observou.</p>
+                </div>
+                <div class="img-placeholder icon-size">
+                    <img src="/imgs/manual-prof.png" alt="Ícone Laptop Coordenador">
+                </div>
+            </div>
+
+            <ul class="lista-regras mt-20">
+                <li>Note que existe um leque de pontos que devem ser <strong>OBRIGATORIAMENTE</strong> mencionados ao longo da sua apreciação, que pode encontrar no subfórum dos coordenadores;</li>
+                <li>O acompanhamento de aula vale <strong>50% na meta semanal</strong>;</li>
+                <li><strong>Não é permitido acompanhar uma aula onde o professor já foi acompanhado anteriormente durante a mesma semana.</strong> Por exemplo: se a professora Amy.Love.Girl teve a aplicação do curso CAC acompanhado pela coordenadora ,Novembro, o coordenador @Fontineles só poderá acompanhar as aplicações dos restantes cursos CAP, CRO e ACL da professora Amy.Love.Girl;</li>
+                <li>Para comprovar a realização do acompanhamento de aula é necessário <strong>tirar 02 (dois) prints</strong> de partes distintas: <strong>o primeiro deverá evidenciar a sua presença</strong> durante a aplicação do curso de aplicação pelo professor; <strong>o segundo deverá conter TODO o desenvolvimento do acompanhamento</strong>, com o <strong>histórico completo aberto</strong>, evidenciando desde a introdução até a conclusão. <a href="https://imgur.com/a/00qh1gg" class="link-destaque">Clique aqui</a> para acessar o exemplo de comprovação.</li>
+                <li>O horário de início do acompanhamento de aula deve ser o mesmo horário de início da aula aplicada pelo professor.</li>
+            </ul>
+        </section>
+
+        <!-- Seção 5: Orientações -->
+        <section class="glass-card">
+            <div class="flex-row align-center mb-20">
+                <div class="img-placeholder icon-size">
+                    <img src="/imgs/manual-prof.png" alt="Ícone Laptop Coordenador">
+                </div>
+                <div class="text-content">
+                    <h3 class="highlight">ORIENTAÇÕES</h3>
+                    <p>As orientações são <strong>aplicações que devem ser aplicadas aos professores da companhia</strong>. Existem 05 (cinco) tipos de orientações, cada um abordando um tema diferente sobre o funcionamento dos Professores.</p>
+                </div>
+            </div>
+
+            <ul class="lista-regras mt-20">
+                <li><strong>Não é permitido aplicar uma mesma orientação a um professor que já a obteve anteriormente.</strong> Também <strong>só poderá aplicar uma orientação a um mesmo professor na mesma semana</strong>. Por exemplo: O coordenador :_Wanderson_: aplicou a orientação I à professora Colletts. O coordenador :_Wanderson_: não poderá aplicar mais nenhum tipo de orientação à professora Colletts nessa semana. Você, coordenador ,Novembro, já só lhe poderá aplicar as orientações II, III, IV ou V;</li>
+                <li>A aplicação de uma orientação vale <strong>50% na meta semanal</strong>;</li>
+                <li>Para comprovar a realização da orientação é necessário <strong>tirar print</strong> de toda a orientação, isto é, o <strong>início, meio e fim</strong> da orientação, todos com o <strong>histórico aberto</strong>. <a href="https://imgur.com/a/DoI9UJD" class="link-destaque">Clique aqui</a> para acessar o exemplo de comprovação.</li>
+                <li><strong>Não é permitido pular a introdução ou conclusão dos scripts</strong>; estes devem ser seguidos em sua totalidade. Caso seja identificada tal infração, o coordenador estará sujeito a uma advertência interna.</li>
+            </ul>
+        </section>
+
+        <!-- Seção 6: Cursos COP e CDA -->
+        <section class="glass-card">
+            <div class="flex-row align-center mb-20 reverse-mobile">
+                <div class="text-content flex-grow text-right">
+                    <h3 class="highlight">CURSOS COP E CDA</h3>
+                    <p>Por fim, os coordenadores também possuem <strong>dois cursos opcionais</strong> para aplicar aos militares da RCC que podem ajudar a complementar a meta: o <strong>Curso de Oratória Pública (COP)</strong> e o <strong>Curso de Desenvolvimento Argumentativo (CDA)</strong>.</p>
+                </div>
+                <div class="img-placeholder icon-size">
+                    <img src="/imgs/manual-prof.png" alt="Ícone Laptop Coordenador">
+                </div>
+            </div>
+
+            <ul class="lista-regras mt-20">
+                <li>O Curso de Oratória Pública (COP) pode ser aplicado apenas para <strong>aspirantes+/equivalências+</strong>. Enquanto o Curso de Desenvolvimento Argumentativo (CDA) pode ser aplicado apenas para <strong>subtenente+/equivalências+</strong>.</li>
+                <li>Os cursos COP/CDA, por sua vez, podem ser aplicados no Centro de Instrução (CI). Em casos de lotação ou ordens de terceiros, podem ser aplicados no corredor principal ou em perímetros relacionados à companhia.</li>
+                <li>Além disso, é permitida a aplicação de ambos os cursos opcionais (COP e CDA) para membros da companhia que ocupem o cargo de <strong>professor</strong>.</li>
+                <li><strong>Não é permitido aplicar qualquer um dos cursos a um mesmo militar que já o obteve anteriormente em menos de quinze (15) dias.</strong> Por exemplo: a coordenadora lyafrosa aplicou o COP ao capitão JoãoHabbo no dia 1 de outubro. O capitão JoãoHabbo só poderá voltar a receber o COP no dia 16 de outubro, 15 dias depois. A planilha de relatórios dos coordenadores possui um filtro que permite realizar esta verificação facilmente;</li>
+                <li>Cada aplicação de um curso vale <strong>50% na meta semanal</strong>.</li>
+            </ul>
+        </section>
+
+        <!-- Rodapé de Créditos -->
+        <div class="creditos-manual">
+            <p>Elaborado por <strong>,Novembro</strong> & <strong>Amy.Love.Girl</strong></p>
+            <p>Contribuições: <strong>guilhermeplout</strong> e <strong>Abismy</strong></p>
+            <p class="direitos">Todos os direitos reservados à Companhia dos Professores</p>
+        </div>
+
+    </div>
+    </div>
+        <hr class="section-separator">
+        <section class="tools-section">
+            <div class="tools-grid">
+                <a href="https://www.policiarcc.com/h223-prof-coord-relatorio" class="tool-link"><img src="/imgs/postar-aula.png" alt=""><span>Postar Relatórios</span></a>
+                <a href="https://system.policercc.com.br/companhia/professores" class="tool-link"><img src="/imgs/postar-system.png" alt=""><span>Postar no System</span></a>
+
+                <a href="https://docs.google.com/spreadsheets/d/1EzyhvK4zEI_940ATXnaNQ8KUCxr-2Xj0qRY1MS6extI/edit?usp=sharing" class="tool-link"><img src="/imgs/verificar-relatorios.png" alt=""><span>Verificar Relatórios</span></a>
+
+                <a href="https://drive.google.com/drive/u/1/folders/13APldv68spVkoekt8kmoFJsIRhsyAnGe" class="tool-link"><img src="/imgs/historico-aulas.png" alt=""><span>Histórico de Aulas</span></a>
+
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoB27_eFNrEIZ_esGVs1mcrm1nLiVTcuRhXPJVsVgnmT0qZQ/viewform" class="tool-link"><img src="/imgs/postar-correção.png" alt=""><span>Postar Correções</span></a>
+
+                <a href="https://docs.google.com/spreadsheets/d/1-JinKLWlxa2nVRTJ-QIrQsYa4lkxX57NBWzrs1U-0kQ/edit#gid=1849101510" class="tool-link"><img src="/imgs/verificar-correções.png" alt=""><span>Verificar Correções</span></a>
+
+                <a href="/justificativa.html" class="tool-link">
+                <img src="/imgs/verificar-justificativa.png" alt=""><span>Justificar Meta</span></a>
+
+                <a href="/painel-justificativa.html" class="tool-link"><img src="/imgs/verificar-justificativa.png" alt=""><span>Verificar Justificativa</span></a>
+
+                <a href="https://profstatusv2.netlify.app/" class="tool-link" target="_blank"><img src="/imgs/verificar-cursoos.png" alt=""><span>Verificar Cursos</span></a>
+
+                <a href="https://www.policiarcc.com/h240-prof-central-prof" class="tool-link"><img src="/imgs/central-prof.png" alt=""><span>Central Prof</span></a>
+            </div>
+        </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js" defer></script>
+
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/paineljust.js" defer></script> 
+</body>
+</html>

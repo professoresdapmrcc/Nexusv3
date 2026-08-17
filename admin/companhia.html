@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Companhia</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/admin/admin.css">  
+    <link rel="stylesheet" href="/templates/header.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app-check.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <header class="admin-header">
+        <nav class="admin-nav">
+            <ul>
+                <li><a href="/admin/painel.html"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="/admin/companhia.html" class="active"><i class="fas fa-users"></i> Companhia</a></li>
+                <li><a href="/admin/spp.html"><i class="fas fa-shield-alt"></i> SPP</a></li>
+                <li><a href="/admin/cdc.html"><i class="fas fa-palette"></i> CDC</a></li>
+                <li><a href="/admin/da.html"><i class="fas fa-graduation-cap"></i> DA</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <div class="page-title-wrapper">
+            <h1>Gerenciamento da Companhia</h1>
+            <div class="subtitle">Administração de membros, promoções e destaques.</div>
+        </div>
+
+        <div class="companhia-container">
+            <aside class="companhia-sidebar">
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active" data-target="aprovacao"><i class="fas fa-user-check"></i> Aprovação</a></li>
+                        <li><a href="#" data-target="destaques"><i class="fas fa-star"></i> Destaques</a></li>
+                        <li><a href="#" data-target="entrada"><i class="fas fa-user-plus"></i> Entrada</a></li>
+                        <li><a href="#" data-target="saida"><i class="fas fa-user-minus"></i> Saída</a></li>
+                        <li><a href="#" data-target="promocao"><i class="fas fa-arrow-up"></i> Promoção</a></li>
+                        <li><a href="#" data-target="rebaixamento"><i class="fas fa-arrow-down"></i> Rebaixamento</a></li>
+                        <li><a href="#" data-target="ouvidoria"><i class="fas fa-bullhorn"></i> Ouvidoria</a></li>
+                        <li><a href="#" data-target="transferencia"><i class="fas fa-exchange-alt"></i> Transferência</a></li>
+                        <li><a href="#" data-target="admin-management"><i class="fas fa-user-shield"></i> Administradores</a></li>
+                        <li><a href="#" data-target="homologacao"><i class="fas fa-file-contract"></i> Homologação</a></li>
+                        <li><a href="#" data-target="reunioes"><i class="fas fa-users-rectangle"></i> Reuniões</a></li>
+                        <li><a href="#" data-target="editor-scripts"><i class="fas fa-code"></i> Scripts de Aula</a></li>
+                        <li><a href="#" data-target="editor-documentos"><i class="fas fa-file-signature"></i> Documentos Oficiais</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="companhia-content">
+                
+                <div id="aprovacao" class="content-panel active">
+                    <h2><i class="fas fa-user-check"></i> Aprovação Pendente</h2>
+                    <p class="subtitle" style="margin-bottom: 20px;">Gerencie os membros que acabaram de se cadastrar.</p>
+                    <div id="pending-list" class="approval-grid"></div>
+                    <div id="loading-aprovacao" style="text-align:center; padding:20px; color:#666;">
+                        <i class="fas fa-spinner fa-spin"></i> Carregando...
+                    </div>
+                </div>
+
+                <div id="destaques" class="content-panel">
+                    <h2>Registro de Destaques</h2>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="destaque-nickname">Nickname do membro</label>
+                                <input type="text" id="destaque-nickname" class="live-check" name="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="destaque-cargo">Cargo</label>
+                                <select id="destaque-cargo" name="cargo">
+                                    <option value="Professor(a)">Professor(a)</option>
+                                    <option value="Coordenador(a)">Coordenador(a)</option>
+                                    <option value="Graduador(a)">Graduador(a)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="destaque-meta">Meta / Conquista</label>
+                                <input type="text" id="destaque-meta" name="meta" placeholder="Ex: Meta semanal batida com excelência" required>
+                            </div>
+                        </div>
+                        <button type="submit" style="background: linear-gradient(135deg, #ffd700, #ffa500); color: #000;">
+                            <i class="fas fa-trophy"></i> Registrar Destaque
+                        </button>
+                    </form>
+                </div>
+
+                <div id="entrada" class="content-panel">
+                    <h2>Registro de Entrada</h2>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="entrada-nickname">Nickname do membro</label>
+                                <input type="text" id="entrada-nickname" class="live-check" name="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cargo-entrada">Cargo Inicial</label>
+                                 <select id="cargo-entrada" name="cargo-atual">
+                                    <option>Professor(a)</option>
+                                    <option>Coordenador(a)</option>
+                                    <option>Graduador(a)</option>
+                                    <option>Estagiário(a)</option>
+                                    <option>Conselheiro(a)</option>
+                                    <option>Vice-Líder</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="entrada-data">Data da entrada</label>
+                                <input type="date" id="entrada-data" name="data" required>
+                            </div>
+                        </div>
+                        <button type="submit"><i class="fas fa-check"></i> Registrar Entrada</button>
+                    </form>
+                </div>
+
+                <div id="saida" class="content-panel">
+                    <h2>Registro de Saída</h2>
+                    <p class="subtitle">Insira vários nicks separados por barra (Ex: Nick1 / Nick2)</p>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="saida-nickname">Nicknames</label>
+                                <input type="text" id="saida-nickname" name="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="saida-data">Data da Saída</label>
+                                <input type="date" id="saida-data" name="data-saida" required>
+                            </div>
+                             <div class="form-group">
+                                <label for="saida-motivo">Motivo da Saída</label>
+                                <input type="text" id="saida-motivo" name="motivo-saida" required>
+                            </div>
+                        </div>
+                        <button type="submit" style="background: linear-gradient(135deg, #e02b2b, #8b0000);">
+                            <i class="fas fa-times"></i> Registrar Saída
+                        </button>
+                    </form>
+                </div>
+
+                <div id="promocao" class="content-panel">
+                    <h2>Registro de Promoção</h2>
+                    <p class="subtitle">Insira vários nicks separados por barra (Ex: Nick1 / Nick2)</p>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="promocao-nickname">Nicknames</label>
+                                <input type="text" id="promocao-nickname" name="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="promocao-cargo-atual">Cargo Atual</label>
+                                <select id="promocao-cargo-atual" name="cargo-atual">
+                                    <option>Professor(a)</option>
+                                    <option>Coordenador(a)</option>
+                                    <option>Graduador(a)</option>
+                                    <option>Estagiário(a)</option>
+                                    <option>Conselheiro(a)</option>
+                                    <option>Vice-Líder</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="promocao-novo-cargo">Novo Cargo</label>
+                                 <select id="promocao-novo-cargo" name="novo-cargo">
+                                    <option>Professor(a)</option>
+                                    <option>Coordenador(a)</option>
+                                    <option>Graduador(a)</option>
+                                    <option>Estagiário(a)</option>
+                                    <option>Conselheiro(a)</option>
+                                    <option>Vice-Líder</option>
+                                    <option>Líder</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit"><i class="fas fa-level-up-alt"></i> Registrar Promoção</button>
+                    </form>
+                </div>
+
+                <div id="rebaixamento" class="content-panel">
+                    <h2>Registro de Rebaixamento</h2>
+                    <p class="subtitle">Insira vários nicks separados por barra (Ex: Nick1 / Nick2)</p>
+                    <form>
+                        <div class="form-grid">
+                             <div class="form-group">
+                                <label for="rebaixamento-nickname">Nicknames</label>
+                                <input type="text" id="rebaixamento-nickname" name="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rebaixamento-cargo-atual">Cargo Atual</label>
+                                <select id="rebaixamento-cargo-atual" name="cargo-atual">
+                                   <option>Professor(a)</option>
+                                   <option>Coordenador(a)</option>
+                                   <option>Graduador(a)</option>
+                                   <option>Estagiário(a)</option>
+                                   <option>Conselheiro(a)</option>
+                                   <option>Vice-Líder</option>
+                                   <option>Líder</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="rebaixamento-novo-cargo">Novo Cargo</label>
+                                 <select id="rebaixamento-novo-cargo" name="novo-cargo">
+                                   <option>Professor(a)</option>
+                                   <option>Coordenador(a)</option>
+                                   <option>Graduador(a)</option>
+                                   <option>Estagiário(a)</option>
+                                   <option>Conselheiro(a)</option>
+                                   <option>Vice-Líder</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label for="rebaixamento-motivo">Motivo</label>
+                                <textarea id="rebaixamento-motivo" name="motivo" rows="4" required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" style="background: linear-gradient(135deg, #ff9f43, #e55039);">
+                            <i class="fas fa-level-down-alt"></i> Registrar Rebaixamento
+                        </button>
+                    </form>
+                </div>
+
+                <div id="ouvidoria" class="content-panel">
+                    <h2>Formulário da Ouvidoria</h2>
+                    <p class="subtitle">Insira vários nicks separados por barra (Ex: Nick1 / Nick2)</p>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="ouvidoria-nickname">Nicknames</label>
+                                <input type="text" id="ouvidoria-nickname" name="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ouvidoria-tipo">Tipo de Proposta</label>
+                                <select id="ouvidoria-tipo" name="tipo-proposta" required>
+                                    <option value="" disabled selected>Selecione...</option>
+                                    <option>Correção</option>
+                                    <option>Sugestão</option>
+                                    <option>Projeto</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ouvidoria-titulo">Título da Proposta</label>
+                                <input type="text" id="ouvidoria-titulo" name="titulo" placeholder="Ex: Avaliação de promoção" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ouvidoria-ordem">Ordem</label>
+                                <input type="number" id="ouvidoria-ordem" name="ordem" placeholder="Ex: 12" required>
+                            </div>
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label for="ouvidoria-sintese">Síntese da Proposta</label>
+                                <textarea id="ouvidoria-sintese" name="sintese" rows="6" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="ouvidoria-data">Enviado em</label>
+                                <input type="date" id="ouvidoria-data" name="data-envio" required>
+                            </div>
+                        </div>
+                        <button type="submit"><i class="fas fa-paper-plane"></i> Enviar Proposta</button>
+                    </form>
+                </div>
+
+                <div id="homologacao" class="content-panel">
+                    <h2>Enviar Homologação</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">A notificação será enviada para <strong>todos</strong> com o link fixo do edital.</p>
+                    <form id="form-homologacao">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="homologacao-numero">Número da homologação</label>
+                                <input type="text" id="homologacao-numero" name="numero-homologacao" placeholder="Ex: 001/2025" required>
+                            </div>
+                        </div>
+                        <button type="submit"><i class="fas fa-share-square"></i> Enviar Notificação</button>
+                    </form>
+                </div>
+
+                <div id="reunioes" class="content-panel">
+                    <h2>Marcar Reuniões</h2>
+                    <div style="background: var(--bg-input); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;">
+                        <h3 style="margin-top:0; color:var(--text-main);">Reunião do Conselho</h3>
+                        <p style="font-size:0.9rem; color:var(--text-muted);">Envia notificação para o conselho com o link das atas.</p>
+                        <form id="form-reuniao-conselho">
+                            <button type="submit"><i class="fas fa-bell"></i> Notificar Conselho</button>
+                        </form>
+                    </div>
+                    <div style="background: var(--bg-input); padding: 20px; border-radius: 8px; border: 1px solid var(--border);">
+                        <h3 style="margin-top:0; color:var(--text-main);">Reunião Geral</h3>
+                        <p style="font-size:0.9rem; color:var(--text-muted);">Envia notificação para <strong>todos</strong> os membros.</p>
+                        <form id="form-reuniao-geral">
+                            <div class="form-group">
+                                <label for="reuniao-geral-link">Link da Reunião Geral</label>
+                                <input type="url" id="reuniao-geral-link" name="link-reuniao-geral" placeholder="https://..." required>
+                            </div>
+                            <button type="submit"><i class="fas fa-bullhorn"></i> Notificar Geral</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="transferencia" class="content-panel">
+                    <h2>Transferência de Nickname</h2>
+                    <p class="subtitle">Altera o nickname do membro mantendo todo o seu histórico e dados.</p>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="transf-old-nick">Nickname Antigo</label>
+                                <input type="text" id="transf-old-nick" class="live-check" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="transf-new-nick">Nickname Novo</label>
+                                <input type="text" id="transf-new-nick" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="transf-data">Data da Alteração</label>
+                                <input type="date" id="transf-data" required>
+                            </div>
+                        </div>
+                        <button type="submit"><i class="fas fa-sync"></i> Realizar Transferência</button>
+                    </form>
+                </div>
+
+                <div id="admin-management" class="content-panel">
+                    <h2>Gerenciar Permissões de Administrador</h2>
+                    <p class="subtitle">Conceder ou remover acesso total ao painel administrativo.</p>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="admin-nickname">Nickname do Membro</label>
+                                <input type="text" id="admin-nickname" class="live-check" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="admin-permissao">Nível de Permissão</label>
+                                <select id="admin-permissao">
+                                    <option value="admin">Atribuir Administrador</option>
+                                    <option value="user">Remover Admin</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="admin-data">Data</label>
+                                <input type="date" id="admin-data" required>
+                            </div>
+                        </div>
+                        <button type="submit" style="background: linear-gradient(135deg, #6c5ce7, #a29bfe);">
+                            <i class="fas fa-shield-alt"></i> Atualizar Permissão
+                        </button>
+                    </form>
+                </div>
+
+                <div class="content-panel" id="editor-scripts">
+                    <h2><i class="fas fa-edit"></i> Gerenciar Scripts de Aula</h2>
+                    <p class="subtitle">Altere o conteúdo das aulas carregadas via Firebase.</p>
+                    <div class="admin-controls" style="margin-bottom: 20px;">
+                        <select id="select-aula-admin" class="admin-input" style="width: 100%; padding: 10px; margin-bottom: 10px; background: var(--bg-input); color: white; border: 1px solid var(--border);">
+                            <option value="">Selecione uma aula para editar...</option>
+                        </select>
+                        <button onclick="carregarAulaParaEditor()" class="btn-admin" style="width: 100%; padding: 10px; cursor: pointer; margin-top: 10px;">Carregar Conteúdo</button>
+                    </div>
+                    <div id="editor-container" style="display:none; margin-top: 20px;">
+                        <div class="form-group">
+                            <label>Título da Aula</label>
+                            <input type="text" id="edit-titulo" class="admin-input" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Subtítulo da Aula</label>
+                            <input type="text" id="edit-subtitulo" class="admin-input" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-conteudo">Conteúdo (HTML):</label>
+                            <textarea id="edit-conteudo" rows="20" class="admin-textarea" style="width: 100%; background: #1e1e1e; color: #d4d4d4; font-family: monospace; padding: 15px; border-radius: 8px;"></textarea>
+                        </div>
+                        <div class="format-factory" style="margin-top: 25px; padding: 20px; background: rgba(0,2,0,0.4); border-radius: 12px; border: 1px solid #28a745;">
+                            <h4 style="color: #fff; margin-bottom: 15px;"><i class="fas fa-terminal"></i> Fábrica de Scripts (Falas e Instruções)</h4>
+                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                <select id="script-factory-type" class="admin-input" style="flex: 1; padding: 10px;">
+                                    <option value="fala">💬 Fala do Instrutor</option>
+                                    <option value="inst">🛠️ Instrução [Ação]</option>
+                                    <option value="neg">🔸 Destaque (Negrito)</option>
+                                </select>
+                                <input type="text" id="script-factory-input" class="admin-input" style="flex: 2; padding: 10px;" placeholder="Digite a fala ou instrução aqui...">
+                                <button onclick="gerarECopiarScript()" class="btn-admin" style="background: #750b5b; border: none; padding: 10px 20px; cursor: pointer; color: white; font-weight: bold;">
+                                    <i class="fas fa-copy"></i> GERAR E COPIAR
+                                </button>
+                            </div>
+                            <p id="script-factory-preview" style="font-size: 0.8rem; color: #00b894; font-family: monospace;"></p>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 20px;">
+                            <button onclick="previewHTML('edit-conteudo', 'Pré-visualização da Aula')" class="btn-preview">
+                                <i class="fas fa-eye"></i> PRÉ-VISUALIZAR
+                            </button>
+                            <button onclick="salvarAlteracoesAula()" class="btn-save" style="padding: 15px; background: #4e0645; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                <i class="fas fa-save"></i> SALVAR NO FIREBASE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="editor-documentos" class="content-panel">
+                    <h2><i class="fas fa-file-alt"></i> Gerenciar Documentos Oficiais</h2>
+                    <p class="subtitle">Edite o Regimento Interno, Código Penal e Normas.</p>
+                    <div class="admin-controls" style="margin-bottom: 20px;">
+                        <select id="select-doc-admin" class="admin-input" style="width: 100%; padding: 10px; margin-bottom: 10px; background: var(--bg-input); color: white; border: 1px solid var(--border);">
+                            <option value="">Selecione um documento...</option>
+                            <option value="regimento">Regimento Interno (RI)</option>
+                            <option value="codigo penal">Código Penal dos Professores</option>
+                            <option value="grupos internos">Normas de Subgrupos</option>
+                        </select>
+                        <button onclick="carregarDocumentoParaEditor()" class="btn-admin" style="width: 100%; padding: 10px; cursor: pointer; margin-top: 10px;">Carregar Documento</button>
+                    </div>
+                    <div id="doc-editor-container" style="display:none; margin-top: 20px;">
+                        <div class="form-group">
+                            <label>Título Visual</label>
+                            <input type="text" id="edit-doc-titulo" class="admin-input" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Subtítulo Visual</label>
+                            <input type="text" id="edit-doc-subtitulo" class="admin-input" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Conteúdo HTML (Integral):</label>
+                            <textarea id="edit-doc-conteudo" rows="25" class="admin-textarea" style="width: 100%; background: #1e1e1e; color: #d4d4d4; font-family: monospace; padding: 15px; border-radius: 8px; border: 1px solid #333;"></textarea>
+                        </div>
+                        <div class="format-factory" style="margin-top: 25px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px solid var(--primary);">
+                            <h4 style="color: #fff; margin-bottom: 15px;"><i class="fas fa-magic"></i> Fábrica de Formatação</h4>
+                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                <select id="factory-type" class="admin-input" style="flex: 1; padding: 10px;">
+                                    <option value="art">Artigo (Art. 1º)</option>
+                                    <option value="par">Parágrafo (§1º)</option>
+                                    <option value="pun">Parágrafo Único</option>
+                                    <option value="tit">Título de Capítulo (Roxo)</option>
+                                    <option value="sec">Subseção (Linha)</option>
+                                    <option value="inc">Inciso (I, II...)</option>
+                                </select>
+                                <input type="text" id="factory-input" class="admin-input" style="flex: 2; padding: 10px;" placeholder="Digite o número ou texto aqui...">
+                                <button onclick="gerarECopiarTag()" class="btn-admin" style="background: var(--primary); border: none; padding: 10px 20px; cursor: pointer; color: white;">
+                                    <i class="fas fa-copy"></i> GERAR E COPIAR
+                                </button>
+                            </div>
+                            <p id="factory-preview" style="font-size: 0.8rem; color: #d896ff; font-family: monospace;"></p>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 20px;">
+                            <button onclick="previewHTML('edit-doc-conteudo', 'Pré-visualização do Documento')" class="btn-preview">
+                                <i class="fas fa-eye"></i> PRÉ-VISUALIZAR
+                            </button>
+                            <button onclick="salvarAlteracoesDocumento()" class="btn-save" style="padding: 15px; background: #6c5ce7; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                                <i class="fas fa-save"></i> SALVAR NO FIREBASE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/admin/companhia.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Subgrupos e Departamentos</title> 
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/central-pages.css">
+    <link rel="stylesheet" href="/css/subgrupos.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading subgroups-hub-body">
+  <div id="header-placeholder"></div>
+
+  <main class="subgroups-page">
+    <section class="subgroups-hero" aria-labelledby="subgroups-title">
+      <nav class="central-context-nav" aria-label="Áreas da Central">
+        <span>Central NEXUS</span><a href="/companhia.html">Companhia</a><a href="/cursos.html">Cursos</a><a href="/subgrupos.html" class="is-active">Subgrupos</a><a href="/inscricoes.html">Inscrições</a>
+      </nav>
+      <div class="subgroups-hero-inner">
+        <p class="subgroups-eyebrow"><span></span> Arquitetura da Companhia</p>
+        <h1 id="subgroups-title">Três especialidades.<br><strong>Uma estrutura conectada.</strong></h1>
+        <p>Cada grupo sustenta uma dimensão essencial da Companhia: entrada, cultura e proteção.</p>
+      </div>
+    </section>
+
+    <section class="subgroups-directory" aria-labelledby="directory-title">
+      <div class="subgroups-directory-heading"><div><p class="subgroups-eyebrow">Diretório interno</p><h2 id="directory-title">Encontre seu <span>núcleo.</span></h2></div><p>O acesso é liberado de acordo com o cargo registrado em cada subgrupo.</p></div>
+      <div class="department-cards-container">
+      
+      <div class="department-card unlocked" id="escala-access-container" style="display: none;">
+        <span class="subgroup-number">00 / Administração</span>
+        <img src="/imgs/subgrupos.png" alt="Emblema Administrativo" class="card-emblem">
+        <div class="card-text-section">
+          <h3 class="card-title">
+            <a href="/subgrupos/escala-admin.html" class="stretched-link">Administrativo</a>
+          </h3>
+          <p>Escalas, organização e visão integrada dos grupos internos.</p>
+        </div>
+        <span class="subgroup-action">Abrir central <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+
+      <div class="department-card unlocked" id="spp-card">
+        <span class="subgroup-number">01 / Proteção</span>
+        <img src="/imgs/spp-imagem.png" alt="Emblema do Serviço de Proteção dos Professores" class="card-emblem">
+        <div class="card-text-section">
+          <h3 class="card-title">
+            <a href="https://sppnexus.netlify.app/" class="stretched-link">Serviço de Proteção dos Professores</a>
+          </h3>
+          <p>Integridade, segurança institucional e cumprimento das normas.</p>
+        </div>
+        <span class="subgroup-action">Abrir central <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+
+      <div class="department-card unlocked" id="cdc-card">
+        <span class="subgroup-number">02 / Cultura</span>
+        <img src="/imgs/cdc-imagem.png" alt="Emblema da Comissão de Desenvolvimento Cultural" class="card-emblem">
+        <div class="card-text-section">
+          <h3 class="card-title">
+            <a href="https://cdc-escala.netlify.app/" class="stretched-link">Comissão de Desenvolvimento Cultural</a>
+          </h3>
+          <p>Comunicação, criatividade, eventos e desenvolvimento cultural.</p>
+        </div>
+        <span class="subgroup-action">Abrir central <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+
+      <div class="department-card unlocked" id="da-card">
+        <span class="subgroup-number">03 / Aplicação</span>
+        <img src="/imgs/da-imagem.png" alt="Emblema do Departamento de Aplicação" class="card-emblem">
+        <div class="card-text-section">
+          <h3 class="card-title">
+            <a href="https://centralprofda.netlify.app/" class="stretched-link">Departamento de Aplicação</a>
+          </h3>
+          <p>Integração, avaliação e acompanhamento da entrada de novos membros.</p>
+        </div>
+        <span class="subgroup-action">Abrir central <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+  <script src="/js/loader.js"></script>
+  <script src="/js/global.js" defer></script>
+  <script src="/subgrupos/subgrupos.js" defer></script>
+  <script src="/js/online-status.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Avaliação de Propostas</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/templates/header.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+
+    <style>
+        /* --- ESTILOS GERAIS --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #581c87 50%, #be123c 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        /* Cards e Containers */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+        }
+
+        /* Botões de Promoção */
+        .promo-btn { transition: transform 0.2s, box-shadow 0.2s; }
+        .promo-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .promo-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* Veredito */
+        .veredito-btn {
+            cursor: pointer; padding: 12px 20px; border-radius: 12px; font-weight: 700;
+            transition: all 0.3s; border: 2px solid transparent; background: rgba(255, 255, 255, 0.05);
+            color: #d1d5db; display: flex; align-items: center; gap: 10px; justify-content: center;
+        }
+        .veredito-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .veredito-btn input { display: none; }
+        
+        .veredito-btn.promovido:has(input:checked) { 
+            background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: white; box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+        .veredito-btn.mantem:has(input:checked) { 
+            background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: white; box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); 
+        }
+        .veredito-icon { font-size: 1.2rem; }
+        .veredito-btn.promovido input:checked ~ .veredito-icon { color: #10b981; }
+        .veredito-btn.mantem input:checked ~ .veredito-icon { color: #f59e0b; }
+
+        /* Badges de Status */
+        .status-message {
+            padding: 6px 12px; border-radius: 6px; font-weight: 700; text-transform: uppercase;
+            font-size: 0.85em; text-align: center; display: inline-block;
+        }
+        .status-excelente { background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #dbeafe; }
+        .status-otimo { background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #f3e8ff; }
+        .status-regular { background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: #dcfce7; }
+        .status-irregular { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fee2e2; }
+        .status-not-found { background: rgba(156, 163, 175, 0.2); border: 1px solid #9ca3af; color: #e5e7eb; }
+
+        /* Histórico */
+        .history-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px; border-radius: 6px; background: rgba(255,255,255,0.03); margin-bottom: 8px;
+        }
+        .history-total { font-weight: 700; color: #c084fc; margin-left: 8px; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+
+        /* Animações */
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Vagas Esgotadas */
+        .vagas-esgotadas {
+            border: 2px solid #ef4444 !important;
+            background: linear-gradient(45deg, #7f1d1d, #991b1b) !important;
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red { 0%, 100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0); } 50% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); } }
+
+        /* Toast */
+        .toast {
+            position: fixed; top: 20px; right: 20px; z-index: 9999;
+            padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600;
+            display: flex; align-items: center; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-out 2.7s forwards;
+        }
+        .toast.loading { animation: slideInRight 0.3s ease-out; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+    </style>
+</head>
+
+<body class="p-4 md:p-8 pt-28 md:pt-32 overflow-x-hidden text-gray-100 auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <!-- LOADING SCREEN -->
+    <div id="preload-screen" class="min-h-screen flex flex-col items-center justify-center fixed inset-0 z-50 bg-gray-900">
+        <div class="p-4 bg-blue-500/10 rounded-full mb-4 animate-pulse">
+            <i class="fas fa-circle-notch text-5xl text-blue-400 animate-spin"></i>
+        </div>
+        <h2 class="text-2xl font-bold mb-2">Carregando Sistema...</h2>
+        <div class="w-64 h-2 bg-gray-700 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-blue-500 transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <p id="loading-status" class="text-gray-400 text-sm mt-2">Iniciando...</p>
+    </div>
+
+    <!-- ACESSO NEGADO (Bypass) -->
+    <div id="access-denied-screen" class="hidden min-h-screen flex items-center justify-center fade-in fixed inset-0 z-50 bg-gray-900">
+        <div class="glass-card p-8 rounded-2xl shadow-2xl text-center max-w-md mx-4">
+            <div class="inline-block p-6 bg-red-500/20 rounded-full mb-6 border border-red-500/50">
+                <i class="fas fa-lock text-5xl text-red-400"></i>
+            </div>
+            <h2 class="text-3xl font-bold mb-4 text-white">Acesso Restrito</h2>
+            <p class="text-gray-300 mb-8">Você precisa estar logado na sua conta NEXUS para acessar o painel de avaliações.</p>
+            
+            <button onclick="document.getElementById('login-popup').classList.add('active'); document.getElementById('overlay').classList.add('active');" 
+                    class="w-full py-3 px-6 rounded-lg font-bold bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white transition shadow-lg transform hover:-translate-y-1">
+                <i class="fas fa-sign-in-alt mr-2"></i> Fazer Login
+            </button>
+        </div>
+    </div>
+
+
+    <!-- APP CONTAINER -->
+    <div id="main-app-screen" class="hidden fade-in max-w-7xl mx-auto pb-12">
+        
+        <!-- HEADER -->
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8 pb-6 border-b border-purple-500/30">
+            <div class="flex items-center gap-4 mb-4 md:mb-0">
+                <img src="/imgs/emblema-prof.png" class="w-16 h-16 rounded-lg shadow-lg" onerror="this.src='https://placehold.co/64x64/purple/white?text=CP'">
+                <div>
+                    <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Painel de Avaliação</h1>
+                    <p class="text-gray-400 text-sm"><i class="fas fa-user-circle mr-1"></i> Avaliador: <span id="display-avaliador-nick" class="text-purple-300 font-semibold">...</span></p>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <!-- SIDEBAR -->
+            <aside class="w-full lg:w-1/4 space-y-6">
+                <div class="glass-card p-5">
+                    <h2 class="text-lg font-bold mb-4 text-blue-300 border-b border-blue-500/30 pb-2 flex items-center">
+                        <i class="fas fa-list-ul mr-2"></i> Listas de Promoção
+                    </h2>
+                    <div id="promo-buttons" class="space-y-3">
+                        <button data-range="B7:B25" data-cargo="professor" class="promo-btn w-full text-left p-4 rounded-xl bg-slate-700/50 hover:bg-slate-700 border border-slate-600 relative overflow-hidden group">
+                            <div class="flex justify-between items-center relative z-10">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-blue-500/20 p-2 rounded-lg text-blue-400"><i class="fas fa-chalkboard-teacher"></i></div>
+                                    <div>
+                                        <p class="font-bold text-sm">Prof. → Coord.</p>
+                                        <p class="text-xs text-gray-400 vagas-info hidden"><span class="vagas-text">...</span></p>
+                                    </div>
+                                </div>
+                                <span class="count-badge hidden bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-md shadow-sm">0</span>
+                            </div>
+                        </button>
+
+                        <button data-range="C7:C25" data-cargo="coordenador" class="promo-btn w-full text-left p-4 rounded-xl bg-slate-700/50 hover:bg-slate-700 border border-slate-600 relative overflow-hidden group">
+                            <div class="flex justify-between items-center relative z-10">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-purple-500/20 p-2 rounded-lg text-purple-400"><i class="fas fa-users-cog"></i></div>
+                                    <div>
+                                        <p class="font-bold text-sm">Coord. → Grad.</p>
+                                        <p class="text-xs text-gray-400 vagas-info hidden"><span class="vagas-text">...</span></p>
+                                    </div>
+                                </div>
+                                <span class="count-badge hidden bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded-md shadow-sm">0</span>
+                            </div>
+                        </button>
+
+                        <button data-range="D7:D25" data-cargo="graduador" class="promo-btn w-full text-left p-4 rounded-xl bg-slate-700/50 hover:bg-slate-700 border border-slate-600 relative overflow-hidden group">
+                            <div class="flex justify-between items-center relative z-10">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-pink-500/20 p-2 rounded-lg text-pink-400"><i class="fas fa-user-graduate"></i></div>
+                                    <div>
+                                        <p class="font-bold text-sm">Grad. → Estag.</p>
+                                        <p class="text-xs text-gray-400 vagas-info hidden"><span class="vagas-text">...</span></p>
+                                    </div>
+                                </div>
+                                <span class="count-badge hidden bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded-md shadow-sm">0</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- MAIN -->
+            <main class="w-full lg:w-3/4">
+                
+                <div id="initial-message" class="glass-card p-10 flex flex-col items-center justify-center min-h-[400px] text-center">
+                    <div class="bg-gray-700/50 p-6 rounded-full mb-4 animate-bounce">
+                        <i class="fas fa-hand-pointer text-4xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-200">Selecione uma lista</h3>
+                    <p class="text-gray-400 mt-2">Escolha um cargo no menu à esquerda para iniciar as avaliações.</p>
+                </div>
+
+                <div id="retrospecto-toggle-container" class="hidden mb-4 flex justify-end">
+                    <button id="toggle-retrospecto-btn" class="bg-gray-700 hover:bg-gray-600 text-white text-sm font-bold py-2 px-4 rounded-lg shadow transition flex items-center gap-2 border border-gray-500">
+                        <i class="fas fa-history"></i> <span>Ver Retrospecto</span>
+                    </button>
+                </div>
+
+                <div id="retrospecto-screen" class="hidden glass-card p-6 border-t-4 border-purple-500 fade-in">
+                    <h2 class="text-2xl font-bold mb-4 text-white flex items-center"><i class="fas fa-clipboard-list mr-2 text-purple-400"></i> Retrospecto</h2>
+                    <div id="retrospecto-content" class="grid gap-4"></div>
+                </div>
+
+                <div id="evaluation-card" class="hidden glass-card overflow-hidden fade-in shadow-2xl border border-gray-700">
+                    
+                    <div class="bg-gradient-to-r from-slate-800 to-slate-700 p-6 border-b border-slate-600 flex justify-between items-center">
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-gray-400 mb-1">Avaliando Membro</p>
+                            <h2 id="display-nick-avaliado" class="text-3xl font-bold text-white tracking-tight drop-shadow-md">Nick</h2>
+                        </div>
+                        <div class="bg-slate-900/50 px-4 py-2 rounded-lg border border-slate-600">
+                            <span id="card-counter" class="font-mono font-bold text-blue-300">1 / 10</span>
+                        </div>
+                    </div>
+
+                    <div class="p-6 md:p-8 space-y-8">
+
+                        <!-- 1. VEREDITO -->
+                        <div class="section-block">
+                            <h3 class="text-xl font-bold mb-4 text-blue-300 flex items-center pb-2 border-b border-blue-500/30">
+                                <i class="fas fa-gavel mr-2"></i> Veredito Final
+                            </h3>
+                            <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                                <label class="veredito-btn promovido flex-1 md:flex-none">
+                                    <input type="radio" name="veredito" value="Promovido">
+                                    <i class="fas fa-arrow-circle-up veredito-icon"></i> <span>Promovido</span>
+                                </label>
+                                <label class="veredito-btn mantem flex-1 md:flex-none">
+                                    <input type="radio" name="veredito" value="Mantém">
+                                    <i class="fas fa-minus-circle veredito-icon"></i> <span>Mantém</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 2. DISSERTAÇÃO -->
+                        <div class="section-block">
+                            <h3 class="text-xl font-bold mb-4 text-yellow-300 flex items-center pb-2 border-b border-yellow-500/30">
+                                <i class="fas fa-pen-fancy mr-2"></i> Dissertação
+                            </h3>
+                            <textarea id="dissertacao-text" rows="4" class="w-full bg-slate-900/50 text-gray-100 p-4 rounded-xl border border-gray-600 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 outline-none transition resize-none placeholder-gray-600" placeholder="Justifique sua decisão..."></textarea>
+                        </div>
+
+                        <!-- 3. INFORMAÇÕES BÁSICAS -->
+                        <div class="section-block">
+                            <h3 class="text-xl font-bold mb-4 text-cyan-300 flex items-center pb-2 border-b border-cyan-500/30">
+                                <i class="fas fa-info-circle mr-2"></i> Informações Básicas
+                            </h3>
+                            <div id="member-details-placeholder"></div>
+                        </div>
+
+                        <!-- 4. RANKING -->
+                        <div class="section-block">
+                            <h3 class="text-xl font-bold mb-4 text-purple-300 flex items-center pb-2 border-b border-purple-500/30">
+                                <i class="fas fa-trophy mr-2"></i> Ranking Interno
+                            </h3>
+                            <div id="internal-ranking-placeholder"></div>
+                        </div>
+
+                        <!-- 5. PROPOSTAS -->
+                        <div class="section-block">
+                            <h3 class="text-xl font-bold mb-4 text-pink-300 flex items-center pb-2 border-b border-pink-500/30">
+                                <i class="fas fa-lightbulb mr-2"></i> Propostas Aprovadas
+                            </h3>
+                            <div id="propostas-placeholder"></div>
+                        </div>
+
+                        <!-- 6. METAS & PERFORMANCE -->
+                        <div class="section-block">
+                            <h3 class="text-xl font-bold mb-4 text-green-300 flex items-center pb-2 border-b border-green-500/30">
+                                <i class="fas fa-chart-line mr-2"></i> Metas & Performance
+                            </h3>
+                            <div class="bg-yellow-900/20 border-l-4 border-yellow-500 p-3 mb-4 rounded-r-md">
+                                <p class="text-xs text-yellow-200 flex items-center gap-2">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span>Se os dados não carregarem, verifique a <a id="consulta-link" href="#" target="_blank" class="underline font-bold hover:text-white">planilha oficial</a>.</span>
+                                </p>
+                            </div>
+                            <div id="metas-placeholder" class="space-y-4">
+                                <div id="metas-current" class="p-4 bg-slate-800/50 rounded-xl border border-slate-700 shadow-inner"></div>
+                                <div id="metas-history" class="space-y-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- 7. ERROS -->
+                        <div id="errors-warnings-placeholder"></div>
+
+                    </div>
+
+                    <!-- FOOTER -->
+                    <footer class="bg-slate-900 p-6 flex justify-between gap-4 border-t border-slate-700 sticky bottom-0 z-10">
+                        <button id="prev-button" class="px-6 py-3 rounded-lg font-bold bg-gray-700 hover:bg-gray-600 text-white transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-chevron-left"></i> Anterior
+                        </button>
+                        <button id="next-button" class="px-6 py-3 rounded-lg font-bold bg-blue-600 hover:bg-blue-500 text-white transition flex items-center gap-2 shadow-lg shadow-blue-900/50">
+                            Próximo <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </footer>
+
+                </div>
+            </main>
+        </div>
+
+        <footer class="mt-16 py-8 border-t border-white/10 text-center text-gray-400 text-sm relative z-10 bg-black/20">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4 mb-2">
+            <span>
+                <i class="far fa-copyright mr-1"></i>
+                <span id="footer-year"></span> NEXUS - Companhia dos Professores.
+            </span>
+            <span class="hidden md:block text-gray-600">|</span>
+            <span>Todos os direitos reservados.</span>
+        </div>
+        <div class="text-gray-500">
+            <i class="fas fa-code text-purple-500/70 mr-2"></i>
+            Desenvolvido por <span class="text-purple-300 font-semibold hover:text-purple-200 transition font-mono">Pegas</span>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+</script>
+    
+
+    <div id="footer-placeholder"></div>
+
+    <!-- JAVASCRIPT -->
+    <script type="module">
+        const CONFIG = {
+            API_KEY: "AIzaSyBQhWdy4iyFCk9Lh89x8weSIyl0knXgA34",
+            SPREADSHEETS: {
+                PROMOVIDOS: "10rnDavOJTY2fKxLGNdC6Ijvwovy_tMeXv_DnWSkPyi4",
+                GERADOR: "1KQXx7TFtbNzMYHzOM5LMT7Fh61hiGOKZHux4K3Q6YpM",
+                RANKING: "1qL4S-vNDI2iONCVtl6fUuWo6EK0v62IWFGydrLKhlbQ",
+                ERRORS: "1UeZJRttSqMY6ZJzVYDNaaCcm8Ua6CTphJ9mw-wea44g",
+                SPP: "1kFnRqlQ-8Bzlv578t9uC_T0C74jjsK3nbzBgRFTlAJM",
+                DA: "1zksr3s1X3-JYTTnVEN8qzgJvZhHjxcUH0SF2lwpzjCk",
+                CDC: "1BJwyIbKfLl8arTIsA4vxtBvHlvx05HPG6VmauBBxlPo",
+                METAS_PROF: "1L5t72kbIlRnHRp_OaOMbHdDjkOy_3QlGJdYqarhh-ac",
+                METAS_COORD: "1EzyhvK4zEI_940ATXnaNQ8KUCxr-2Xj0qRY1MS6extI",
+                METAS_GRAD: "154ToDPq8wakIM9W0LIiM_TExwAjunT696pqq0xmP2I8"
+            },
+            APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyQ2IBcKpF_rQ-u-l2o5unQetcNszrUAd6Rv8QeE2P7IsLVZ_yF03c6IxJmRWVnWlUCkQ/exec"
+        };
+
+        // CORRIGIDO: Sheet Name "Gerador" para SPP e Range específico
+        const SUBGRUPOS = {
+            spp: { name: "SPP", color: "purple", sheet: CONFIG.SPREADSHEETS.SPP, sheetName: "Gerador", range: "B16:C37", logo: "/imgs/spp-imagem.png" },
+            da: { name: "DA", color: "yellow", sheet: CONFIG.SPREADSHEETS.DA, sheetName: "Listagem", range: "B15:C35", logo: "/imgs/da-imagem.png" },
+            cdc: { name: "CDC", color: "pink", sheet: CONFIG.SPREADSHEETS.CDC, sheetName: "Listagem", range: "B16:C36", logo: "/imgs/cdc-imagem.png" }
+        };
+
+        const STATE = {
+            avaliador: "Visitante",
+            listaAtual: [],
+            index: 0,
+            cargoAtual: "",
+            avaliacoes: { professor: {}, coordenador: {}, graduador: {} },
+            cache: { professor: { nicks:[], vagas:0 }, coordenador: { nicks:[], vagas:0 }, graduador: { nicks:[], vagas:0 } }
+        };
+
+        async function fetchSheet(sheetId, range) {
+            try {
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${CONFIG.API_KEY}`;
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(res.statusText);
+                return await res.json();
+            } catch (e) {
+                console.error(`Erro fetch ${range}:`, e);
+                return { values: [] };
+            }
+        }
+
+        function showToast(msg, type = 'success') {
+            const colors = { success: '#10b981', loading: '#3b82f6', error: '#ef4444' };
+            const icons = { success: 'fa-check-circle', loading: 'fa-spinner fa-spin', error: 'fa-exclamation-triangle' };
+            const div = document.createElement('div');
+            div.className = `toast ${type === 'loading' ? 'loading' : ''}`;
+            div.style.background = colors[type];
+            div.innerHTML = `<i class="fas ${icons[type]}"></i> <span>${msg}</span>`;
+            document.body.appendChild(div);
+            if (type !== 'loading') setTimeout(() => div.remove(), 3000);
+            return div;
+        }
+
+        function setHTML(id, html) {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = html;
+        }
+
+        function toggleDisplay(id, show) {
+            const el = document.getElementById(id);
+            if(el) show ? el.classList.remove('hidden') : el.classList.add('hidden');
+        }
+
+        // --- UTILS ---
+        function getWeekDates(weekOffset = 0) {
+            const now = new Date();
+            // Adjust for weekOffset logic (1 = last week, 2 = 2 weeks ago)
+            // Logic: Current date minus (offset * 7)
+            // But standard week logic is Sunday to Saturday.
+            // Let's assume weekOffset 0 is current week.
+            const d = new Date();
+            d.setDate(d.getDate() - ((weekOffset - 1) * 7)); // Logic from original code was slightly different, aligning to Sunday start
+            
+            // Find the Sunday of that week
+            const day = d.getDay(); // 0 (Sun) to 6 (Sat)
+            const start = new Date(d);
+            start.setDate(d.getDate() - day);
+            start.setHours(0,0,0,0);
+            
+            const end = new Date(start);
+            end.setDate(start.getDate() + 6);
+            end.setHours(23,59,59,999);
+            
+            return { start, end };
+        }
+
+        function parseDate(str) {
+            if(!str) return null;
+            const parts = str.split(/[\/\s]/);
+            if(parts.length >= 3) {
+                const d = parseInt(parts[0]), m = parseInt(parts[1])-1, y = parseInt(parts[2].length===2 ? '20'+parts[2] : parts[2]);
+                if(!isNaN(d)) return new Date(y, m, d);
+            }
+            return null;
+        }
+
+        function getStatus(score, type) {
+            if (score === -1) return { class: 'status-not-found', msg: 'Não Localizado' };
+            if (type === 'grad' && score >= 2) return { class: 'status-regular', msg: 'Regular' };
+            if (type === 'grad') return { class: 'status-irregular', msg: 'Irregular' };
+            
+            if (score >= 300) return { class: 'status-excelente', msg: 'Excelente' };
+            if (score >= 150) return { class: 'status-otimo', msg: 'Ótimo' };
+            if (score >= 100) return { class: 'status-regular', msg: 'Regular' };
+            return { class: 'status-irregular', msg: 'Irregular' };
+        }
+
+        // --- PRELOAD ---
+        async function preloadSystem() {
+            const pBar = document.getElementById('progress-bar');
+            const status = document.getElementById('loading-status');
+            status.textContent = "Conectando à Central...";
+            pBar.style.width = "30%";
+
+            const [profData, coordData, gradData, vagasData] = await Promise.all([
+                fetchSheet(CONFIG.SPREADSHEETS.PROMOVIDOS, "'Central'!B7:B25"),
+                fetchSheet(CONFIG.SPREADSHEETS.PROMOVIDOS, "'Central'!C7:C25"),
+                fetchSheet(CONFIG.SPREADSHEETS.PROMOVIDOS, "'Central'!D7:D25"),
+                fetchSheet(CONFIG.SPREADSHEETS.PROMOVIDOS, "'Central'!B6:D6")
+            ]);
+
+            pBar.style.width = "60%";
+            const parse = (d) => (d.values || []).flat().map(x => x.trim()).filter(Boolean);
+            STATE.cache.professor.nicks = parse(profData);
+            STATE.cache.coordenador.nicks = parse(coordData);
+            STATE.cache.graduador.nicks = parse(gradData);
+
+            const vagas = (vagasData.values && vagasData.values[0]) ? vagasData.values[0] : [0,0,0];
+            STATE.cache.professor.vagas = parseInt(vagas[0]) || 0;
+            STATE.cache.coordenador.vagas = parseInt(vagas[1]) || 0;
+            STATE.cache.graduador.vagas = parseInt(vagas[2]) || 0;
+
+            status.textContent = "Sincronizando avaliações...";
+            await loadEvaluationsFromServer();
+
+            pBar.style.width = "100%";
+            updateBadges();
+            setTimeout(() => { toggleDisplay('preload-screen', false); toggleDisplay('main-app-screen', true); }, 500);
+        }
+
+        function updateBadges() {
+            document.querySelectorAll('.promo-btn').forEach(btn => {
+                const cargo = btn.dataset.cargo;
+                const data = STATE.cache[cargo];
+                if(!data) return;
+
+                const badge = btn.querySelector('.count-badge');
+                const info = btn.querySelector('.vagas-info');
+                const txt = btn.querySelector('.vagas-text');
+
+                badge.textContent = data.vagas;
+                badge.classList.remove('hidden');
+                badge.style.display = 'inline-block';
+
+                const total = data.nicks.length;
+                const done = Object.keys(STATE.avaliacoes[cargo]).length;
+                const pending = total - done;
+
+                if(total === 0) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    info.classList.remove('hidden');
+                    txt.textContent = `${pending} pendente(s)`;
+                    
+                    // Lógica Vagas: "Mantém" não consome vaga.
+                    const promoted = Object.values(STATE.avaliacoes[cargo]).filter(x => x.veredito === 'Promovido').length;
+                    
+                    if(data.vagas > 0 && (data.vagas - promoted) <= 0) {
+                        btn.classList.add('vagas-esgotadas');
+                        txt.textContent = "VAGAS ESGOTADAS";
+                        txt.classList.add('text-red-300', 'font-bold');
+                    } else {
+                        btn.classList.remove('vagas-esgotadas');
+                        txt.textContent = `${pending} pendente(s)`;
+                        txt.classList.remove('text-red-300', 'font-bold');
+                    }
+                }
+            });
+        }
+
+        // --- NAVEGAÇÃO ---
+        async function loadPromotionList(cargo, range) {
+            STATE.cargoAtual = cargo;
+            STATE.listaAtual = STATE.cache[cargo].nicks;
+            STATE.index = 0;
+            toggleDisplay('initial-message', false);
+            toggleDisplay('evaluation-card', true);
+            toggleDisplay('retrospecto-screen', false);
+            toggleDisplay('retrospecto-toggle-container', true);
+            loadCard();
+        }
+
+        async function loadCard() {
+            const nick = STATE.listaAtual[STATE.index];
+            if(!nick) return;
+
+            setHTML('display-nick-avaliado', nick);
+            setHTML('card-counter', `${STATE.index + 1} / ${STATE.listaAtual.length}`);
+            document.getElementById('prev-button').disabled = STATE.index === 0;
+            document.getElementById('next-button').innerHTML = STATE.index === STATE.listaAtual.length - 1 ? 'Finalizar <i class="fas fa-check ml-2"></i>' : 'Próximo <i class="fas fa-chevron-right ml-2"></i>';
+
+            const saved = STATE.avaliacoes[STATE.cargoAtual][nick] || {};
+            document.getElementById('dissertacao-text').value = saved.dissertacao || '';
+            const radios = document.getElementsByName('veredito');
+            radios.forEach(r => r.checked = (r.value === saved.veredito));
+
+            const spin = '<div class="text-center py-6 text-gray-500"><i class="fas fa-spinner fa-spin text-2xl"></i><p class="text-xs mt-2">Carregando...</p></div>';
+            ['member-details-placeholder','internal-ranking-placeholder','propostas-placeholder','metas-current','errors-warnings-placeholder', 'metas-history'].forEach(id => setHTML(id, spin));
+
+            fetchMemberDetails(nick);
+            fetchMetas(nick);
+            fetchErrors(nick);
+            if (STATE.cargoAtual === 'professor') fetchHistoryProf(nick);
+            else if (STATE.cargoAtual === 'coordenador') fetchHistoryCoord(nick);
+            else fetchHistoryGrad(nick);
+        }
+
+        // --- DETALHES & SPP ---
+        async function fetchMemberDetails(nick) {
+            const [gen, rank, prop] = await Promise.all([
+                fetchSheet(CONFIG.SPREADSHEETS.GERADOR, "'Gerador'!C4:I193"),
+                fetchSheet(CONFIG.SPREADSHEETS.RANKING, "'Ranking Interno'!I6:K18"),
+                fetchSheet(CONFIG.SPREADSHEETS.GERADOR, "'Central de Dados'!DB4:DC1000")
+            ]);
+
+            const row = (gen.values || []).find(r => r[0]?.toLowerCase() === nick.toLowerCase());
+            let html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+            if(row) {
+                html += `<div class="bg-cyan-900/30 border border-cyan-500/50 p-3 rounded-lg"><p class="text-cyan-200 text-xs font-bold uppercase">Entrada</p><p class="text-lg font-bold">${row[1] || '-'}</p></div>`;
+                html += `<div class="bg-blue-900/30 border border-blue-500/50 p-3 rounded-lg"><p class="text-blue-200 text-xs font-bold uppercase">Última Promo</p><p class="text-lg font-bold">${row[2] || '-'}</p></div>`;
+            } else html += '<div class="col-span-2 text-orange-400 text-center">Não encontrado no Gerador</div>';
+            html += '</div>';
+
+            // Subgrupos - Correção
+            let subHTML = '<div class="mt-4 grid grid-cols-3 gap-2">';
+
+for(const k in SUBGRUPOS) {
+    const sg = SUBGRUPOS[k];
+    const res = await fetchSheet(sg.sheet, `'${sg.sheetName}'!${sg.range}`);
+    
+    // Verifica se o nick está na lista
+    const found = (res.values || []).find(r => r[1]?.trim().toLowerCase() === nick.trim().toLowerCase());
+    
+    // Define estilos (ativo ou inativo)
+    const activeClass = found 
+        ? `border-${sg.color}-500 bg-${sg.color}-900/40 text-white` 
+        : 'border-gray-700 bg-gray-800/40 text-gray-500 opacity-50 grayscale'; // Grayscale deixa imagem cinza se inativo
+
+    subHTML += `
+    <div class="border rounded-lg p-2 text-center ${activeClass} flex flex-col items-center justify-center transition hover:scale-105">
+        
+        <img src="${sg.logo}" alt="${sg.name}" class="w-8 h-8 mb-1 object-contain drop-shadow-md">
+        
+        <span class="font-bold text-xs">${sg.name}</span>
+        ${found ? `<span class="text-[10px] mt-1 bg-black/40 px-2 py-0.5 rounded font-mono text-yellow-200">${found[0]}</span>` : ''}
+    </div>`;
+}
+
+subHTML += '</div>';
+setHTML('member-details-placeholder', html + subHTML);
+
+            const rRow = (rank.values || []).find(r => r[1]?.toLowerCase() === nick.toLowerCase());
+            setHTML('internal-ranking-placeholder', rRow ? `<div class="bg-purple-900/20 border border-purple-500 p-4 rounded-lg text-center shadow-lg"><i class="fas fa-trophy text-yellow-400 text-2xl mb-2"></i><div class="text-3xl font-bold text-white">${rRow[0]}º</div><div class="text-sm text-purple-300 font-mono">${rRow[2]} pts</div></div>` : '<div class="text-gray-500 text-center">Sem ranking</div>');
+
+            const pRows = (prop.values || []).filter(r => r[0]?.toLowerCase() === nick.toLowerCase());
+            if(pRows.length > 0) {
+                const counts = { Projeto: 0, Sugestão: 0, Correção: 0 };
+                pRows.forEach(p => { if(counts[p[1]] !== undefined) counts[p[1]]++; });
+                setHTML('propostas-placeholder', `<div class="grid grid-cols-3 gap-3 text-center"><div class="bg-blue-900/30 border border-blue-500/50 rounded-lg p-2"><div class="text-xs text-blue-300 uppercase">Projetos Aprovados</div><div class="text-xl font-bold">${counts.Projeto}</div></div><div class="bg-green-900/30 border border-green-500/50 rounded-lg p-2"><div class="text-xs text-green-300 uppercase">Sugestões Aprovadas</div><div class="text-xl font-bold">${counts.Sugestão}</div></div><div class="bg-pink-900/30 border border-pink-500/50 rounded-lg p-2"><div class="text-xs text-pink-300 uppercase">Correções Aprovadas</div><div class="text-xl font-bold">${counts.Correção}</div></div></div><div class="mt-3 text-center bg-pink-900/20 rounded p-2 border border-pink-500/30"><span class="text-sm text-pink-200">Total: <b>${pRows.length}</b> propostas</span></div>`);
+            } else setHTML('propostas-placeholder', '<div class="text-gray-500 text-center">Nenhuma proposta aprovada</div>');
+        }
+
+        // --- METAS ATUAIS E HISTÓRICO ---
+        async function fetchMetas(nick) {
+            const map = { professor: {id: CONFIG.SPREADSHEETS.METAS_PROF, r:"'Ranking & Filtro'!C5:H", i:5, unit: '%'}, coordenador: {id: CONFIG.SPREADSHEETS.METAS_COORD, r:"'Ranking & Filtro'!C5:I", i:6, unit: '%'}, graduador: {id: CONFIG.SPREADSHEETS.METAS_GRAD, r:"'Ranking'!C5:F", i:3, unit: 'grads'} };
+            const cfg = map[STATE.cargoAtual];
+            const data = await fetchSheet(cfg.id, cfg.r);
+            const row = (data.values || []).find(r => r[0]?.toLowerCase() === nick.toLowerCase());
+
+            if(row) {
+                const val = row[cfg.i];
+                const num = parseFloat(val.replace(',', '.')) || 0;
+                let st = 'status-irregular', msg = 'Irregular';
+                
+                if(STATE.cargoAtual === 'graduador') {
+                    if(num >= 2) { st = 'status-regular'; msg = 'Regular'; }
+                } else {
+                    if(num >= 100) { st = 'status-regular'; msg = 'Regular'; }
+                    if(num >= 150) { st = 'status-otimo'; msg = 'Ótimo'; }
+                    if(num >= 300) { st = 'status-excelente'; msg = 'Excelente'; }
+                }
+
+                setHTML('metas-current', `<div class="flex justify-between items-center"><div><p class="text-xs text-gray-400 uppercase">Meta Atual</p><p class="text-2xl font-bold text-white">${val} <span class="text-sm font-normal text-gray-500">${cfg.unit}</span></p></div><div class="${st} text-sm px-3 py-1 rounded uppercase font-bold tracking-wider">${msg}</div></div>`);
+            } else setHTML('metas-current', '<div class="status-not-found p-2 rounded text-center">Sem meta registrada</div>');
+        }
+
+        async function fetchHistoryProf(nick) {
+            const data = await fetchSheet(CONFIG.SPREADSHEETS.METAS_PROF, "BACKUP!A:F");
+            const rows = data.values || [];
+            let html = '<h4 class="font-bold text-sm text-gray-400 mb-2">Histórico Semanal</h4>';
+            
+            for (let i = 1; i <= 4; i++) {
+                const { start, end } = getWeekDates(i);
+                let total = -1; 
+
+                rows.forEach(r => {
+                    if(r[1]?.toLowerCase() === nick.toLowerCase()) {
+                        const d = parseDate(r[0]);
+                        if(d && d >= start && d <= end) {
+                            if(total === -1) total = 0;
+                            const pts = { 'Curso de Aperfeiçoamento Comunicativo (CAC)': 50, 'Curso de Aperfeiçoamento de Praças (CAP)': 50, 'Curso de Revisão Ortográfica (CRO)': 45, 'Avaliação de Conhecimento Linguístico (ACL)': 45 };
+                            total += (pts[r[5]?.trim()] || 0);
+                        }
+                    }
+                });
+
+                const st = getStatus(total, 'prof');
+                const valDisplay = total === -1 ? '-' : total + '%';
+                
+                html += `<div class="history-item"><span>Semana ${i}</span><span class="history-total">${valDisplay}</span><span class="status-message ${st.class}">${st.msg}</span></div>`;
+            }
+            setHTML('metas-history', html);
+        }
+
+        async function fetchHistoryCoord(nick) {
+            const data = await fetchSheet(CONFIG.SPREADSHEETS.METAS_COORD, "BACKUP!A:E");
+            const rows = data.values || [];
+            let html = '<h4 class="font-bold text-sm text-gray-400 mb-2">Histórico Semanal</h4>';
+
+            for (let i = 1; i <= 4; i++) {
+                const { start, end } = getWeekDates(i);
+                let total = -1;
+
+                rows.forEach(r => {
+                    if(r[1]?.toLowerCase() === nick.toLowerCase()) {
+                        const d = parseDate(r[0]);
+                        if(d && d >= start && d <= end) {
+                            if(total === -1) total = 0;
+                            const pts = { 'Acompanhamento de aula': 50, 'Orientação': 50, 'Curso de Oratória Pública (COP)': 50, 'Curso de Desenvolvimento Argumentativo (CDA)': 50 };
+                            const act = r[4] || '';
+                            for(const k in pts) if(act.includes(k)) total += pts[k];
+                        }
+                    }
+                });
+                const st = getStatus(total, 'coord');
+                const valDisplay = total === -1 ? '-' : total + '%';
+                html += `<div class="history-item"><span>Semana ${i}</span><span class="history-total">${valDisplay}</span><span class="status-message ${st.class}">${st.msg}</span></div>`;
+            }
+            setHTML('metas-history', html);
+        }
+
+        async function fetchHistoryGrad(nick) {
+            const data = await fetchSheet(CONFIG.SPREADSHEETS.METAS_GRAD, "'Graduações Passadas'!A:E");
+            const rows = data.values || [];
+            let html = '<h4 class="font-bold text-sm text-gray-400 mb-2">Histórico Quinzenal</h4>';
+            
+            // 2 Quinzenas
+            for(let i=0; i<2; i++) {
+                let total = -1;
+                const start = new Date(); start.setDate(start.getDate() - ((i+1)*15));
+                const end = new Date(); end.setDate(end.getDate() - (i*15));
+                
+                rows.forEach(r => {
+                    if(r[1]?.toLowerCase() === nick.toLowerCase()) {
+                        const d = parseDate(r[0]);
+                        if(d && d >= start && d <= end && r[4]?.includes('Graduação')) {
+                            if(total === -1) total = 0;
+                            total++;
+                        }
+                    }
+                });
+                const st = getStatus(total, 'grad');
+                const valDisplay = total === -1 ? '-' : total + ' grads';
+                html += `<div class="history-item"><span>Quinzena ${i+1}</span><span class="history-total">${valDisplay}</span><span class="status-message ${st.class}">${st.msg}</span></div>`;
+            }
+            setHTML('metas-history', html);
+        }
+
+        async function fetchErrors(nick) {
+            const data = await fetchSheet(CONFIG.SPREADSHEETS.ERRORS, "'Quadro de Erros & Advertências'!C5:J200");
+            const errs = (data.values || []).filter(r => r[0]?.toLowerCase() === nick.toLowerCase());
+            
+            if(errs.length > 0) {
+                let html = `<h3 class="text-xl font-bold mb-4 text-red-400 flex items-center pb-2 border-b border-red-500/30"><i class="fas fa-exclamation-circle mr-2"></i> Erros & Advertências</h3><ul class="space-y-2">`;
+                errs.forEach(e => html += `<li class="bg-red-900/20 border-l-4 border-red-500 p-3 rounded-r"><div class="flex justify-between items-center mb-1"><span class="font-bold text-red-300">${e[1]}</span><span class="text-xs text-gray-500">${e[5] || ''}</span></div><p class="text-sm text-gray-300">${e[2]}</p></li>`);
+                html += '</ul>';
+                setHTML('errors-warnings-placeholder', html);
+            } else {
+                setHTML('errors-warnings-placeholder', `<h3 class="text-xl font-bold mb-4 text-gray-500 flex items-center pb-2 border-b border-gray-700"><i class="fas fa-shield-alt mr-2"></i> Erros</h3><div class="text-green-400 bg-green-900/10 p-3 rounded border border-green-900/30 text-center"><i class="fas fa-check-circle mr-2"></i> Nenhum erro recente.</div>`);
+            }
+        }
+
+        // --- SALVAMENTO (COM TOAST) ---
+        async function saveEvaluation() {
+            const nick = STATE.listaAtual[STATE.index];
+            const veredito = document.querySelector('input[name="veredito"]:checked')?.value;
+            const dissertacao = document.getElementById('dissertacao-text').value;
+
+            if(!nick) return;
+
+            // Feedback
+            const savingToast = showToast('Salvando...', 'loading');
+
+            STATE.avaliacoes[STATE.cargoAtual][nick] = { veredito, dissertacao };
+            updateBadges();
+
+            const payload = { action: 'saveEvaluation', avaliador: STATE.avaliador, nick_avaliado: nick, cargo: STATE.cargoAtual, veredito: veredito || '', dissertacao: dissertacao || '' };
+            
+            try {
+                await fetch(CONFIG.APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                savingToast.remove();
+                showToast('Salvo!', 'success');
+            } catch(e) {
+                savingToast.remove();
+                showToast('Erro ao salvar', 'error');
+                console.error(e);
+            }
+        }
+
+        async function loadEvaluationsFromServer() {
+            try {
+                const res = await fetch(`${CONFIG.APPS_SCRIPT_URL}?action=getEvaluations&avaliador=${encodeURIComponent(STATE.avaliador)}`);
+                const json = await res.json();
+                if(json.success) {
+                    json.evaluations.forEach(ev => {
+                        if(STATE.avaliacoes[ev.cargo]) STATE.avaliacoes[ev.cargo][ev.nick_avaliado] = { veredito: ev.veredito, dissertacao: ev.dissertacao };
+                    });
+                }
+            } catch(e) { console.error("Sync fail", e); }
+        }
+
+        // --- RETROSPECTO ---
+        function toggleRetrospecto() {
+            const screen = document.getElementById('retrospecto-screen');
+            const btn = document.getElementById('toggle-retrospecto-btn');
+            
+            if(screen.classList.contains('hidden')) {
+                toggleDisplay('evaluation-card', false);
+                toggleDisplay('retrospecto-screen', true);
+                btn.innerHTML = '<i class="fas fa-arrow-left"></i> Voltar';
+                
+                let html = '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">';
+                STATE.listaAtual.forEach((n, i) => {
+                    const d = STATE.avaliacoes[STATE.cargoAtual][n];
+                    let cls = 'border-gray-700 bg-gray-800/50 text-gray-500';
+                    let icon = 'fa-circle';
+                    if(d) {
+                        if(d.veredito === 'Promovido') { cls = 'border-green-500/50 bg-green-900/20 text-green-200'; icon = 'fa-arrow-up'; }
+                        else if(d.veredito === 'Mantém') { cls = 'border-yellow-500/50 bg-yellow-900/20 text-yellow-200'; icon = 'fa-minus'; }
+                        else if(d.dissertacao) { cls = 'border-blue-500/50 bg-blue-900/20 text-blue-200'; icon = 'fa-pen'; }
+                    }
+                    html += `<div onclick="window.goToIndex(${i})" class="cursor-pointer border rounded-xl p-4 ${cls} hover:scale-105 transition"><div class="flex justify-between font-bold"><span>${n}</span> <i class="fas ${icon}"></i></div><div class="text-xs mt-2 truncate opacity-70">${d?.dissertacao || 'Pendente'}</div></div>`;
+                });
+                setHTML('retrospecto-content', html + '</div>');
+            } else {
+                toggleDisplay('evaluation-card', true);
+                toggleDisplay('retrospecto-screen', false);
+                btn.innerHTML = '<i class="fas fa-history"></i> Ver Retrospecto';
+            }
+        }
+
+        window.goToIndex = (i) => { STATE.index = i; toggleRetrospecto(); loadCard(); };
+
+        // --- INIT ---
+        document.querySelectorAll('.promo-btn').forEach(b => b.addEventListener('click', () => loadPromotionList(b.dataset.cargo, b.dataset.range)));
+        
+        document.getElementById('next-button').addEventListener('click', async () => {
+            await saveEvaluation();
+            if(STATE.index < STATE.listaAtual.length - 1) { STATE.index++; loadCard(); }
+            else { showToast('Fim da lista!', 'success'); toggleRetrospecto(); }
+        });
+
+        document.getElementById('prev-button').addEventListener('click', async () => {
+            await saveEvaluation();
+            if(STATE.index > 0) { STATE.index--; loadCard(); }
+        });
+
+        document.getElementById('toggle-retrospecto-btn').addEventListener('click', toggleRetrospecto);
+        document.addEventListener('change', (e) => { if(e.target.name === 'veredito') saveEvaluation(); });
+
+       // --- INTEGRAÇÃO COM LOGIN (FIREBASE / GLOBAL.JS) ---
+        
+        // Escuta o evento que o global.js emite quando o usuário é detectado
+        document.addEventListener('userDataReady', async (e) => {
+            const user = e.detail.userData;
+            
+            if (user) {
+                // USUÁRIO LOGADO
+                console.log("Usuário logado detectado:", user.name);
+                
+                // Define o avaliador no STATE
+                STATE.avaliador = user.name;
+                setHTML('display-avaliador-nick', user.name);
+                
+                // Atualiza Interface
+                toggleDisplay('access-denied-screen', false); // Esconde tela de bloqueio
+                toggleDisplay('preload-screen', true);        // Mostra loading
+                
+                // Inicia o sistema
+                await preloadSystem();
+                
+            } else {
+                // USUÁRIO DESLOGADO / NÃO ENCONTRADO
+                console.log("Nenhum usuário logado.");
+                
+                // Esconde loading e app principal
+                toggleDisplay('preload-screen', false);
+                toggleDisplay('main-app-screen', false);
+                
+                // Mostra tela de bloqueio
+                toggleDisplay('access-denied-screen', true);
+            }
+        });
+
+        // Handler para Logout (opcional, caso adicione botão de sair)
+        window.handleLogout = () => {
+            firebase.auth().signOut().then(() => window.location.reload());
+        };
+
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/plugin/relativeTime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/locale/pt-br.min.js"></script>
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script>
+</body>
+</html>
+

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - SPP</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/admin/admin.css">  
+    <link rel="stylesheet" href="/templates/header.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <header class="admin-header">
+        <nav class="admin-nav">
+            <ul>
+                <li><a href="/admin/painel.html"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="/admin/companhia.html"><i class="fas fa-users"></i> Companhia</a></li>
+                <li><a href="/admin/spp.html" class="active"><i class="fas fa-shield-alt"></i> SPP</a></li> 
+                <li><a href="/admin/cdc.html"><i class="fas fa-palette"></i> CDC</a></li>
+                <li><a href="/admin/da.html"><i class="fas fa-graduation-cap"></i> DA</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <div class="page-title-wrapper">
+            <h1>Gerenciamento do SPP</h1>
+            <div class="subtitle">Administração dos membros da Segurança.</div>
+        </div>
+
+        <div class="companhia-container">
+            
+            <aside class="companhia-sidebar">
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active" data-target="entrada"><i class="fas fa-user-plus"></i> Entrada</a></li>
+                        <li><a href="#" data-target="saida"><i class="fas fa-user-minus"></i> Saída</a></li>
+                        <li><a href="#" data-target="promocao"><i class="fas fa-arrow-up"></i> Promoção</a></li>
+                        <li><a href="#" data-target="rebaixamento"><i class="fas fa-arrow-down"></i> Rebaixamento</a></li>
+                        <li><a href="#" data-target="ouvidoria"><i class="fas fa-bullhorn"></i> Ouvidoria</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="companhia-content">
+                
+                <div id="entrada" class="content-panel active">
+                    <h2>Registro de Entrada</h2>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="entrada-nickname">Nicknames</label>
+                                <input type="text" id="entrada-nickname" class="live-check" name="nickname" placeholder="Ex: Nick1 / Nick2" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="entrada-data">Data da entrada</label>
+                                <input type="date" id="entrada-data" name="data" required>
+                            </div>
+                        </div>
+                        <button type="submit"><i class="fas fa-check-circle"></i> Registrar Entrada</button>
+                    </form>
+                </div>
+
+                <div id="saida" class="content-panel">
+                    <h2>Registro de Saída</h2>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="saida-nickname">Nicknames</label>
+                                <input type="text" id="saida-nickname" class="live-check" name="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="saida-data">Data da Saída</label>
+                                <input type="date" id="saida-data" name="data-saida" required>
+                            </div>
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label for="saida-forma">Forma de Saída</label>
+                                <select id="saida-forma" name="forma-saida" required>
+                                    <option>A Pedido</option>
+                                    <option>Expulsão</option>
+                                    <option>Inatividade</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" style="background: linear-gradient(135deg, #e02b2b, #8b0000);">
+                            <i class="fas fa-user-times"></i> Registrar Saída
+                        </button>
+                    </form>
+                </div>
+
+                <div id="promocao" class="content-panel">
+                    <h2>Registro de Promoção</h2>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="promocao-nickname">Nicknames</label>
+                                <input type="text" id="promocao-nickname" class="live-check" name="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="promocao-cargo-atual">Cargo Atual</label>
+                                <select id="promocao-cargo-atual" name="cargo-atual" required>
+                                    <option>Analista</option>
+                                    <option>Perito</option>
+                                    <option>Subcomandante</option>
+                                    <option>Comandante</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="promocao-novo-cargo">Novo Cargo</label>
+                                <select id="promocao-novo-cargo" name="novo-cargo" required>
+                                    <option>Perito</option>
+                                    <option>Subcomandante</option>
+                                    <option>Comandante</option>
+                                    <option>Líder</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label for="promocao-motivo">Motivo</label>
+                                <textarea id="promocao-motivo" name="motivo" rows="4" placeholder="Motivo da promoção..." required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit"><i class="fas fa-level-up-alt"></i> Registrar Promoção</button>
+                    </form>
+                </div>
+
+                <div id="rebaixamento" class="content-panel">
+                    <h2>Registro de Rebaixamento</h2>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="rebaixamento-nickname">Nicknames</label>
+                                <input type="text" id="rebaixamento-nickname" class="live-check" name="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rebaixamento-cargo-atual">Cargo Atual</label>
+                                <select id="rebaixamento-cargo-atual" name="cargo-atual" required>
+                                    <option>Comandante</option>
+                                    <option>Subcomandante</option>
+                                    <option>Perito</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="rebaixamento-novo-cargo">Novo Cargo</label>
+                                <select id="rebaixamento-novo-cargo" name="novo-cargo" required>
+                                    <option>Subcomandante</option>
+                                    <option>Perito</option>
+                                    <option>Analista</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label for="rebaixamento-motivo">Motivo</label>
+                                <textarea id="rebaixamento-motivo" name="motivo" rows="4" placeholder="Motivo do rebaixamento..." required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" style="background: linear-gradient(135deg, #ff9f43, #e55039);">
+                            <i class="fas fa-level-down-alt"></i> Registrar Rebaixamento
+                        </button>
+                    </form>
+                </div>
+
+                <div id="ouvidoria" class="content-panel">
+                    <h2>Formulário da Ouvidoria</h2>
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="ouvidoria-nickname">Nicknames</label>
+                                <input type="text" id="ouvidoria-nickname" class="live-check" name="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ouvidoria-cargo">Cargo</label>
+                                <select id="ouvidoria-cargo" name="cargo" required>
+                                    <option>Analista</option>
+                                    <option>Perito</option>
+                                    <option>Subcomandante</option>
+                                    <option>Comandante</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ouvidoria-tipo">Tipo de Proposta</label>
+                                <select id="ouvidoria-tipo" name="tipo-proposta" required>
+                                    <option>Correção</option>
+                                    <option>Sugestão</option>
+                                    <option>Projeto</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ouvidoria-titulo">Título da Proposta</label>
+                                <input type="text" id="ouvidoria-titulo" name="titulo-projeto" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ouvidoria-ordem">Ordem</label>
+                                <input type="number" id="ouvidoria-ordem" name="ordem" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ouvidoria-data">Enviado em</label>
+                                <input type="date" id="ouvidoria-data" name="data-envio" required>
+                            </div>
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label for="ouvidoria-sintese">Síntese da Proposta</label>
+                                <textarea id="ouvidoria-sintese" name="sintese" rows="6" required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit"><i class="fas fa-paper-plane"></i> Enviar Proposta</button>
+                    </form>
+                </div>
+
+            </main>
+        </div>
+    </div>
+    
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/online-status.js" defer></script>
+    <script src="/admin/spp.js" defer></script>
+</body>
+</html>

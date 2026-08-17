@@ -1,0 +1,408 @@
+/* ==========================================================================
+   NEXUS - ESCALAS (DESIGN SYSTEM COMPLETO)
+   ========================================================================== */
+
+/* --- Títulos e Cabeçalho da Página --- */
+.cabecalho-escalas {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 40px;
+    margin-bottom: var(--espaco-md);
+    padding-bottom: var(--espaco-sm);
+    border-bottom: 1px solid rgba(186, 79, 192, 0.15);
+}
+
+.bloco-titulo-filtro {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.titulo-pagina {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: var(--font-weight-index);
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.periodo-atual-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(186, 79, 192, 0.15); /* Fundo roxo bem suave */
+    border: 1px solid rgba(186, 79, 192, 0.4); /* Bordinha neon */
+    color: #ffffff; /* Texto clarinho */
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: fit-content;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 900px) {
+    .cabecalho-escalas {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+}
+
+/* --- Sistema de Abas Minimalistas --- */
+.abas-limpas {
+    display: flex;
+    gap: var(--espaco-md);
+}
+
+.aba-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    color: var(--cor-texto-secundario);
+    font-family: var(--fonte-principal);
+    font-size: 1.1rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    cursor: pointer;
+    padding-bottom: 8px;
+    position: relative;
+    transition: color 0.3s ease;
+    opacity: 0.6;
+}
+
+.aba-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.aba-btn:hover, .aba-btn.active {
+    color: #ffffff;
+    opacity: 1;
+}
+
+.aba-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--cor-primaria-clara);
+    border-radius: 3px 3px 0 0;
+}
+
+/* --- Painel Principal com Glow Neon --- */
+.painel-roxo {
+    background-color: rgba(26, 4, 28, 0.85); 
+    border-radius: 16px;
+    padding: 20px 0; 
+    border: 1px solid rgba(186, 79, 192, 0.2); 
+    box-shadow: 0 0 40px rgba(130, 31, 136, 0.2), 
+                0 15px 35px rgba(0, 0, 0, 0.5);   
+}
+
+/* --- Tabela Nexus --- */
+.tabela-nexus {
+    width: 100%;
+    border-collapse: collapse; 
+    text-align: center;
+}
+
+/* Adicionado overflow para dar rolagem em telas pequenas sem espremer a tabela */
+.tabela-view { display: none; animation: fadeIn 0.4s ease; overflow-x: auto; padding-bottom: 10px; }
+.tabela-view.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+.tabela-nexus th {
+    color: var(--cor-primaria-clara);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 30px 15px 30px;
+    font-weight: var(--font-weight-bold);
+}
+
+.tabela-nexus td {
+    padding: 16px 30px;
+    color: var(--cor-texto-principal);
+    vertical-align: middle;
+}
+
+/* Aumentei a largura máxima da atividade para ela ter mais espaço */
+.coluna-atividade {
+    max-width: 450px; 
+    line-height: 1.6;
+    font-size: 0.90rem;
+    color: #e0e0e0; 
+}
+
+/* ==========================================================================
+   AJUSTE DE LARGURA DAS COLUNAS E BLOQUEIO DE QUEBRA DE LINHA
+   ========================================================================== */
+
+/* Define larguras exatas para cada coluna */
+.tabela-nexus th:nth-child(1) { width: 15%; } /* Conselho */
+.tabela-nexus th:nth-child(2) { width: 25%; } /* Membro */
+.tabela-nexus th:nth-child(3) { width: 35%; } /* Atividade */
+.tabela-nexus th:nth-child(4) { width: 13%; } /* Prazo */
+.tabela-nexus th:nth-child(5) { width: 12%; text-align: center; } /* Status */
+
+/* Impede que o texto quebre de linha nessas colunas específicas */
+.tabela-nexus td:nth-child(1),
+.tabela-nexus td:nth-child(2),
+.tabela-nexus td:nth-child(4),
+.tabela-nexus td:nth-child(5) {
+    white-space: nowrap; 
+}
+
+/* --- Avatares Habbo --- */
+.membro-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-box {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    border: 2px solid var(--cor-primaria-media);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; 
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    flex-shrink: 0; /* Impede o avatar de ser esmagado */
+}
+
+.avatar-box img {
+    margin-top: -8px;
+    transform: scale(1.1);
+}
+
+.nome-membro {
+    font-weight: var(--font-weight-bold);
+    font-size: 1.05rem;
+}
+
+/* --- Linhas Separadoras de 95% --- */
+.tabela-nexus tbody tr {
+    transition: all 0.2s ease;
+}
+
+.tabela-nexus tbody td {
+    border-bottom: none; 
+}
+
+.tabela-nexus tbody tr:not(:last-child) {
+    background-image: linear-gradient(to right, 
+        transparent 2.5%, 
+        rgba(186, 79, 192, 0.4) 2.5%, 
+        rgba(186, 79, 192, 0.4) 97.5%, 
+        transparent 97.5%
+    );
+    background-size: 100% 1px;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+
+.tabela-nexus tbody tr:hover {
+    background-color: rgba(186, 79, 192, 0.05); 
+    box-shadow: inset 4px 0 0 var(--cor-primaria-clara); 
+}
+
+/* --- Badges de Status --- */
+.badge-status {
+    padding: 6px 16px;
+    border-radius: 8px; 
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 130px;
+}
+
+.status-concluida { background-color: rgba(46, 204, 113, 0.15); color: var(--cor-sucesso); border: 1px solid rgba(46, 204, 113, 0.3); }
+.status-nao-escalado { background-color: rgba(255, 255, 255, 0.03); color: #a0a0a0; border: 1px solid rgba(255, 255, 255, 0.15); }
+.status-nao-realizada { background-color: rgba(231, 76, 60, 0.15); color: var(--cor-erro); border: 1px solid rgba(231, 76, 60, 0.3); }
+
+/* Status Pendente (Amarelo/Laranja) */
+.status-pendente { 
+    background-color: rgba(243, 156, 18, 0.15); 
+    color: #f39c12; 
+    border: 1px solid rgba(243, 156, 18, 0.3); 
+}
+
+/* --- Tag de Licença do lado do nome --- */
+.tag-licenca {
+    background-color: #242020;
+    color: white;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    display: inline-block; /* Garante alinhamento correto */
+}
+
+/* --- Seção de Conselhos (Grid de Botões) --- */
+.secao-conselhos {
+    margin-top: var(--espaco-xl);
+    margin-bottom: var(--espaco-xl);
+}
+
+.titulo-conselhos {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.4rem;
+    color: #ffffff;
+    margin-bottom: var(--espaco-md);
+    font-weight: var(--font-weight-bold);
+}
+
+.grid-conselhos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.btn-conselho {
+    background-color: rgba(30, 8, 32, 0.7); 
+    border: 1px solid rgba(186, 79, 192, 0.15); 
+    border-radius: 8px;
+    padding: 18px 20px;
+    color: #ffffff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: var(--font-weight-bold);
+    transition: all 0.3s ease;
+}
+
+.btn-conselho svg {
+    color: var(--cor-primaria-clara);
+}
+
+.btn-conselho:hover {
+    background-color: var(--cor-primaria-media);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(130, 31, 136, 0.4);
+    border-color: var(--cor-primaria-clara);
+}
+
+.btn-conselho:hover svg {
+    color: #ffffff;
+}
+
+/* Responsividade do Grid */
+@media (max-width: 1024px) { .grid-conselhos { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .grid-conselhos { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .grid-conselhos { grid-template-columns: 1fr; } }
+
+/* ========================================== */
+/* ESTILOS DOS LINKS ÚTEIS (PADRÃO NEXUS)     */
+/* ========================================== */
+.secao-links-uteis {
+    margin-top: var(--espaco-xl); /* Mantém a mesma distância da seção de cima */
+    margin-bottom: var(--espaco-xl);
+}
+
+.cabecalho-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: var(--espaco-md);
+}
+
+.cabecalho-links h2 {
+    font-size: 1.4rem;
+    font-weight: var(--font-weight-bold);
+    color: #ffffff;
+    margin: 0;
+}
+
+.icone-estrela {
+    color: var(--cor-primaria-clara); /* Estrela agora usa a cor oficial do site */
+    font-size: 1.4rem;
+}
+
+/* Transformamos em Grid de 6 Colunas */
+.grid-links-uteis {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 6 botões por linha perfeitamente iguais */
+    gap: 15px;
+}
+
+/* Herdando as exatas mesmas cores dos botões de Conselhos */
+.card-link-util {
+    background-color: rgba(30, 8, 32, 0.7); 
+    border: 1px solid rgba(186, 79, 192, 0.15); 
+    border-radius: 8px;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.card-link-util i {
+    font-size: 24px;
+    color: var(--cor-primaria-clara); /* Ícone na cor oficial */
+    margin-bottom: 12px;
+    transition: transform 0.3s ease;
+}
+
+.card-link-util span {
+    font-size: 0.80rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.3;
+}
+
+/* O mesmo efeito maravilhoso de passar o mouse */
+.card-link-util:hover {
+    background-color: var(--cor-primaria-media);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(130, 31, 136, 0.4);
+    border-color: var(--cor-primaria-clara);
+}
+
+.card-link-util:hover i {
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+/* --- Responsividade Inteligente --- */
+/* Se a tela diminuir, ele vai quebrando as colunas para não espremer o texto */
+@media (max-width: 1200px) { .grid-links-uteis { grid-template-columns: repeat(5, 1fr); } }
+@media (max-width: 992px) { .grid-links-uteis { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 768px) { .grid-links-uteis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 480px) { .grid-links-uteis { grid-template-columns: repeat(2, 1fr); } }
+
+
+.status-justificada {
+            background-color: rgba(196, 241, 247,0.90); 
+            color: #128fa6; 
+            border: 1px solid rgba(18, 143, 166, 0.4);
+            padding: 6px 14px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            display: inline-block;
+        }

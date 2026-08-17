@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Formulário do Conselho</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/templates/header.css"> 
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/companhia/conselho/css/forms.css">
+    <link rel="stylesheet" href="/companhia/conselho/css/estilo.css">  
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script> 
+</head>
+<body class="light-theme aba-conselho"></body>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <div class="painel-roxo container-formulario">
+        <div class="header-postagem">
+            <div class="perfil-usuario-form">
+                <div class="avatar-box-grande">
+                    <img id="user-avatar" src="" alt="Avatar" style="display: none;">
+                </div>
+                <div class="info-user-form">
+                    <span id="user-nick">Carregando usuário...</span>
+                    <span id="user-conselho" class="badge-conselho">Buscando conselho...</span>
+                </div>
+            </div>
+        </div>
+        
+        <form id="form-postagem-conselho" class="form-moderno" style="display: none;">
+            
+            <div class="campo-moderno">
+                <label>O que deseja postar?</label>
+                <select id="tipo_postagem" required>
+                    <option value="" disabled selected>Selecione uma opção...</option>
+                    <option value="funcao">Cumprimento de Função do Conselho</option>
+                    <option value="atividade">Cumprimento de Atividade</option>
+                    <option value="justificativa">Justificativa</option>
+                </select>
+            </div>
+
+            <div id="bloco-funcao" class="bloco-condicional">
+                
+                <div class="campo-moderno" id="caixa-selecao-funcao">
+                    <label>Qual a função realizada? *</label>
+                    <select id="func_especifica">
+                    </select>
+                </div>
+                
+                <div id="aviso-seguranca" class="aviso-fixo" style="display: none;">
+                    <i class="fa-solid fa-shield-halved"></i> Função vinculada: <b>Fiscalização da Listagem, Grupo e Subfórum</b>
+                </div>
+
+                <div class="linha-dupla">
+                    <div class="campo-moderno">
+                        <label>Data da realização: *</label>
+                        <input type="date" id="func_data">
+                    </div>
+                    <div class="campo-moderno">
+                        <label>Comprovação (Link) *</label>
+                        <input type="url" id="func_link" placeholder="https://prnt.sc/...">
+                    </div>
+                </div>
+
+                <div class="checkbox-moderno" style="margin-top: 10px; margin-bottom: 15px;">
+                    <input type="checkbox" id="func_sem_att">
+                    <label for="func_sem_att" style="color: #b0b0b0; font-size: 0.85rem; cursor: pointer;">
+                        Não houve atualizações pendentes para esta função hoje.
+                    </label>
+                </div>
+
+                <div class="campo-moderno">
+                    <label>Descrição / Observação (Opcional)</label>
+                    <textarea id="func_obs" rows="2" placeholder="Algo a acrescentar?"></textarea>
+                </div>
+            </div>
+
+            <div id="bloco-atividade" class="bloco-condicional">
+                <div class="linha-dupla">
+                    <div class="campo-moderno">
+                        <label>Data da realização: *</label>
+                        <input type="date" id="ativ_data">
+                    </div>
+                    <div class="campo-moderno">
+                        <label>Comprovação (Link) *</label>
+                        <input type="url" id="ativ_link" placeholder="https://prnt.sc/...">
+                    </div>
+                </div>
+
+                <div class="campo-moderno">
+                    <label>Descrição do que foi feito (Opcional)</label>
+                    <textarea id="ativ_desc" rows="2" placeholder="Detalhe a atividade cumprida..."></textarea>
+                </div>
+            </div>
+
+            <div id="bloco-justificativa" class="bloco-condicional">
+                
+                <div class="campo-moderno">
+                    <label>Referente a qual obrigação? *</label>
+                    <select id="just_tipo">
+                        <option value="" disabled selected>Selecione uma opção...</option>
+                        <option value="Função">Função do Conselho</option>
+                        <option value="Atividade">Atividade</option>
+                    </select>
+                </div>
+
+                <div class="campo-moderno">
+                    <label>Qual motivo da justificativa? *</label>
+                    <input type="text" id="just_motivo" placeholder="Ex: Viagem, problemas de internet, estudo...">
+                </div>
+
+                <div class="linha-dupla">
+                    <div class="campo-moderno">
+                        <label>Data original da função/atividade: *</label>
+                        <input type="date" id="just_data">
+                    </div>
+                </div>
+
+                <div class="checkbox-moderno">
+                    <input type="checkbox" id="just_ciente">
+                    <label for="just_ciente">Afirmo que, antes de justificar, comuniquei a Liderança previamente.</label>
+                </div>
+            </div>
+
+            <button type="submit" id="btn-enviar" class="btn-neon">ENVIAR REGISTRO</button>
+        </form>
+    </div>
+
+    <div id="toast-sucesso" class="toast-sucesso">
+        <div class="toast-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+        </div>
+        <div class="toast-content">
+            <h4>Enviado com sucesso!</h4>
+            <p>Redirecionando...</p>
+        </div>
+        <div class="toast-progress"></div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/companhia/conselho/js/forms.js" defer></script> 
+</body>
+</html>

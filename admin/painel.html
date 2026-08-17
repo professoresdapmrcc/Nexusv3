@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Administrativo</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/admin/painel.css">  
+    <link rel="stylesheet" href="/templates/header.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app-check.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <header class="admin-header">
+        <nav class="admin-nav">
+            <ul>
+                <li><a href="/admin/painel.html" class="active"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="/admin/companhia.html"><i class="fas fa-users"></i> Companhia</a></li>
+                <li><a href="/admin/spp.html"><i class="fas fa-shield-alt"></i> SPP</a></li>
+                <li><a href="/admin/cdc.html"><i class="fas fa-palette"></i> CDC</a></li>
+                <li><a href="/admin/da.html"><i class="fas fa-graduation-cap"></i> DA</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        
+        <div class="page-title-wrapper">
+            <h1>Painel Administrativo</h1>
+            <div class="subtitle">Visão geral e listagem de membros.</div>
+        </div>
+
+        <div class="content-panel active" style="margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <h2 style="margin:0; border:none; padding:0; font-size: 1.3rem;">Total de Membros</h2>
+                <span class="subtitle">Membros ativos na base de dados</span>
+            </div>
+            <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary);">
+                <span id="total-membros">0</span> <i class="fas fa-users" style="font-size: 1.5rem; color: var(--text-muted); margin-left: 10px;"></i>
+            </div>
+        </div>
+
+        <div class="content-panel active">
+            
+            <div class="panel-header">
+                <h2><i class="fas fa-list"></i> Lista de Membros</h2>
+                
+                <div class="header-tools">
+                    <button id="btn-export-csv" class="btn-export">
+                        <i class="fas fa-file-csv"></i> Exportar
+                    </button>
+
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Buscar por nickname...">
+                    </div>
+
+                    <select id="filter-cargo" class="filter-select">
+                        <option value="">Todos os Cargos</option>
+                        <option value="Professor(a)">Professor(a)</option>
+                        <option value="Coordenador(a)">Coordenador(a)</option>
+                        <option value="Graduador(a)">Graduador(a)</option>
+                        <option value="Estagiário(a)">Estagiário(a)</option>
+                        <option value="Conselheiro(a)">Conselheiro(a)</option>
+                        <option value="Vice-Líder">Vice-Líder</option>
+                        <option value="Líder">Líder</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Nickname</th>
+                            <th>Cargo Principal</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">SPP</th>
+                            <th class="text-center">CDC</th>
+                            <th class="text-center">DA</th>
+                            <th class="text-center">Admin</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-membros">
+                        <tr>
+                            <td colspan="8" class="text-center">Carregando dados...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/online-status.js" defer></script>
+    <script src="painel.js" defer></script> 
+</body>
+</html>

@@ -1,0 +1,183 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ==========================================================
+    // ### 1. FUNCOES AUXILIARES ###
+    // ==========================================================
+    function sessaoOidc() {
+      return request.auth != null && request.auth.token.nexusOidc == true;
+    }
+
+    // Durante a migração, sessões Firebase legadas continuam operando. Depois
+    // do corte, apenas tokens criados pela ponte OIDC podem acessar dados.
+    function transicaoLegadaAtiva() {
+      return !exists(/databases/$(database)/documents/nexus_config/auth) ||
+        !get(/databases/$(database)/documents/nexus_config/auth).data.keys().hasAll(['allowLegacyFirebase']) ||
+        get(/databases/$(database)/documents/nexus_config/auth).data.allowLegacyFirebase == true;
+    }
+
+    function estaLogado() {
+      return request.auth != null && (sessaoOidc() || transicaoLegadaAtiva());
+    }
+
+    function eDono(userId) {
+      return estaLogado() && request.auth.uid == userId;
+    }
+
+    function dadosDoUsuario() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function eMembroAtivo() {
+      return estaLogado() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        dadosDoUsuario().status == 'Ativo';
+    }
+
+    // role == 'admin' e setado manualmente no Firestore, nunca via cadastro
+    function eAdmin() {
+      return estaLogado() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        dadosDoUsuario().role == 'admin';
+    }
+
+    // ==========================================================
+    // ### 2. COLECAO DE USUARIOS ###
+    // ==========================================================
+    match /users/{userId} {
+      allow read: if true;
+
+      // Perfis novos passam a ser criados exclusivamente pela função
+      // confidencial após um callback OIDC validado.
+      allow create: if false;
+
+      allow update: if eAdmin() ||
+                    (eDono(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+                      'role', 'cargo', 'isAdmin', 'status', 'authProvider',
+                      'oidcSubject', 'oidcSubjectHash', 'oidcUsername', 'oidcLinkedAt'
+                    ]));
+
+      match /historico/{documentId} {
+        allow read: if eDono(userId) || eAdmin();
+        allow write: if eDono(userId) || eAdmin();
+      }
+
+      match /unlockedTrophies/{trophyId} {
+        allow read: if estaLogado();
+        allow write: if eDono(userId) || eAdmin();
+      }
+    }
+
+    // ==========================================================
+    // ### 3. CONFIGURACOES E SISTEMAS ###
+    // ==========================================================
+    match /licencas/{document=**} {
+      allow read: if estaLogado();
+      allow write: if eAdmin();
+    }
+
+    // O nome usado pelo sistema e "nexus_config" (com n minusculo).
+    match /nexus_config/{document=**} {
+      allow read: if true;
+      allow write: if eAdmin();
+    }
+
+    match /assistencia_registros/{document=**} {
+      allow read: if estaLogado();
+      allow create: if eMembroAtivo();
+      allow update, delete: if eAdmin();
+    }
+
+    match /logs_admin/{logId} {
+      allow read, write: if eAdmin();
+    }
+
+    // ==========================================================
+    // ### 4. JUSTIFICATIVAS ###
+    // ==========================================================
+    match /justificativas/{justificativaId} {
+      allow read: if estaLogado();
+
+      // Membros ativos podem apenas criar uma justificativa com o proprio nick
+      // e exatamente os campos utilizados pelo formulario.
+      allow create: if eMembroAtivo() &&
+                    request.resource.data.keys().hasAll([
+                      'nickname', 'cargo', 'periodo', 'motivos', 'tipo', 'timestamp'
+                    ]) &&
+                    request.resource.data.keys().hasOnly([
+                      'nickname', 'cargo', 'periodo', 'motivos', 'tipo', 'timestamp'
+                    ]) &&
+                    request.resource.data.nickname == dadosDoUsuario().name &&
+                    request.resource.data.cargo in ['Professor(a)', 'Coordenador(a)'] &&
+                    request.resource.data.periodo is string &&
+                    request.resource.data.periodo.size() > 0 &&
+                    request.resource.data.periodo.size() <= 100 &&
+                    request.resource.data.motivos is string &&
+                    request.resource.data.motivos.size() > 0 &&
+                    request.resource.data.motivos.size() <= 2000 &&
+                    request.resource.data.tipo == 'NÃO CUMPRIMENTO DE META' &&
+                    request.resource.data.timestamp == request.time;
+
+      allow update, delete: if eAdmin();
+    }
+
+    // ==========================================================
+    // ### 5. SOCIAL E INTERACAO ###
+    // ==========================================================
+    match /nicknames/{nick} {
+      allow read: if true;
+      // O índice de apelidos é uma chave de vínculo de identidade e só pode
+      // ser alterado pelo servidor Admin ou por um administrador Nexus.
+      allow create, update, delete: if eAdmin();
+    }
+
+    match /notificacoes/{notificationId} {
+      allow read: if estaLogado();
+      allow create, update: if eMembroAtivo();
+      allow delete: if eAdmin();
+    }
+
+    match /muralPhotos/{photoId} {
+      allow read: if true;
+      allow create: if eMembroAtivo();
+
+      allow update: if eMembroAtivo() && (
+        resource.data.authorId == request.auth.uid ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likeCount', 'likedBy']) ||
+        eAdmin()
+      );
+      allow delete: if estaLogado() && (resource.data.authorId == request.auth.uid || eAdmin());
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if eMembroAtivo();
+        allow delete: if estaLogado() && (resource.data.authorId == request.auth.uid || eAdmin());
+      }
+    }
+
+    // ==========================================================
+    // ### 6. CAIXA DE SUGESTOES E BUGS ###
+    // ==========================================================
+    match /sugestoes/{sugestaoId} {
+      allow create: if eMembroAtivo();
+      allow read, update, delete: if eAdmin();
+    }
+
+    // ==========================================================
+    // ### 7. REGRA GLOBAL PARA COLEÇÕES OPERACIONAIS ###
+    // ==========================================================
+    // As coleções excluídas têm regras próprias acima. Sem essa exceção, a
+    // regra recursiva tornaria públicos históricos, sugestões e vínculos OIDC.
+    match /{collection}/{document=**} {
+      allow read: if estaLogado() && !(collection in [
+        'logs_admin', 'nexus_identity_links', 'nexus_identity_issues',
+        'sugestoes', 'users'
+      ]);
+      allow write: if eAdmin() && !(collection in [
+        'logs_admin', 'nexus_identity_links', 'nexus_identity_issues',
+        'sugestoes', 'users'
+      ]);
+    }
+  }
+}

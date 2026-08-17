@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>NEXUS - Justificativas</title>
+
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/manual.css">
+    <link rel="stylesheet" href="/companhia/cursos/professores/cursos.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+<div class="manual-container">
+        
+        <!-- Cabeçalho do Manual -->
+        <header class="manual-header">
+            <h2>MANUAL DO PROFESSOR</h2>
+            <p>O <strong>MANUAL DO PROFESSOR</strong> ajuda-o a guiar-se pelas suas responsabilidades enquanto <strong>PROFESSOR</strong> da companhia. Em caso de dúvidas adicionais contate um conselheiro+.</p>
+        </header>
+
+        <!-- Seção 1: Introdução -->
+        <section class="glass-card flex-row align-center">
+            <div class="img-placeholder icon-size">
+                <!-- Imagem do Laptop puxando da sua pasta local -->
+                <img src="/imgs/manual-prof.png" alt="Ícone Laptop Professor">
+            </div>
+            <div class="text-content">
+                <h3>SOU PROFESSOR/A. E AGORA?</h3>
+                <p>Aguarde ser adicionado ao <strong>subfórum</strong> e aos dois <strong>grupos do Habbo</strong>. Confira se já pertence ao subfórum da companhia <a href="https://www.policiarcc.com/f6-professores-da-rcc" class="link-destaque">clicando aqui</a>. Caso já tenha sido adicionado ao subfórum, irá encontrar uma página com uma variedade de tópicos.</p>
+                <p>Para acessar os scripts das aulas no cargo de professor, clique na aba "<strong>Central de Funções</strong>" e em seguida <strong>Companhia</strong> e depois em "<strong>Professores</strong>", onde mostrará os cursos que você poderá aplicar.</p>
+            </div>
+        </section>
+
+        <!-- Seção 2: Cursos Obrigatórios e Opcionais -->
+        <section class="glass-card">
+            <div class="flex-row align-center mb-20 reverse-mobile">
+                <div class="text-content flex-grow text-right">
+                    <h3>CURSOS OBRIGATÓRIOS E OPCIONAIS</h3>
+                    <p>Antes de aprender a como aplicar uma aula na prática vamos aprender as <strong>normas de cada um</strong>. É importante complementar a leitura deste manual com as <strong>DOCUMENTAÇÕES</strong> da companhia.</p>
+                </div>
+                <div class="img-placeholder icon-size">
+                    <!-- Imagem do Laptop puxando da sua pasta local -->
+                    <img src="/imgs/manual-prof.png" alt="Ícone Laptop Professor">
+                </div>
+            </div>
+
+            <div class="text-content mb-20">
+                <p>O <strong>CAC (Curso de Aperfeiçoamento Comunicação)</strong> e o <strong>CAP (Curso de Aperfeiçoamento de Praças)</strong> são <strong>cursos obrigatórios</strong>. O que isto significa? Os militares necessitam de receber estes cursos para continuarem a progredir na hierarquia. O <strong>CRO (Curso de Revisão Ortográfica)</strong> e a <strong>ACL (Avaliação de Conhecimento Linguístico)</strong> são <strong>cursos opcionais</strong>. Os militares têm a <strong>opção</strong> de realizar este curso ou não.</p>
+            </div>
+
+            <ul class="curso-lista">
+                <li><strong class="highlight">Curso de Aperfeiçoamento Comunicação (CAC):</strong> É um curso obrigatório, contabilizando 50% (cinquenta por cento) na meta. É destinado a sargentos/equivalências+.</li>
+                <li><strong class="highlight">Curso de Aperfeiçoamento de Praças (CAP):</strong> É um curso obrigatório, contabilizando 50% (cinquenta por cento) na meta. É destinado apenas a subtenentes;</li>
+                <li><strong class="highlight">Curso de Revisão Ortográfica (CRO):</strong> É um curso opcional, contabilizando 45% (quarenta e cinco por cento) na meta. É destinado a cabos+/equivalências+.</li>
+                <li><strong class="highlight">Avaliação de Conhecimento Linguístico (ACL):</strong> É um curso opcional, contabilizando 45% (trinta e cinco por cento) na meta. É destinado a cabos+/equivalências+.</li>
+            </ul>
+        </section>
+
+        <!-- Seção 3: Regras e Graduação -->
+        <section class="glass-card">
+            <div class="flex-row align-center mb-20">
+                <div class="img-placeholder icon-size">
+                    <!-- Imagem do Laptop puxando da sua pasta local -->
+                    <img src="/imgs/manual-prof.png" alt="Ícone Laptop Professor">
+                </div>
+                <div class="text-content">
+                    <h3 class="highlight">VOCÊ PRECISA DA GRADUAÇÃO I PARA APLICAR UM CURSO!</h3>
+                    <p>Serão considerados válidos apenas os relatórios de cursos feitos por membros que tenham alcançado a <strong>Graduação I, incluindo os próprios</strong>, tanto nos registros internos da companhia quanto no RCC System.</p>
+                </div>
+            </div>
+
+            <div class="regras-grid">
+                <ul class="lista-regras">
+                    <li>Antes de iniciar a aplicação de um curso, é fundamental <strong>verificar se o aluno está registrado no RCC System</strong> ou <strong>se já possui o curso</strong>, especialmente nos casos dos cursos obrigatórios, CAC e CAP;</li>
+                    <li>Os <strong>cursos opcionais</strong>, CRO e ACL, não devem ser aplicados a um mesmo aluno num <strong>período inferior a 15 (quinze) dias</strong>. A planilha de verificação dos relatórios dos professores possui um recurso que permite realizar a conferência;</li>
+                    <li>Se um aluno sair ou for desconectado da aula, o professor deverá capturar uma imagem de tela com o histórico da aula e o perfil offline do aluno, hospedá-la no Imgur (preferencialmente) e anexá-la ao relatório como prova;</li>
+                    <li>A porcentagem semanal é calculada com base na quantidade de alunos presentes, <strong>não sendo necessária a postagem de múltiplos relatórios</strong> quando se tiver 01 (um) ou mais alunos;</li>
+                    <li>As aplicações dos cursos devem ocorrer e ser ministradas sempre que possível em <strong>perímetro oficial</strong>, que é definido como quaisquer instalações pertencentes à companhia ou à RCC;</li>
+                    <li>Os cursos <strong>ACL, CRO, CAC e CAP</strong> devem ser aplicados exclusivamente no Centro de Instrução (CI) ou, quando em Batalhão Auxiliar, também nos cubículos. Na <strong>indisponibilidade</strong> desses espaços, será permitida a aplicação nas salas de aulas da companhia, devendo o ministrante registrar, obrigatoriamente, no campo de comentário do formulário de postagem do curso, a justificativa da indisponibilidade do espaço regular.</li>
+                </ul>
+                <div class="img-placeholder print-size">
+                    <!-- Substitua o link abaixo pelo link do Imgur -->
+                    <img src="https://i.imgur.com/coiW6sD.png" alt="Print Filtro RCC System">
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 4: Prática -->
+        <section class="glass-card">
+            <h3 class="text-center highlight mb-30">MAS... COMO APLICAR NA PRÁTICA?</h3>
+            <p class="text-center mb-30">Após a abordagem inicial ao militar que vai receber a aula, você deve encaminhá-lo para o <strong>corredor principal</strong>.</p>
+
+            <div class="pratica-grid">
+                <!-- Passo 1 -->
+                <div class="pratica-passo">
+                    <div class="img-placeholder print-size">
+                        <!-- Substitua o link abaixo pelo link do Imgur (ou se for o corredor-ci.png da sua pasta, coloque /imgs/corredor-ci.png) -->
+                        <img src="https://i.imgur.com/aXk7buI.png" alt="Print Portões">
+                    </div>
+                    <p>Caso você ou o seu aluno não tenham os grupos de acesso, aproxime-se dos portões e <strong>solicite educamente ao Oficial da Guarda (OG)</strong> que abra o portão. Espere o aluno entrar no teleporte antes de o seguir.</p>
+                </div>
+
+                <!-- Passo 2 -->
+                <div class="pratica-passo">
+                    <div class="img-placeholder print-size">
+                        <!-- Substitua o link abaixo pelo link do Imgur (ou /imgs/corredor-prof.png se for essa a imagem da sua pasta) -->
+                        <img src="https://i.imgur.com/nV3jBXZ.png" alt="Print Portaprof">
+                    </div>
+                    <p>No corredor principal, os quartos de cada companhia estão devidamente assinalados com os respetivos brasões. Use o comando "<strong>portaprof</strong>" para abrir o portão do corredor dos Professores.</p>
+                </div>
+
+                <!-- Passo 3 -->
+                <div class="pratica-passo">
+                    <div class="img-placeholder print-size">
+                        <!-- Substitua o link abaixo pelo link do Imgur -->
+                        <img src="https://i.imgur.com/TySc9VE.png" alt="Print Entrada Sala">
+                    </div>
+                    <p>Após o aluno chegar no corredor da companhia, você deverá <strong>liberar a entrada dele para a área de acesso às salas de aplicação</strong>. Para isso, basta clicar no portão branco ou utilizar o comando <code>:aulas</code>, a porta se fechará automaticamente após alguns segundos.</p>
+                </div>
+            </div>
+
+            <div class="text-content mt-30">
+                <p><strong>Verifique quais salas de aplicação estão disponíveis</strong>, observe as luzes localizadas acima dos portões. Se a luz estiver verde, a sala está livre; se estiver vermelha, a sala está sendo usada. Adicionalmente, você pode procurar por "RCC" ou "-Edhone" no navegador, caso o sistema de luzes esteja com problema. Peça ao aluno para entrar na sala escolhida antes de o seguir.</p>
+                
+                <h4 class="highlight mt-20">ANTES DE COMEÇAR A APLICAÇÃO, ABRA O FORMULÁRIO E ANOTE O HORÁRIO DE INÍCIO!</h4>
+                <p>Para garantir que é o horário correto, verifique esse e os demais dados após a postagem do relatório em todas as aulas aplicadas. Se notar um erro poderá retificá-lo em "<strong>[PROF] Retificação de Erros</strong>".</p>
+            </div>
+        </section>
+
+    </div>
+        <hr class="section-separator">
+        <section class="tools-section">
+            <div class="tools-grid">
+                <a href="https://www.policiarcc.com/h217-prof-relatorio" class="tool-link"><img src="/imgs/postar-aula.png" alt=""><span>Postar Relatórios</span></a>
+                <a href="https://system.policercc.com.br/companhia/professores" class="tool-link"><img src="/imgs/postar-system.png" alt=""><span>Postar no System</span></a>
+
+                <a href="https://docs.google.com/spreadsheets/d/1L5t72kbIlRnHRp_OaOMbHdDjkOy_3QlGJdYqarhh-ac/edit" class="tool-link"><img src="/imgs/verificar-relatorios.png" alt=""><span>Verificar Relatórios</span></a>
+
+                <a href="https://drive.google.com/drive/u/1/folders/13APldv68spVkoekt8kmoFJsIRhsyAnGe" class="tool-link"><img src="/imgs/historico-aulas.png" alt=""><span>Histórico de Aulas</span></a>
+
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoB27_eFNrEIZ_esGVs1mcrm1nLiVTcuRhXPJVsVgnmT0qZQ/viewform" class="tool-link"><img src="/imgs/postar-correção.png" alt=""><span>Postar Correções</span></a>
+
+                <a href="https://docs.google.com/spreadsheets/d/1-JinKLWlxa2nVRTJ-QIrQsYa4lkxX57NBWzrs1U-0kQ/edit#gid=1849101510" class="tool-link"><img src="/imgs/verificar-correções.png" alt=""><span>Verificar Correções</span></a>
+
+                <a href="/justificativa.html" class="tool-link">
+                <img src="/imgs/verificar-justificativa.png" alt=""><span>Justificar Meta</span></a>
+
+                <a href="/painel-justificativa.html" class="tool-link"><img src="/imgs/verificar-justificativa.png" alt=""><span>Verificar Justificativa</span></a>
+
+                <a href="https://profstatusv2.netlify.app/" class="tool-link" target="_blank"><img src="/imgs/verificar-cursoos.png" alt=""><span>Verificar Cursos</span></a>
+
+                <a href="https://www.policiarcc.com/h240-prof-central-prof" class="tool-link"><img src="/imgs/central-prof.png" alt=""><span>Central Prof</span></a>
+            </div>
+        </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js" defer></script>
+
+    <script src="/js/loader.js" defer></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/paineljust.js" defer></script> 
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - [CDC] Escalas & Registro</title>
+    
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/templates/header.css"> 
+    <link rel="stylesheet" href="funcoes.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+
+<body class="auth-loading">
+    
+    <div id="header-placeholder"></div>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+        <div class="loading-text">Sincronizando dados...</div>
+    </div>
+
+    <div id="screenshot-container"></div>
+
+    <div id="app-container" class="container">
+
+        <header class="main-header fade-in">
+            <div id="logo-container">
+                <canvas id="logo-canvas"></canvas>
+            </div>
+            <h1>Comissão de Desenvolvimento Cultural</h1>
+            <p>Plataforma central para gestão de escalas, registros e funções.</p>
+        </header>
+
+        <div class="toolbar panel-card fade-in">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="search-nick" placeholder="Buscar por nick...">
+            </div>
+            
+            <div id="scale-filter-buttons" class="filter-group">
+                <button data-filter="todos" class="filter-btn active">Todas</button>
+                <button data-filter="analistas" class="filter-btn">Analistas</button>
+                <button data-filter="promotores" class="filter-btn">Promotores</button>
+                <button data-filter="docentes" class="filter-btn">Docentes</button>
+                <button id="open-links-modal-btn" class="filter-btn btn-outline-accent">Links</button>
+            </div>
+        </div>
+
+        <section id="analistas-section" class="scale-section fade-in">
+            <div class="section-header">
+                <div class="section-title-wrapper">
+                    <i class="fas fa-chart-line section-icon"></i>
+                    <h2>ESCALA DE ANALISTAS</h2>
+                </div>
+                <div class="header-actions">
+                    <div class="period-badge">
+                        <i class="far fa-calendar-alt"></i> 
+                        <span id="periodo-analistas">A carregar período...</span>
+                        <button id="btn-edit-periodo-analistas" class="btn-edit-period admin-only hidden" onclick="abrirModalPeriodo('analistas')" title="Editar Data">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </div>
+                    <button class="btn-backup admin-only hidden" onclick="abrirConfirmacaoBackup('analistas')"><i class="fas fa-archive"></i> Backup</button>
+                    <button id="screenshot-analistas-btn" class="btn-primary"><i class="fas fa-camera"></i> Capturar</button>
+                </div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th class="col-nick">NICK</th> 
+                            <th class="col-funcao">FUNÇÃO</th>                                                       
+                            <th class="col-prazo">PRAZO</th>
+                            <th class="col-status">STATUS</th>
+                            <th class="col-acao">AÇÃO</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analistas-table"></tbody>
+                </table>
+            </div>
+            <div id="add-btn-container-analistas" class="hidden">
+                <button class="btn-add-row" onclick="adicionarLinhaVazia('analistas-table', 'analistas')">
+                    <i class="fas fa-plus"></i> Adicionar nova linha
+                </button>
+            </div>
+        </section>
+
+        <section id="docentes-section" class="scale-section fade-in">
+            <div id="docentes-container">
+                <div class="section-header">
+                    <div class="section-title-wrapper">
+                        <i class="fas fa-chalkboard-teacher section-icon"></i>
+                        <h2>ESCALA DOS DOCENTES</h2>
+                    </div>
+                    <div class="header-actions">
+                        <div class="period-badge">
+                            <i class="far fa-calendar-alt"></i> 
+                            <span id="periodo-docentes">A carregar período...</span>
+                            <button id="btn-edit-periodo-docentes" class="btn-edit-period admin-only hidden" onclick="abrirModalPeriodo('docentes')" title="Editar Data">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                        </div>
+                        <button class="btn-backup admin-only hidden" onclick="abrirConfirmacaoBackup('docentes')"><i class="fas fa-archive"></i> Backup</button>
+                        <button id="screenshot-docentes-btn" class="btn-primary"><i class="fas fa-camera"></i> Capturar</button>
+                    </div>
+                </div>
+                
+                <div class="table-wrapper">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th class="col-nick">NICK</th> 
+                                <th class="col-funcao">FUNÇÃO</th>                                                       
+                                <th class="col-prazo">PRAZO</th>
+                                <th class="col-status">STATUS</th>
+                                <th class="col-acao">AÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="docentes-table"></tbody>
+                    </table>
+                </div>
+                <div id="add-btn-container-docentes" class="hidden">
+                    <button class="btn-add-row" onclick="adicionarLinhaVazia('docentes-table', 'docentes')">
+                        <i class="fas fa-plus"></i> Adicionar nova linha
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="promotores-section" class="scale-section fade-in">
+            <div id="promotores-container">
+                <div class="section-header">
+                    <div class="section-title-wrapper">
+                        <i class="fas fa-bullhorn section-icon"></i>
+                        <h2>ESCALA DOS PROMOTORES</h2>
+                    </div>
+                    <div class="header-actions">
+                        <div class="period-badge">
+                            <i class="far fa-calendar-alt"></i> 
+                            <span id="periodo-promotores">A carregar período...</span>
+                            <button id="btn-edit-periodo-promotores" class="btn-edit-period admin-only hidden" onclick="abrirModalPeriodo('promotores')" title="Editar Data">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                        </div>
+                        <button class="btn-backup admin-only hidden" onclick="abrirConfirmacaoBackup('promotores')"><i class="fas fa-archive"></i> Backup</button>
+                        <button id="screenshot-promotores-btn" class="btn-primary"><i class="fas fa-camera"></i> Capturar</button>
+                    </div>
+                </div>
+                
+                <div class="table-wrapper">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th class="col-nick">NICK</th> 
+                                <th class="col-funcao">FUNÇÃO</th>                                                       
+                                <th class="col-prazo">PRAZO</th>
+                                <th class="col-status">STATUS</th>
+                                <th class="col-acao">AÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="promotores-table"></tbody>
+                    </table>
+                </div>
+                <div id="add-btn-container-promotores" class="hidden">
+                    <button class="btn-add-row" onclick="adicionarLinhaVazia('promotores-table', 'promotores')">
+                        <i class="fas fa-plus"></i> Adicionar nova linha
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="periodo-modal" class="modal-overlay hidden">
+        <div class="modal-content panel-card modal-sm">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-day"></i> Editar Período</h3>
+                <button onclick="fecharModalPeriodo()" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="form-periodo" class="modern-form">
+                <input type="hidden" id="periodo-tipo">
+                <div class="form-group">
+                    <label>Data de Início</label>
+                    <input type="date" id="periodo-inicio" required>
+                </div>
+                <div class="form-group">
+                    <label>Data de Fim</label>
+                    <input type="date" id="periodo-fim" required>
+                </div>
+                <button type="submit" class="btn-primary w-full mt-3"><i class="fas fa-save"></i> Salvar Período</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="form-modal" class="modal-overlay hidden">
+        <div class="modal-content panel-card">
+            <div class="modal-header">
+                <h3>Registrar Ação</h3>
+                <button id="close-modal-btn" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="modal-form" class="modern-form">
+                <input type="hidden" id="form-role" name="role">
+                <input type="hidden" id="form-action-type" name="actionType">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nick do Responsável</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="form-nick" name="nick" placeholder="Ex: Rodrigo" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Ordem (ID)</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-hashtag"></i>
+                            <input type="text" id="form-ordem" name="ordem" readonly class="input-disabled">
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="comprovacao-field" class="form-group">
+                    <label>Comprovação (Link)</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fas fa-link"></i>
+                        <input type="url" id="form-comprovacao" name="comprovacao" placeholder="https://imgur.com/..." required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Comentários ou Justificativas</label>
+                    <textarea id="form-comentarios" name="comentarios" rows="3" placeholder="Detalhes adicionais (opcional)"></textarea>
+                </div>
+                
+                <div id="form-feedback" class="form-feedback"></div>
+                
+                <button type="submit" id="submit-form-btn" class="btn-primary w-full mt-3">Enviar Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="screenshot-modal" class="modal-overlay hidden">
+        <div class="modal-content panel-card modal-sm">
+            <div class="modal-header">
+                <h3><i class="fas fa-camera"></i> Exportar Escala</h3>
+                <button id="close-screenshot-modal-btn" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <p class="text-muted text-center mb-4">Escolha o formato de exportação:</p>
+            <div class="flex-column gap-2 mt-4">
+                <button id="screenshot-save-btn" class="btn-primary w-full"><i class="fas fa-download"></i> Salvar Imagem (.PNG)</button>
+                <button id="screenshot-copy-btn" class="btn-secondary w-full"><i class="fas fa-copy"></i> Copiar para Área de Transferência</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="links-modal" class="modal-overlay hidden">
+        <div class="modal-content panel-card modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-link"></i> Central de Links</h3>
+                <button id="close-links-modal-btn" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="links-grid">
+                <a href="#" class="link-card"><i class="fas fa-sheet-plastic"></i><span>Planilha da Escala</span></a>
+                <a href="#" class="link-card"><i class="fas fa-broadcast-tower"></i><span>Central Analistas</span></a>
+                <a href="#" class="link-card"><i class="fas fa-bullhorn"></i><span>Central Promotores</span></a>
+                <a href="#" class="link-card"><i class="fas fa-calendar-week"></i><span>Weekly</span></a>
+                <a href="#" class="link-card"><i class="fas fa-image"></i><span>Imager</span></a>
+                <a href="#" class="link-card"><i class="fas fa-gavel"></i><span>Homologações</span></a>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    <script>dayjs.extend(window.dayjs_plugin_customParseFormat); dayjs.locale('pt-br');</script>
+    
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/online-status.js" defer></script>
+    <script src="funcoes.js" defer></script>
+
+</body>
+</html>

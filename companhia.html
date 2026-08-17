@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Central de Funções</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css"> 
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/css/central-pages.css">
+    <link rel="stylesheet" href="/css/cargos.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading company-hub-body">
+
+    <div id="header-placeholder"></div>
+
+    <main class="cargos-page company-hub">
+        <section class="company-hero" aria-labelledby="company-title">
+            <nav class="central-context-nav" aria-label="Áreas da Central">
+                <span>Central NEXUS</span><a href="/companhia.html" class="is-active">Companhia</a><a href="/cursos.html">Cursos</a><a href="/subgrupos.html">Subgrupos</a><a href="/inscricoes.html">Inscrições</a>
+            </nav>
+            <div class="company-hero-inner">
+                <div class="company-hero-copy"><p class="company-eyebrow"><span></span> Estrutura da Companhia</p><h1 id="company-title">Cada função.<br><strong>Uma parte da missão.</strong></h1><p>Entre na central correspondente ao seu cargo para encontrar ferramentas, atividades e responsabilidades da sua jornada.</p></div>
+                <div class="company-route-summary" aria-label="Resumo das rotas disponíveis"><strong>05</strong><span>rotas internas</span><small>O seu cargo determina os acessos liberados.</small></div>
+            </div>
+        </section>
+
+        <section class="cargos-selection" aria-labelledby="roles-title">
+            <div class="roles-heading"><div><p class="company-eyebrow">Mapa de funções</p><h2 id="roles-title">Selecione sua <span>posição.</span></h2></div><p>As rotas são liberadas automaticamente conforme os dados do seu perfil.</p></div>
+            <div class="department-cards-container">
+
+                <a href="/companhia/professores.html" class="department-card" id="prof-card" data-required-role="Professor(a)">
+                    <span class="role-index">01</span>
+                    <img src="/imgs/prof-brevê.png" alt="Emblema Professores" class="card-emblem">
+                    <div class="card-text-section">
+                        <i class="card-icon fas fa-lock"></i>
+                        <div><small>Base da formação</small><h3 class="card-title">Professores</h3><p>Cursos, aplicações e ferramentas de ensino.</p></div>
+                    </div>
+                    <span class="role-access">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+
+                <a href="/companhia/coordenadores.html" class="department-card" id="coord-card" data-required-role="Coordenador(a)">
+                    <span class="role-index">02</span>
+                    <img src="/imgs/coord-breve.png" alt="Emblema Coordenadores" class="card-emblem">
+                    <div class="card-text-section">
+                        <i class="card-icon fas fa-lock"></i>
+                        <div><small>Acompanhamento</small><h3 class="card-title">Coordenadores</h3><p>Orientações, desenvolvimento e gestão de professores.</p></div>
+                    </div>
+                    <span class="role-access">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+
+                <a href="/companhia/graduadores.html" class="department-card" id="grad-card" data-required-role="Graduador(a)">
+                    <span class="role-index">03</span>
+                    <img src="/imgs/grad-breve.png" alt="Emblema Graduadores" class="card-emblem">
+                    <div class="card-text-section">
+                        <i class="card-icon fas fa-lock"></i>
+                        <div><small>Progressão</small><h3 class="card-title">Graduadores</h3><p>Graduações e aperfeiçoamento da estrutura interna.</p></div>
+                    </div>
+                    <span class="role-access">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+
+                <a href="/companhia/conselho/diario.html" class="department-card" id="cons-card" 
+                data-required-role="Conselheiro(a),Estagiário(a),Vice-Líder,Líder,Admin">
+                    <span class="role-index">04</span>
+                    <img src="/imgs/cons-breve.png" alt="Emblema Conselho" class="card-emblem">
+                    <div class="card-text-section">
+                        <i class="card-icon fas fa-lock"></i> 
+                        <div><small>Estratégia</small><h3 class="card-title">Conselho</h3><p>Administração, decisões e registros institucionais.</p></div>
+                    </div>
+                    <span class="role-access">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+                
+                <a href="/companhia/lideranca.html" class="department-card" id="lid-card" 
+                data-required-role="Vice-Líder,Líder">
+                    <span class="role-index">05</span>
+                    <img src="/imgs/cons-breve.png" alt="Emblema Liderança" class="card-emblem">
+                    <div class="card-text-section">
+                        <i class="card-icon fas fa-lock"></i> 
+                        <div><small>Direção</small><h3 class="card-title">Liderança</h3><p>Visão geral, condução da Companhia e decisões finais.</p></div>
+                    </div>
+                    <span class="role-access">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script>
+    <script src="/js/central.js" defer></script>
+    <script src="/js/online-status.js" defer></script>
+</body>
+</html>

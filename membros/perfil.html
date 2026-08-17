@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Membro</title>
+
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/membros/perfil.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <img src="/imgs/grifo-image-invertido.png" alt="Personagem lateral" class="side-character">
+
+    <div class="page-container">
+        
+        <!-- =================== COLUNA ESQUERDA =================== -->
+        <aside class="left-column">
+            <div class="card" id="card-stats">
+                <h3>PERFIL</h3>
+                <div class="info-item"><span>STATUS:</span><span id="info-estado">Carregando...</span></div>
+                <div class="info-item"><span>CARGO:</span><span id="info-cargo">--</span></div>
+                <div class="info-item"><span>ANIVERSÁRIO:</span><span id="info-aniversario">--/--</span></div>
+                <div class="info-item"><span>DIAS NA COMPANHIA:</span><span id="info-dias-cargo">0</span></div>
+                <div class="info-item"><span>PROPOSTAS:</span><span id="info-propostas">0</span></div>
+            </div>
+
+            <div class="card" id="card-groups">
+                <h3>GRUPOS INTERNOS</h3>
+                <div class="info-item group-row">
+                    <div class="group-icon"><img src="/imgs/spp-imagem.png" alt="Logo do SPP"></div>
+                    <span id="info-spp">--</span>
+                </div>
+                <div class="info-item group-row">
+                    <div class="group-icon"><img src="/imgs/da-imagem.png" alt="Logo do DA"></div>
+                    <span id="info-da">--</span>
+                </div>
+                <div class="info-item group-row">
+                    <div class="group-icon"><img src="/imgs/cdc-imagem.png" alt="Logo da CDC"></div>
+                    <span id="info-cdc">--</span>
+                </div>
+            </div>
+
+            <!-- Logo da Companhia -->
+            <div class="card company-card" id="card-company">
+                 <img src="/imgs/Logo (1).png" alt="Logo da Companhia dos Professores">
+            </div>
+
+            <!-- Mini Mural Integrado -->
+            <div class="card" id="card-mini-mural">
+                <h3>FOTOS RECENTES</h3>
+                <div class="mini-mural-grid" id="mini-mural-grid">
+                    <p style="font-size: 12px; text-align:center; color:#ccc; grid-column: 1 / -1;">Carregando...</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- =================== COLUNA CENTRAL =================== -->
+        <main class="main-column">
+            <!-- Novo Cartão Unificado (Capa, Avatar, Badges e Botões) -->
+            <div class="profile-card-unified" id="card-info">
+                
+                <!-- Capa -->
+                <div class="profile-cover" id="profile-cover" style="background-image: url('/imgs/default-cover.png');">
+                    <!-- Botão de alterar capa (Visível apenas para o dono) -->
+                    <div class="card-paint-btn cover-edit-btn" id="btn-edit-cover" style="display: none;" title="Mudar Capa">
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+                </div>
+
+                <div class="profile-content">
+                    <!-- Avatar sobreposto -->
+                    <div class="avatar-overlap">
+                        <img src="" alt="Avatar do Usuário" id="profile-avatar-img">
+                    </div>
+
+                    <h2 id="profile-name">Carregando...</h2>
+                    <span class="profile-role" id="profile-role-highlight">Membro</span>
+
+                    <!-- Conquistas Visuais -->
+                    <div class="badges-container" id="profile-badges">
+                        <div class="badge-item" data-tooltip="Veterano"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="badge-item" data-tooltip="Participou de Propostas"><i class="fa-solid fa-lightbulb"></i></div>
+                        <div class="badge-item" data-tooltip="Membro Ativo"><i class="fa-solid fa-fire"></i></div>
+                        <!-- Mais badges podem ser injetadas via JS -->
+                    </div>
+
+                    <!-- Botões de Ação Rápida -->
+                    <div class="quick-actions">
+                        <button class="btn-quick" onclick="alert('Funcionalidade de recados em breve!')"><i class="fa-solid fa-comment-dots"></i> Mensagem</button>
+                        <button class="btn-quick" onclick="navigator.clipboard.writeText(document.getElementById('profile-name').innerText); alert('Nick copiado!')"><i class="fa-solid fa-copy"></i> Copiar Nick</button>
+                        <button class="btn-quick" id="btn-open-settings" style="display: none;" onclick="abrirModalConfiguracoes()"><i class="fa-solid fa-gear"></i></button>
+                        
+                        <!-- Botão Admin Discreto -->
+                        <button class="btn-quick btn-admin-action" id="btn-admin-panel" style="display: none;" onclick="abrirModalAdmin()"><i class="fa-solid fa-hammer"></i> Gerenciar</button>
+                    </div>
+
+                    <!-- Frase (Mantida o estilo original) -->
+                    <div class="quote-box" id="card-frase">
+                        <p id="txt-frase">"Carregando frase..."</p>
+                        <div class="edit-icon" id="btn-edit-frase" style="display: none;">
+                            <i class="fa-solid fa-pencil"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relacionamentos Modernos (Cabecinhas do Habbo) -->
+            <div class="card relationship-card" id="card-relationships">
+                <h3>
+                    Conexões
+                    <i class="fa-solid fa-pencil btn-edit-rel" id="btn-edit-rel" style="display: none;" title="Editar"></i>
+                </h3>
+                <div class="rel-list" id="lista-relacionamentos">
+                    <p style="font-size: 12px; text-align:center; color:#ccc">Carregando...</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- =================== COLUNA DIREITA =================== -->
+        <aside class="right-column">
+            <div class="card" id="card-timeline" style="margin-bottom: 0;">
+                <h3 class="timeline-title">TIMELINE</h3>
+                
+                <!-- Filtros da Timeline -->
+                <div class="timeline-filters">
+                    <span class="filter-btn active">Todos</span>
+                    <span class="filter-btn">Promoções</span>
+                    <span class="filter-btn">Cursos</span>
+                    <span class="filter-btn">Propostas</span>
+                    <span class="filter-btn">Punições</span>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item"><p>Carregando histórico...</p></div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <div class="vertical-text">#SOBERANIAROXA</div>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- =================== MODAIS =================== -->
+    <div id="modal-overlay" class="modal-overlay">
+        
+        <!-- Edição de Frase -->
+        <div id="modal-frase" class="modal-box" style="display: none;">
+            <div class="modal-header">
+                <h3>Editar Frase</h3>
+                <i class="fa-solid fa-xmark close-icon" onclick="fecharModal()"></i>
+            </div>
+            <p class="modal-desc">Escreva algo marcante sobre você.</p>
+            <textarea id="input-nova-frase" rows="4" placeholder="Digite sua frase aqui..."></textarea>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+                <button class="btn-confirm" id="btn-salvar-frase">Salvar</button>
+            </div>
+        </div>
+
+        <!-- Gerenciar Relacionamentos -->
+        <div id="modal-relacionamentos" class="modal-box modal-lg" style="display: none;">
+            <div class="modal-header">
+                <h3>Gerenciar Conexões</h3>
+                <i class="fa-solid fa-xmark close-icon" onclick="fecharModal()"></i>
+            </div>
+            <div class="add-rel-section">
+                <h4>Adicionar Nova Conexão</h4>
+                <div class="add-form">
+                    <input type="text" id="input-rel-nick" placeholder="Nick do usuário ex: Sr.Gabriel.">
+                    <select id="input-rel-tipo">
+                        <option value="love">Amo (Parceiro(a))</option>
+                        <option value="like">Gosto (Amigo(a))</option>
+                        <option value="colleague">Colega de Trabalho</option>
+                        <option value="hate">Rivalidade/Brincadeira</option>
+                    </select>
+                    <button class="btn-confirm" id="btn-add-rel"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                </div>
+            </div>
+            <div class="list-rel-section">
+                <h4>Conexões Atuais</h4>
+                <p class="modal-desc">Clique na lixeira para remover.</p>
+                <ul id="modal-lista-rels" class="rel-manager-list"></ul>
+            </div>
+        </div>
+
+        <!-- Configurações de Privacidade -->
+        <div id="modal-configuracoes" class="modal-box" style="display: none;">
+            <div class="modal-header">
+                <h3>Configurações do Perfil</h3>
+                <i class="fa-solid fa-xmark close-icon" onclick="fecharModal()"></i>
+            </div>
+            <p class="modal-desc">Escolha o que os outros podem ver no seu perfil.</p>
+            
+            <div class="toggle-row">
+                <span>Mostrar Aniversário</span>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="toggle-row">
+                <span>Mostrar Conexões</span>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="toggle-row">
+                <span>Mostrar Grupos Internos</span>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="toggle-row" style="border: none;">
+                <span>Ativar Efeito Neve (Sazonal)</span>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="modal-buttons" style="margin-top: 30px;">
+                <button class="btn-confirm" onclick="fecharModal(); alert('Preferências salvas com sucesso!')">Salvar Preferências</button>
+            </div>
+        </div>
+
+        <!-- Modal Admin Discreto (Placeholder) -->
+        <div id="modal-admin-tools" class="modal-box" style="display: none;">
+            <div class="modal-header">
+                <h3 style="color: #ff416c;">Ações Administrativas</h3>
+                <i class="fa-solid fa-xmark close-icon" onclick="fecharModal()"></i>
+            </div>
+            <p class="modal-desc" style="color: #ff416c;">Você está visualizando ferramentas com privilégios de diretoria.</p>
+            
+            <div class="add-form">
+                <button class="btn-cancel" style="background: rgba(255, 255, 255, 0.1); color: #fff; text-align: left; padding-left: 20px;"><i class="fa-solid fa-pen-to-square"></i> Editar Dados do Membro</button>
+                <button class="btn-cancel" style="background: rgba(255, 255, 255, 0.1); color: #fff; text-align: left; padding-left: 20px;"><i class="fa-solid fa-list-check"></i> Ver Histórico Interno (Logs)</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Paleta de Cores -->
+    <div id="modal-palette" class="modal-overlay" style="z-index: 2000;">
+        <div class="modal-box palette-box">
+            <div class="modal-header" style="justify-content: center;">
+                <h3>Personalizar Cores</h3>
+            </div>
+            
+            <div class="color-grid">
+                <div class="swatch" style="--bg: #821F88;" onclick="selecionarCor('#821F88')"></div>
+                <div class="swatch" style="--bg: #351e49;" onclick="selecionarCor('#351e49')"></div>
+                <div class="swatch" style="--bg: #B900F6;" onclick="selecionarCor('#B900F6')"></div>
+                <div class="swatch" style="--bg: #FF0080;" onclick="selecionarCor('#FF0080')"></div>
+                
+                <div class="swatch" style="--bg: #1a1a1a;" onclick="selecionarCor('#1a1a1a')"></div>
+                <div class="swatch" style="--bg: #2C3E50;" onclick="selecionarCor('#2C3E50')"></div>
+                <div class="swatch" style="--bg: #000000;" onclick="selecionarCor('#000000')"></div>
+                
+                <div class="swatch" style="--bg: #2980B9;" onclick="selecionarCor('#2980B9')"></div>
+                <div class="swatch" style="--bg: #27AE60;" onclick="selecionarCor('#27AE60')"></div>
+                <div class="swatch" style="--bg: #C0392B;" onclick="selecionarCor('#C0392B')"></div>
+
+                <div class="swatch custom-rainbow" onclick="ativarNativo()" title="Outra cor...">
+                    <i class="fa-solid fa-plus"></i>
+                    <input type="color" id="native-picker-fallback">
+                </div>
+            </div>
+
+            <div class="modal-buttons" style="margin-top: 15px;">
+                <button class="btn-cancel" onclick="resetarCorAlvo()">Padrão</button>
+                <button class="btn-confirm" onclick="fecharPalette()">Concluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização Rápida no Perfil (Mini Mural) -->
+    <div id="modal-view-photo" class="modal-overlay" style="z-index: 3000;">
+        <div class="modal-box" style="padding: 20px; max-width: 450px; text-align: center;">
+            <div class="modal-header" style="margin-bottom: 15px; padding-bottom: 10px;">
+                <h3 style="font-size: 1.1rem;">Lembrança do Mural</h3>
+                <i class="fa-solid fa-xmark close-icon" onclick="fecharModalFoto()"></i>
+            </div>
+            <img id="modal-view-img" src="" style="width: 100%; border-radius: 12px; margin-bottom: 15px; object-fit: cover; max-height: 400px; background: rgba(0,0,0,0.3);">
+            <p id="modal-view-desc" style="font-size: 0.95rem; color: #ddd; margin-bottom: 25px; text-align: left; word-wrap: break-word;"></p>
+            <a id="modal-view-link" href="#" class="btn-confirm" style="display: block; text-decoration: none; padding: 14px; text-align: center; text-transform: uppercase; font-weight: bold;">
+                <i class="fa-solid fa-expand"></i> Ver Original e Comentários
+            </a>
+        </div>
+    </div>
+
+    <!-- Botão de Personalização Global -->
+    <div id="btn-customize" class="floating-fab" style="display: none;" onclick="abrirModalTema()">
+        <i class="fa-solid fa-palette"></i>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/membros/perfil.js" defer></script>
+
+    <!-- Script Inline Apenas para os Novos Modais Visuais (Config e Admin) -->
+    <script>
+        function esconderTodosModais() {
+            document.getElementById('modal-frase').style.display = 'none';
+            document.getElementById('modal-relacionamentos').style.display = 'none';
+            document.getElementById('modal-configuracoes').style.display = 'none';
+            document.getElementById('modal-admin-tools').style.display = 'none';
+        }
+
+        function abrirModalConfiguracoes() {
+            esconderTodosModais();
+            document.getElementById('modal-overlay').style.display = 'flex';
+            document.getElementById('modal-configuracoes').style.display = 'block';
+        }
+
+        function abrirModalAdmin() {
+            esconderTodosModais();
+            document.getElementById('modal-overlay').style.display = 'flex';
+            document.getElementById('modal-admin-tools').style.display = 'block';
+        }
+        
+    </script>
+</body>
+</html>

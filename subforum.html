@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Explorando o Subfórum</title>
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/subforum.css">
+    <link rel="stylesheet" href="/templates/header.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading">
+
+    <div id="header-placeholder"></div>
+
+    <main class="subforum-page">
+        <div class="page-header" style="text-align: center; margin-bottom: 3rem; margin-top: 2rem;">
+            <h1 class="page-title" style="color: #fff; font-weight: 800; font-size: 2.5rem;"><i class="fa-solid fa-server" style="color: #e056fd;"></i> Explorando o NEXUS</h1>
+            <p class="page-subtitle" style="color: #cfaadb; font-size: 1.1rem;">O Mapa Oficial do Subfórum da Companhia</p>
+        </div>
+
+        <div class="subforum-intro">
+            <p>O <strong>Sistema NEXUS</strong> foi concebido para centralizar e elevar o nível dos serviços prestados pela Companhia dos Professores. Este portal funciona como um mapa interativo da nossa estrutura operacional no fórum da RCC.</p>
+            <p>Clique nos nomes dos tópicos abaixo para ser direcionado ao local destinado. Em caso de dúvidas, consulte um Conselheiro+.</p>
+        </div>
+
+        <div class="accordion-container">
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <h2><i class="fa-solid fa-house-user" style="margin-right: 10px; color: #f1c40f;"></i> [NEXUS] HUB PRINCIPAL</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul class="subforum-list">
+                        <li><strong><a href="https://www.policiarcc.com/t32243-prof-requerimentos-da-companhia">[PROF] Requerimentos da Companhia</a>:</strong> Destinado à submissão de requerimentos administrativos (entradas, promoções, etc.). Use os modelos da página 01.</li>
+                        <li><strong><a href="https://www.policiarcc.com/t35734-prof-ouvidoria">[PROF] Ouvidoria</a>:</strong> Canal direto para submissão de propostas, projetos e sugestões para a evolução da companhia.</li>
+                        <li><strong><a href="https://www.policiarcc.com/t35035-prof-lista-de-membros">[PROF] Lista de Membros</a>:</strong> Base de dados com todos os integrantes ativos, datas de ingresso e promoções.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <h2><i class="fa-solid fa-scale-balanced" style="margin-right: 10px; color: #e056fd;"></i> [NEXUS] DIRETRIZES & DOCUMENTAÇÕES</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul class="subforum-list">
+                        <li><strong><a href="/documentos/regimento.html">[NEXUS] Regimento Interno</a>:</strong> O manual que esclarece o funcionamento completo e as normativas gerais da NEXUS.</li>
+                        <li><strong><a href="/documentos/codigo-penal.html">[NEXUS] Código Penal dos Professores</a>:</strong> Regulamenta as infrações e sanções administrativas dentro da Companhia.</li>
+                        <li><strong><a href="/documentos/grupos-internos.html">[NEXUS] Grupos Internos & Normas</a>:</strong> Detalha o funcionamento e ingresso nos grupos DA, SPP e CDC.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <h2><i class="fa-solid fa-newspaper" style="margin-right: 10px; color: #4a90e2;"></i> [NEXUS] DIÁRIO OFICIAL & INTEGRAÇÃO</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul class="subforum-list">
+                        <li><strong><a href="/quadro.html">[NEXUS] Quadro de Erros & Advertências</a>:</strong> Registro oficial de infrações e ações irregulares.</li>
+                        <li><strong><a href="/ranking.html">[NEXUS] Ranking Interno</a>:</strong> Sistema de gamificação e metas mensais com premiações.</li>
+                        <li><strong><a href="https://www.policiarcc.com/t37972-prof-controladoria-de-propostas">[PROF] Controladoria de Propostas</a>:</strong> Acompanhe os vereditos das propostas enviadas na Ouvidoria.</li>
+                        <li><strong><a href="https://www.policiarcc.com/t33010-prof-livro-de-recordes">[PROF] Livro de Recordes</a>:</strong> Eterniza os maiores recordes de aplicações da história da CIA.</li>
+                        <li><strong><a href="https://www.policiarcc.com/t33340-prof-edital-de-homologacao">[PROF] Edital de Homologação</a>:</strong> Publicações oficiais sobre mudanças estruturais e decisões da liderança.</li>
+                        <li><strong><a href="https://www.policiarcc.com/t33342-prof-atas-de-reunioes">[PROF] Atas de Reuniões</a>:</strong> Relatos oficiais das discussões e pautas abordadas em reuniões.</li>
+                        <li><strong><a href="https://www.policiarcc.com/t34511-prof-quadro-de-honra-excelencia">[PROF] Quadro de Honra & Excelência</a>:</strong> Tributo aos ex-membros da Alta Gestão e destaques mensais.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <h2><i class="fa-solid fa-chalkboard-user" style="margin-right: 10px; color: #2ecc71;"></i> [NEXUS] CENTRAL DE APLICAÇÕES</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul class="subforum-list">
+                        <li><strong><a href="/companhia.html">[NEXUS] Central de Funções</a>:</strong> Hub de funções com scripts, relatórios e ferramentas para aplicação de cursos.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+
+    <script src="/js/loader.js"></script>
+    <script src="/js/global.js" defer></script> 
+    <script src="/js/subforum.js" defer></script>
+    <script src="/js/online-status.js" defer></script>
+
+</body>
+</html>

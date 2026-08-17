@@ -1,0 +1,80 @@
+.app-background {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+    min-height: 100vh;
+}
+
+.glass-card {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.25rem;
+}
+
+.promo-btn {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.promo-btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    background: rgba(30, 41, 59, 0.8);
+}
+.promo-btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(100%); }
+
+.veredito-btn {
+    cursor: pointer; padding: 14px 20px; border-radius: 12px; font-weight: 700;
+    transition: all 0.3s; border: 2px solid transparent; background: rgba(255, 255, 255, 0.03);
+    color: #9ca3af; display: flex; align-items: center; gap: 10px; justify-content: center;
+}
+.veredito-btn:hover { background: rgba(255, 255, 255, 0.08); color: #e5e7eb; }
+.veredito-btn input { display: none; }
+
+.veredito-btn.promovido:has(input:checked) { 
+    background: rgba(16, 185, 129, 0.15); border-color: #10b981; color: #34d399; 
+    box-shadow: inset 0 0 15px rgba(16, 185, 129, 0.1);
+}
+.veredito-btn.mantem:has(input:checked) { 
+    background: rgba(245, 158, 11, 0.15); border-color: #f59e0b; color: #fbbf24; 
+    box-shadow: inset 0 0 15px rgba(245, 158, 11, 0.1); 
+}
+
+.veredito-icon { font-size: 1.3rem; transition: transform 0.2s; }
+.veredito-btn:has(input:checked) .veredito-icon { transform: scale(1.2); }
+
+.status-message {
+    padding: 4px 10px; border-radius: 6px; font-weight: 700; text-transform: uppercase;
+    font-size: 0.75em; letter-spacing: 0.05em; display: inline-block;
+}
+.status-excelente { background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.5); color: #93c5fd; }
+.status-otimo { background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.5); color: #d8b4fe; }
+.status-regular { background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.5); color: #86efac; }
+.status-irregular { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #fca5a5; }
+.status-not-found { background: rgba(100, 116, 139, 0.2); border: 1px solid rgba(100, 116, 139, 0.5); color: #cbd5e1; }
+
+.history-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 12px; border-radius: 8px; background: rgba(0,0,0,0.2); margin-bottom: 6px;
+    font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.03);
+}
+
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.6); }
+
+.fade-in { animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+.vagas-esgotadas {
+    border-color: #ef4444 !important;
+    background: linear-gradient(45deg, rgba(127, 29, 29, 0.6), rgba(153, 27, 27, 0.6)) !important;
+}
+
+/* Layout da Comparação */
+.grid-expanded {
+    grid-template-columns: 1fr;
+}
+@media (min-width: 1024px) {
+    .grid-expanded { grid-template-columns: 1fr 1fr; }
+}

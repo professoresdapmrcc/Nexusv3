@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Escala da Administração</title>
+    <meta name="description" content="Escala das Administrações dos Grupos Internos - Sistema NEXUS dos Professores">
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/templates/header.css">
+    <link rel="stylesheet" href="/subgrupos/escala-admin.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+</head>
+<body class="auth-loading">
+    <div id="header-placeholder"></div>
+
+    <main class="container">
+        <section class="page-header" id="page-header-section">
+            <h1 id="page-title">ESCALA DA ADMINISTRAÇÃO</h1>
+            <p class="subtitle" id="page-subtitle">Carregando...</p>
+
+        </section>
+
+        <!-- Navegação entre grupos -->
+        <nav class="grupo-tabs" id="grupo-tabs" style="display: none;"></nav>
+
+        <!-- Loading -->
+        <div class="loading-container" id="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Verificando permissões...</p>
+        </div>
+
+        <!-- Acesso Negado -->
+        <div class="access-denied-container" id="access-denied-state" style="display: none;">
+            <i class="fas fa-lock"></i>
+            <h2>Acesso Restrito</h2>
+            <p>Você não tem permissão para acessar esta escala. Apenas membros autorizados do grupo interno podem visualizá-la.</p>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div id="escala-content" style="display: none;">
+            <!-- Função de Hoje -->
+            <div class="funcao-hoje-banner" id="funcao-hoje-banner" style="display: none; flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.2rem;">
+                <div style="display: flex; align-items: center; gap: 0.8rem; width: 100%;">
+                    <i class="fas fa-calendar-day hoje-icon"></i>
+                    <div class="hoje-label" id="hoje-label-text" style="font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">📌 Função de Hoje</div>
+                </div>
+                <div id="hoje-lista-funcoes" style="display: flex; flex-wrap: wrap; gap: 0.8rem; width: 100%;">
+                    <!-- Itens dinâmicos aqui -->
+                </div>
+            </div>
+
+            <!-- Função Atrasada (Justificação pendente) -->
+            <div class="funcao-hoje-banner" id="funcao-atrasada-banner" style="display: none; flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.2rem; background: linear-gradient(135deg, rgba(230, 126, 34, 0.2), rgba(211, 84, 0, 0.2)); border: 1px solid rgba(230, 126, 34, 0.3); margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.8rem; width: 100%;">
+                    <i class="fas fa-clock-rotate-left" style="color: #e67e22; font-size: 1.4rem;"></i>
+                    <div class="hoje-label" style="font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; color: #e67e22;">⚠️ Aguardando Justificativa</div>
+                </div>
+                <div id="atrasada-lista-funcoes" style="display: flex; flex-wrap: wrap; gap: 0.8rem; width: 100%;">
+                    <!-- Itens dinâmicos aqui -->
+                </div>
+            </div>
+
+            <!-- Barra de Controles -->
+            <div class="escala-controls">
+                <div class="controls-left">
+                    <label for="mes-referencia" style="display: none;"><i class="fas fa-calendar-alt"></i> Mês:</label>
+                    <input type="month" id="mes-referencia" class="month-selector" title="Mês selecionado" disabled>
+                    
+                    <div class="control-divider" aria-hidden="true"></div>
+                    <select id="filtro-funcao" class="month-selector month-selector-funcao">
+                        <option value="">Todas as Funções</option>
+                    </select>
+                    
+                    <div class="control-divider control-divider-hidden" aria-hidden="true"></div>
+                    <label for="filtro-membro" title="Buscar por Membro Escalonado" class="control-search-label"><i class="fas fa-search"></i></label>
+                    <input type="text" id="filtro-membro" class="month-selector month-selector-membro" placeholder="Membro...">
+                </div>
+                <div class="controls-right">
+                    <button class="btn-action" id="btn-ver-inscricoes" style="display: none; background: rgba(155, 89, 182, 0.2); color: #9b59b6; border-color: rgba(155, 89, 182, 0.3);">
+                        <i class="fas fa-list-alt"></i> Inscrições
+                    </button>
+                    <button class="btn-action btn-admin-only" id="btn-nova-escala" style="display: none; background: rgba(46, 204, 113, 0.2); color: #2ecc71; border-color: rgba(46, 204, 113, 0.3);">
+                        <i class="fas fa-plus"></i> Nova Escala
+                    </button>
+                    <button class="btn-action" id="btn-backup" disabled>
+                        <i class="fas fa-download"></i> Backup
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid de cards de funções -->
+            <div class="funcoes-grid" id="funcoes-grid"></div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <i class="fas fa-calendar-xmark"></i>
+                <p>Nenhuma escala encontrada para este mês.</p>
+                <button class="btn-criar-escala" id="btn-criar-escala">
+                    <i class="fas fa-plus"></i> Criar Escala
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Seção de Funções Não Feitas -->
+    <section class="justificativas-container" id="nao-feitas-container" style="display: none; background: rgba(192, 57, 43, 0.05); border-top: 1px solid rgba(192, 57, 43, 0.1);">
+        <h2 class="justificativas-title" style="color: #e74c3c;"><i class="fas fa-times-circle"></i> Funções Não Feitas (Mês)</h2>
+        <div class="justificativas-grid" id="nao-feitas-grid"></div>
+    </section>
+
+    <!-- Seção de Funções Justificadas -->
+    <section class="justificativas-container" id="justificativas-container" style="display: none;">
+        <h2 class="justificativas-title"><i class="fas fa-file-alt"></i> Funções Justificadas (Mês)</h2>
+        <div class="justificativas-grid" id="justificativas-grid"></div>
+    </section>
+
+    <!-- Créditos -->
+    <footer style="margin-top: 4rem; padding: 2rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); opacity: 0.4; font-size: 0.75rem;">
+        <p>Desenvolvimento por <strong>Pegas</strong></p>
+    </footer>
+
+    <div class="save-indicator" id="save-indicator">
+        <i class="fas fa-check-circle"></i>
+        <span>Salvo!</span>
+    </div>
+
+    <div class="modal-overlay" id="modal-postar" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fas fa-check-circle"></i> Confirmar Postagem</h3>
+            </div>
+            <div class="modal-body">
+                <p class="modal-funcao" id="modal-funcao-nome"></p>
+                <p class="modal-prazo" id="modal-prazo-texto"></p>
+                <div class="modal-field">
+                    <label for="modal-nick-select">Quem realizou?</label>
+                    <select id="modal-nick-select" class="modal-select">
+                        <option value="">Carregando membros...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="modal-btn-cancelar">Cancelar</button>
+                <button class="modal-btn modal-btn-confirm" id="modal-btn-confirmar">
+                    <i class="fas fa-check"></i> Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Justificativa -->
+    <div class="modal-overlay" id="modal-justificar" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header header-warning">
+                <h3><i class="fas fa-file-alt"></i> Justificar Falta/Atraso</h3>
+            </div>
+            <div class="modal-body">
+                <p class="modal-funcao" id="justificativa-funcao-nome"></p>
+                <p class="modal-prazo" id="justificativa-prazo-texto"></p>
+                <div class="modal-field">
+                    <label for="justificativa-texto">Motivo da Justificativa:</label>
+                    <textarea id="justificativa-texto" class="modal-textarea" rows="4" placeholder="Explique o motivo..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="justificativa-btn-cancelar">Cancelar</button>
+                <button class="modal-btn modal-btn-confirm" id="justificativa-btn-confirmar">
+                    <i class="fas fa-paper-plane"></i> Enviar Justificativa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-lideranca" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header" style="background: linear-gradient(135deg, #8e44ad, #9b59b6);">
+                <h3><i class="fas fa-user-shield"></i> Poder Supremo (Liderança)</h3>
+            </div>
+            <div class="modal-body">
+                <p class="modal-funcao" id="lideranca-funcao-nome"></p>
+                <p class="modal-prazo" id="lideranca-prazo-texto"></p>
+                
+                <div class="modal-field">
+                    <label for="lideranca-status-select">Novo Status Permitido:</label>
+                    <select id="lideranca-status-select" class="modal-select">
+                        <option value="pendente">Pendente (Pode Postar)</option>
+                        <option value="aguardando_justificativa">Atrasado (Pode Justificar)</option>
+                        <option value="nao_feito">Não Feito (Forçar Falta)</option>
+                    </select>
+                </div>
+
+                <div class="modal-field" style="margin-top: 1rem;">
+                    <label for="lideranca-motivo">Motivo da Alteração:</label>
+                    <textarea id="lideranca-motivo" class="modal-textarea" rows="3" placeholder="Ex: Fulano não conseguiu justificar porque tava bugado."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="lideranca-btn-cancelar">Cancelar</button>
+                <button class="modal-btn modal-btn-confirm" id="lideranca-btn-confirmar" style="background: #8e44ad;">
+                    <i class="fas fa-check-double"></i> Confirmar Alteração
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Inscrições Departamentais -->
+    <div class="modal-overlay" id="modal-inscricoes" style="display: none;">
+        <div class="modal-card" style="max-width: 95vw; width: 1300px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                <h3><i class="fas fa-clipboard-list"></i> Inscrições Departamentais</h3>
+            </div>
+            <div class="modal-body" style="max-height: 75vh; overflow-y: auto; padding: 1.5rem;">
+                <div id="inscricoes-loading" style="display: none; text-align: center; padding: 3rem;">
+                    <i class="fas fa-circle-notch fa-spin" style="font-size: 3rem; color: #9b59b6;"></i>
+                    <p style="margin-top: 1rem; color: #b3b3b3; font-weight: 500;">Buscando dados da planilha oficial...</p>
+                </div>
+                <div id="inscricoes-error" style="display: none; text-align: center; padding: 2rem; color: #e74c3c;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <p id="inscricoes-error-text">Ocorreu um erro ao carregar as inscrições.</p>
+                </div>
+                <div id="inscricoes-grid-container" style="display: none; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- Cards dinâmicos gerados via JS -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="inscricoes-btn-fechar" style="width: 100%; max-width: 200px; margin: 0 auto;">Fechar Painel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalhes da Inscrição -->
+    <div class="modal-overlay" id="modal-detalhes-inscricao" style="display: none; z-index: 10000;">
+        <div class="modal-card" style="max-width: 800px; width: 95vw;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                <h3 id="detalhes-inscricao-nome"><i class="fas fa-user"></i> Detalhes da Inscrição</h3>
+            </div>
+            <div class="modal-body" id="detalhes-inscricao-body" style="max-height: 70vh; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Preenchido via JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="detalhes-inscricao-btn-fechar" style="width: 100%; max-width: 200px; margin: 0 auto;">Voltar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    <script src="/js/global.js" defer></script>
+    <script src="/js/loader.js" defer></script>
+    <script src="/subgrupos/escala-admin.js" defer></script>
+    <script src="/js/online-status.js" defer></script>
+</body>
+</html>
